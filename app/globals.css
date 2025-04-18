@@ -1,0 +1,168 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Temel Renkler */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Font Ailesi */
+  --font-playfair: var(--font-playfair);
+  --font-montserrat: var(--font-montserrat);
+
+  /* Ana Renkler */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  /* Yardımcı Renkler */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  /* UI Elementleri */
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  /* Border Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Border Radius */
+  --radius: 0.625rem;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Light Theme Colors */
+  --background: #ffffff; /* Temiz ve steril bir his için saf beyaz */
+  --foreground: #2d3436; /* Kolay okunabilir koyu gri */
+
+  /* Ana Renkler */
+  --primary: #b2d6a1; /* Kurumsal yeşil renk */
+  --primary-foreground: #ffffff;
+  --secondary: #f0f9ed; /* Açık yeşil ton */
+  --secondary-foreground: #2d3436;
+
+  /* Yardımcı Renkler */
+  --muted: #f7faf5; /* Çok açık yeşil */
+  --muted-foreground: #68947c; /* Orta ton yeşil */
+  --accent: #e8f5e2; /* Vurgu için açık yeşil */
+  --accent-foreground: #2d3436;
+
+  /* Fonksiyonel Renkler */
+  --destructive: #e74c3c; /* Uyarılar için */
+  --border: #dcebd5; /* Yeşil tonlu border */
+  --input: #f5f9f3; /* Form alanları için açık ton */
+  --ring: #b2d6a1; /* Odaklanma halkası için kurumsal renk */
+
+  /* Font Ailesi Değişkenleri */
+  --font-playfair: var(--font-playfair), serif;
+  --font-montserrat: var(--font-montserrat), sans-serif;
+}
+
+.dark {
+  --background: #1a1f1d; /* Koyu yeşile çalan arka plan */
+  --foreground: #e5e5e5;
+
+  /* Ana Renkler */
+  --primary: #b2d6a1; /* Kurumsal rengi koruyoruz */
+  --primary-foreground: #1a1f1d;
+  --secondary: #2a332d;
+  --secondary-foreground: #e5e5e5;
+
+  /* Yardımcı Renkler */
+  --muted: #2a332d;
+  --muted-foreground: #9db5a3;
+  --accent: #304134;
+  --accent-foreground: #e5e5e5;
+
+  /* Fonksiyonel Renkler */
+  --destructive: #cf6679;
+  --border: rgba(
+    178,
+    214,
+    161,
+    0.2
+  ); /* Kurumsal rengin transparan hali */
+  --input: rgba(178, 214, 161, 0.1);
+  --ring: #b2d6a1;
+}
+
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-montserrat);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-playfair);
+  }
+}
+
+/* Typography Styles */
+h1 {
+  @apply text-4xl font-bold mb-6;
+}
+
+h2 {
+  @apply text-3xl font-bold mb-4;
+}
+
+h3 {
+  @apply text-2xl font-bold mb-3;
+}
+
+p {
+  @apply mb-4 leading-relaxed;
+}
+
+/* Smooth Transitions for Theme Switching */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Container */
+.container {
+  @apply mx-auto px-4 max-w-7xl;
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+}
