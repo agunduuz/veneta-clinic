@@ -3,10 +3,88 @@ import Link from 'next/link';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import type { MenuItem } from '@/data/navigation';
+import { useState } from 'react';
 
-export const Navigation = ({ items }: { items: MenuItem[] }) => {
+export const Navigation = ({
+  items,
+  isMobile,
+}: {
+  items: MenuItem[];
+  isMobile?: boolean;
+}) => {
   const pathname = usePathname();
+  const [openMenus, setOpenMenus] = useState<number[]>([]);
 
+  const toggleMenu = (index: number) => {
+    setOpenMenus((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  };
+
+  if (isMobile) {
+    return (
+      <div className='flex flex-col space-y-4'>
+        {items.map((item, index) => (
+          <div key={index} className='relative'>
+            {item.subMenus ? (
+              <div>
+                <button
+                  onClick={() => toggleMenu(index)}
+                  className={`w-full text-left py-2 flex items-center justify-between text-lg font-medium ${
+                    pathname === item.href
+                      ? 'text-primary'
+                      : 'text-accent-foreground'
+                  }`}
+                >
+                  {item.title}
+                  <ChevronDown
+                    className={`h-5 w-5 transition-transform duration-200 ${
+                      openMenus.includes(index) ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {openMenus.includes(index) && (
+                  <div className='mt-2 ml-4 space-y-2'>
+                    {item.subMenus.map((subMenu, subIndex) => (
+                      <div key={subIndex} className='space-y-2'>
+                        <div className='font-medium text-accent-foreground/80'>
+                          {subMenu.title}
+                        </div>
+                        <div className='ml-4 space-y-2'>
+                          {subMenu.items.map((subItem, itemIndex) => (
+                            <Link
+                              key={itemIndex}
+                              href={subItem.href}
+                              className='block py-2 text-accent-foreground hover:text-primary transition-colors'
+                            >
+                              {subItem.title}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                href={item.href}
+                className={`block py-2 text-lg font-medium ${
+                  pathname === item.href
+                    ? 'text-primary'
+                    : 'text-accent-foreground'
+                }`}
+              >
+                {item.title}
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
   return (
     <div className='links flex justify-between items-center gap-8'>
       {items.map((item, index) => (
@@ -43,7 +121,7 @@ export const Navigation = ({ items }: { items: MenuItem[] }) => {
                           <Link
                             key={itemIndex}
                             href={item.href}
-                            className='text-accent-foreground hover:text-primary p-2 rounded-md hover:bg-gray-50 transition-all duration-200'
+                            className='text-accent-foreground hover:text-primary p-2 rounded-md hover:bg-muted transition-all duration-200'
                           >
                             {item.title}
                           </Link>
