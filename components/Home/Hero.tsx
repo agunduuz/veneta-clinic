@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { Button } from '../ui/Button';
+import { Button } from '@/components/UI/button';
 import {
   CalendarDays,
   Hospital,
