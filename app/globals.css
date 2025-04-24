@@ -273,3 +273,23 @@ body {
     linear-gradient(to bottom, #000 1px, transparent 1px);
   background-size: 24px 24px;
 }
+
+/* Feature Cards Style */
+.feature-card {
+  @apply relative;
+}
+
+.feature-card::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 
+         opacity-0 transition-opacity duration-300 rounded-xl pointer-events-none;
+}
+
+.feature-card:hover::after {
+  @apply opacity-100;
+}
+
+/* Icon hover effect */
+.feature-card:hover .icon-container {
+  @apply transform scale-110;
+}

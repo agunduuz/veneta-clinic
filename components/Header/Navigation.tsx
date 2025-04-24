@@ -101,7 +101,7 @@ export const Navigation = ({
             )}
           </Link>
           {item.subMenus && (
-            <div className='absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all mt-2 -left-4 bg-background rounded-lg shadow-xl p-4 min-w-[350px] border-t-4 border-primary z-10'>
+            <div className='absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all mt-2 -left-4 bg-background rounded-lg shadow-xl p-4 min-w-[350px] border-t-4 border-primary z-20'>
               <div className='flex flex-col space-y-2'>
                 {item.subMenus.map((subMenu, subIndex) => (
                   <div
@@ -115,7 +115,7 @@ export const Navigation = ({
                       {subMenu.title}
                       <ChevronRight className='h-4 w-4' />
                     </Link>
-                    <div className='absolute invisible group-hover/submenu:visible hover:text-primary left-full top-0 ml-6 bg-background rounded-lg shadow-xl p-4 min-w-[350px] border-l-4 border-secondary transition-all z-10'>
+                    <div className='absolute invisible group-hover/submenu:visible hover:text-primary left-full top-0 ml-6 bg-background rounded-lg shadow-xl p-4 min-w-[350px] border-l-4 border-secondary transition-all z-20'>
                       <div className='grid grid-cols-1 gap-2'>
                         {subMenu.items.map((item, itemIndex) => (
                           <Link

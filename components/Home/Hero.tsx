@@ -64,7 +64,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className='relative bg-gradient-to-b from-muted to-background min-h-[90vh] flex items-center sm:py-16 overflow-hidden pb-5'>
+    <section className='relative bg-gradient-to-b from-muted to-background min-h-[90vh] flex items-center sm:py-5 overflow-hidden pb-5'>
       <div className='absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none' />
 
       <div className='container mx-auto px-4 md:px-6 relative z-10'>
