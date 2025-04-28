@@ -80,7 +80,7 @@ const PatientStories = () => {
   }, [emblaApi, onSelect]);
 
   return (
-    <section className='py-20 bg-background'>
+    <section className='py-10 bg-background'>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +88,7 @@ const PatientStories = () => {
         transition={{ duration: 0.6 }}
         className='container mx-auto px-4'
       >
-        <div className='text-center mb-12'>
+        <div className='text-center mb-8'>
           <h2 className='text-3xl md:text-4xl font-bold font-playfair mb-4'>
             Hasta Hikayeleri
           </h2>
@@ -105,7 +105,7 @@ const PatientStories = () => {
                   key={testimonial.id}
                   className='flex-[0_0_100%] min-w-0 relative px-4'
                 >
-                  <div className='bg-muted/30 rounded-2xl p-8 md:p-12'>
+                  <div className='bg-muted/30 rounded-2xl p-4 md:p-12'>
                     <div className='flex flex-col md:flex-row gap-8 items-center'>
                       <div className='relative w-24 h-24 md:w-32 md:h-32'>
                         <Image

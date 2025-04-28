@@ -195,7 +195,7 @@ export default function Hero() {
           </div>
 
           {/* Sağ Kolon - Görsel */}
-          <div className='relative aspect-[4/3] lg:aspect-square w-full max-w-2xl mx-auto lg:max-w-none rounded-xl overflow-hidden shadow-2xl transform lg:translate-x-0 opacity-0 animate-slide-in-right'>
+          <div className='relative aspect-[4/3] lg:aspect-square w-full max-w-2xl mx-auto lg:max-w-none rounded-xl overflow-hidden shadow-2xl transform lg:translate-x-0 opacity-0 animate-slide-in-right hidden md:block'>
             <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10' />
             <Image
               src='/images/doctors-team.jpg'

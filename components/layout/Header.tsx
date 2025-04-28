@@ -3,9 +3,9 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { navigationItems } from '@/data/navigation';
-import { ThemeSwitcher } from '../Header/ThemeSwitcher';
-import { LanguageSwitcher } from '../Header/LanguageSwitcher';
-import { Navigation } from '../Header/Navigation';
+import { ThemeSwitcher } from '../header/ThemeSwitcher';
+import { LanguageSwitcher } from '../header/LanguageSwitcher';
+import { Navigation } from '../header/Navigation';
 import { Menu, X } from 'lucide-react';
 
 const Header = () => {
@@ -58,7 +58,7 @@ const Header = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className='md:hidden p-2 rounded-full hover:bg-muted transition-colors duration-200 z-20'
+              className='md:hidden p-2 rounded-full hover:bg-muted transition-colors duration-200 z-30'
               aria-label='Toggle menu'
             >
               {isMenuOpen ? (
@@ -72,7 +72,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         <div
-          className={`fixed inset-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10 transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-20 transition-transform duration-300 ease-in-out ${
             isMenuOpen ? 'translate-x-0' : 'translate-x-full'
           } md:hidden overflow-y-auto`}
         >

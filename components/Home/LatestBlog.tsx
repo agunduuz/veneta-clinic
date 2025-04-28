@@ -137,7 +137,7 @@ const LatestBlog = () => {
               </div>
 
               <div className='p-6'>
-                <div className='flex items-center gap-4 text-sm text-muted-foreground mb-3'>
+                <div className='flex items-center gap-2 text-sm text-muted-foreground mb-3'>
                   <span>{post.author}</span>
                   <span>•</span>
                   <span>{post.date}</span>

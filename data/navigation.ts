@@ -71,7 +71,7 @@ export const navigationItems: MenuItem[] = [
   },
   {
     title: 'Hakkımızda',
-    href: '/hakkimizda',
+    href: '/about',
   },
   {
     title: 'İletişim',
