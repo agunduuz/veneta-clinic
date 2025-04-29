@@ -31,7 +31,6 @@ const Header = () => {
     <header className='pt-4 pb-4 bg-background'>
       <div className='container'>
         <nav className='flex justify-between items-center'>
-          {/* Logo */}
           <Link href='/' className='logo'>
             <Image
               src='/veneta-logo.svg'
