@@ -3,9 +3,9 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { navigationItems } from '@/data/navigation';
-import { ThemeSwitcher } from '@/components/header/ThemeSwitcher';
-import { LanguageSwitcher } from '@/components/header/LanguageSwitcher';
-import { Navigation } from '@/components/header/Navigation';
+import { ThemeSwitcher } from '@/components/Header/ThemeSwitcher';
+import { LanguageSwitcher } from '@/components/Header/LanguageSwitcher';
+import { Navigation } from '@/components/Header/Navigation';
 import { Menu, X } from 'lucide-react';
 
 const Header = () => {
