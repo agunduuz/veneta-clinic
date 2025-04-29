@@ -1,6 +1,6 @@
-import AboutHeader from '@/components/About/AboutHeader';
-import AboutMission from '@/components/About/AboutMission';
-import AboutFeatures from '@/components/About/AboutFeatures';
+import AboutHeader from '../../../components/About/AboutHeader';
+import AboutMission from '../../../components/About/AboutMission';
+import AboutFeatures from '../../../components/About/AboutFeatures';
 
 const Page = () => {
   return (
