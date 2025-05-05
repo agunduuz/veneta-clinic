@@ -3,11 +3,14 @@ import BlogPost from '@/components/CategoryComponent/BlogPost';
 import { navigationItems } from '@/data/navigation';
 import { notFound } from 'next/navigation';
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<
+  { category: string; slug: string }[]
+> {
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
   const params: { category: string; slug: string }[] = [];
+
   ameliyatli?.subMenus?.forEach((sub) => {
     sub.items.forEach((item) => {
       params.push({
@@ -16,6 +19,7 @@ export async function generateStaticParams() {
       });
     });
   });
+
   return params;
 }
 
