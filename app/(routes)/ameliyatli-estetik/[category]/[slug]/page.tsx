@@ -3,6 +3,13 @@ import BlogPost from '@/components/CategoryComponent/BlogPost';
 import { navigationItems } from '@/data/navigation';
 import { notFound } from 'next/navigation';
 
+interface BlogPageProps {
+  params: {
+    category: string;
+    slug: string;
+  };
+}
+
 export async function generateStaticParams(): Promise<
   { category: string; slug: string }[]
 > {
@@ -23,11 +30,7 @@ export async function generateStaticParams(): Promise<
   return params;
 }
 
-export default function BlogPage({
-  params,
-}: {
-  params: { category: string; slug: string };
-}) {
+export default function BlogPage({ params }: BlogPageProps) {
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
