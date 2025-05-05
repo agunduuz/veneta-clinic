@@ -3,11 +3,7 @@ import BlogPost from '@/components/CategoryComponent/BlogPost';
 import { navigationItems } from '@/data/navigation';
 import { notFound } from 'next/navigation';
 
-type Props = {
-  params: { category: string; slug: string };
-};
-
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
@@ -23,7 +19,11 @@ export function generateStaticParams() {
   return params;
 }
 
-export default function BlogPage({ params }: Props) {
+export default function BlogPage({
+  params,
+}: {
+  params: { category: string; slug: string };
+}) {
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
