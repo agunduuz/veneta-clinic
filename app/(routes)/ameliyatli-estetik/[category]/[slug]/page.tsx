@@ -1,4 +1,3 @@
-// app/(routes)/ameliyatli-estetik/[category]/[slug]/page.tsx
 import BlogPost from '@/components/CategoryComponent/BlogPost';
 import { navigationItems } from '@/data/navigation';
 import { notFound } from 'next/navigation';
@@ -23,20 +22,20 @@ export async function generateStaticParams(): Promise<
   return params;
 }
 
-export default function BlogPage({
+export default async function BlogPage({
   params,
 }: {
-  params: { category: string; slug: string };
+  params: Promise<{ category: string; slug: string }>;
 }) {
+  const { category, slug } = await params;
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
   const subMenu = ameliyatli?.subMenus?.find(
-    (sub) =>
-      sub.href.replace('/ameliyatli-estetik/', '') === params.category
+    (sub) => sub.href.replace('/ameliyatli-estetik/', '') === category
   );
   const post = subMenu?.items.find(
-    (item) => item.href.split('/').pop() === params.slug
+    (item) => item.href.split('/').pop() === slug
   );
 
   if (!post) return notFound();
