@@ -15,13 +15,12 @@ export async function generateStaticParams() {
   );
 }
 
-export default async function CategoryPage({
+export default async function BlogPage({
   params,
 }: {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }) {
-  const category = params.category;
-
+  const { category } = await params;
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
