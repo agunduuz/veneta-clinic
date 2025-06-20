@@ -64,11 +64,11 @@ const AboutHeader = () => {
           className='relative aspect-[4/3] rounded-3xl overflow-hidden'
         >
           <Image
-            src='https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1000'
+            src='/images/batibey-batmaci-1.jpg'
             alt='Veneta Klinik Modern Tedavi Odası'
             fill
             className='object-cover hover:scale-105 transition-transform duration-500'
-            sizes='(max-width: 1024px) 100vw, 50vw'
+            sizes='(max-width: 768px) 100vw, 50vw'
             priority
           />
           <div className='absolute inset-0 bg-gradient-to-t from-black/30 to-transparent' />

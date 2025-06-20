@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import type { MenuItem } from '@/data/navigation';
 import { useState, useEffect } from 'react';
@@ -56,25 +56,13 @@ export const Navigation = ({
                 {openMenus.includes(index) && (
                   <div className='mt-2 ml-4 space-y-2'>
                     {item.subMenus.map((subMenu, subIndex) => (
-                      <div key={subIndex} className='space-y-2'>
-                        <Link
-                          href={subMenu.href}
-                          className='font-medium text-accent-foreground/80'
-                        >
-                          {subMenu.title}
-                        </Link>
-                        <div className='ml-4 space-y-2'>
-                          {subMenu.items.map((subItem, itemIndex) => (
-                            <Link
-                              key={itemIndex}
-                              href={subItem.href}
-                              className='block py-2 text-accent-foreground hover:text-primary transition-colors'
-                            >
-                              {subItem.title}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
+                      <Link
+                        key={subIndex}
+                        href={subMenu.href}
+                        className='block py-2 text-accent-foreground hover:text-primary transition-colors'
+                      >
+                        {subMenu.title}
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -114,43 +102,15 @@ export const Navigation = ({
           {item.subMenus && (
             <div className='absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all mt-2 -left-4 bg-background rounded-lg shadow-xl p-4 min-w-[350px] border-t-4 border-primary z-20'>
               <div className='flex flex-col space-y-2'>
-                {item.subMenus.map((subMenu, subIndex) =>
-                  subMenu.items && subMenu.items.length > 0 ? (
-                    <div
-                      key={subIndex}
-                      className='relative group/submenu'
-                    >
-                      <Link
-                        href={subMenu.href}
-                        className='text-background-foreground hover:text-primary flex items-center justify-between p-2 rounded-md hover:bg-muted transition-all'
-                      >
-                        {subMenu.title}
-                        <ChevronRight className='h-4 w-4' />
-                      </Link>
-                      <div className='absolute invisible group-hover/submenu:visible hover:text-primary left-full top-0 ml-6 bg-background rounded-lg shadow-xl p-4 min-w-[350px] border-l-4 border-secondary transition-all z-20'>
-                        <div className='grid grid-cols-1 gap-2'>
-                          {subMenu.items.map((item, itemIndex) => (
-                            <Link
-                              key={itemIndex}
-                              href={item.href}
-                              className='text-accent-foreground hover:text-primary p-2 rounded-md hover:bg-muted transition-all duration-200'
-                            >
-                              {item.title}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <Link
-                      key={subIndex}
-                      href={subMenu.href}
-                      className='text-background-foreground hover:text-primary flex items-center justify-between p-2 rounded-md hover:bg-muted transition-all'
-                    >
-                      {subMenu.title}
-                    </Link>
-                  )
-                )}
+                {item.subMenus.map((subMenu, subIndex) => (
+                  <Link
+                    key={subIndex}
+                    href={subMenu.href}
+                    className='text-background-foreground hover:text-primary flex items-center justify-between p-2 rounded-md hover:bg-muted transition-all'
+                  >
+                    {subMenu.title}
+                  </Link>
+                ))}
               </div>
             </div>
           )}

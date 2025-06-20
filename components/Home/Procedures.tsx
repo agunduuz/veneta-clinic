@@ -14,7 +14,7 @@ type Procedure = {
 const procedures: Procedure[] = [
   {
     id: 1,
-    title: 'Botoks',
+    title: 'Kırışıklık Tedavisi',
     description:
       'Hızlı ve etkili bir şekilde kırışıklıkları ve ince çizgileri azaltın.',
     image:
@@ -198,7 +198,7 @@ const Procedures = () => {
                     alt={procedure.title}
                     fill
                     className='object-cover transition-transform duration-300 group-hover:scale-105'
-                    sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'
+                    sizes='(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw'
                   />
                   <div className='absolute top-4 right-4'>
                     <span

@@ -72,7 +72,7 @@ const AboutMission = () => {
           className='relative w-48 h-48 mb-8 rounded-full overflow-hidden'
         >
           <Image
-            src='https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400'
+            src='/images/batibey-batmaci-2.png'
             alt='Uzman Doktor'
             fill
             className='object-cover hover:scale-105 transition-transform duration-500'
@@ -93,11 +93,18 @@ const AboutMission = () => {
           </blockquote>
           <div className='flex flex-col'>
             <cite className='text-lg font-semibold text-foreground not-italic'>
-              Dr. Sarah Mitchell
+              Dr. Batıbey Batmacı
             </cite>
-            <span className='text-sm text-muted-foreground'>
-              Medikal Direktör
+            <span className='text-sm text-muted-foreground mb-2'>
+              Medikal Direktör & Plastik Cerrahi Uzmanı
             </span>
+            <div className='text-xs text-muted-foreground space-y-1'>
+              <p>• Selçuk Üniversitesi Meram Tıp Fakültesi Mezunu</p>
+              <p>• 13+ Yıl Plastik Cerrahi Deneyimi</p>
+              <p>• 5000+ Başarılı Operasyon</p>
+              <p>• Uluslararası Estetik Cerrahi Derneği Üyesi</p>
+              <p>• En Son Teknolojik Yöntemler Uzmanı</p>
+            </div>
           </div>
         </motion.div>
       </motion.div>

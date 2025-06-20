@@ -5,6 +5,8 @@ import Procedures from '@/components/Home/Procedures';
 import PatientStories from '@/components/Home/PatientStories';
 import LatestBlog from '@/components/Home/LatestBlog';
 import CallToAction from '@/components/Home/CallToAction';
+import WhatsAppButton from '@/components/Header/WhatsAppButton';
+import PhoneButton from '@/components/Header/PhoneButton';
 
 export default function Home() {
   return (
@@ -16,6 +18,8 @@ export default function Home() {
       <PatientStories />
       <LatestBlog />
       <CallToAction />
+      <PhoneButton />
+      <WhatsAppButton />
     </>
   );
 }

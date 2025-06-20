@@ -10,14 +10,17 @@ export async function generateStaticParams(): Promise<
   );
   const params: { category: string; slug: string }[] = [];
 
-  ameliyatli?.subMenus?.forEach((sub) => {
-    sub.items.forEach((item) => {
+  if (ameliyatli?.subMenus) {
+    ameliyatli.subMenus.forEach((sub) => {
+      const category = sub.href.replace('/ameliyatli-estetik/', '');
+      const slug = sub.href.split('/').pop() || '';
+
       params.push({
-        category: sub.href.replace('/ameliyatli-estetik/', ''),
-        slug: item.href.split('/').pop() || '',
+        category,
+        slug,
       });
     });
-  });
+  }
 
   return params;
 }
@@ -27,15 +30,12 @@ export default async function BlogPage({
 }: {
   params: Promise<{ category: string; slug: string }>;
 }) {
-  const { category, slug } = await params;
+  const { slug } = await params;
   const ameliyatli = navigationItems.find(
     (item) => item.title === 'Ameliyatlı Estetik'
   );
-  const subMenu = ameliyatli?.subMenus?.find(
-    (sub) => sub.href.replace('/ameliyatli-estetik/', '') === category
-  );
-  const post = subMenu?.items.find(
-    (item) => item.href.split('/').pop() === slug
+  const post = ameliyatli?.subMenus?.find(
+    (sub) => sub.href.split('/').pop() === slug
   );
 
   if (!post) return notFound();

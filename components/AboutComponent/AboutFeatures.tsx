@@ -86,7 +86,7 @@ const AboutFeatures = () => {
                   alt={feature.title}
                   fill
                   className='object-cover'
-                  sizes='(max-width: 768px) 100vw, 33vw'
+                  sizes='(max-width: 124px) 100vw, 33vw'
                 />
                 <div className='absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent' />
               </motion.div>

@@ -41,9 +41,9 @@ const blogPosts: BlogPost[] = [
   },
   {
     id: 3,
-    title: 'Botoks Tedavisi: Gerçekler ve Yanılgılar',
+    title: 'Kırışıklık Tedavisi: Gerçekler ve Yanılgılar',
     description:
-      'Botoks hakkında yaygın yanlış inanışların açıklanması ve bu popüler kozmetik tedavi hakkında bilimsel gerçekler.',
+      'Kırışıklık hakkında yaygın yanlış inanışların açıklanması ve bu popüler kozmetik tedavi hakkında bilimsel gerçekler.',
     image:
       'https://images.pexels.com/photos/7319170/pexels-photo-7319170.jpeg?auto=compress&cs=tinysrgb&w=1600',
     category: 'non-surgical',

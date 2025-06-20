@@ -293,3 +293,11 @@ body {
 .feature-card:hover .icon-container {
   @apply transform scale-110;
 }
+
+.cls-1 {
+  fill: #b2d6a1;
+}
+
+.cls-2 {
+  fill: #b2d6a1;
+}

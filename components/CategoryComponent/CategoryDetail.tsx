@@ -39,11 +39,11 @@ export default function CategoryDetail({
                 className='object-cover rounded-xl'
                 sizes='96px'
               />
-              {sub.badge && (
+              {/* {sub.badge && (
                 <span className='absolute top-2 left-2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-semibold shadow'>
                   {sub.badge}
                 </span>
-              )}
+              )} */}
             </div>
             {/* Bilgi alanı */}
             <div className='flex-1 text-center md:text-left'>

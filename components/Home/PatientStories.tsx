@@ -1,6 +1,5 @@
 'use client';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import {
@@ -41,7 +40,7 @@ const testimonials: Testimonial[] = [
   {
     id: 3,
     name: 'Zeynep Kaya',
-    procedure: 'Botoks',
+    procedure: 'Kırışıklık Tedavisi',
     image:
       'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1600',
     rating: 5,
@@ -107,17 +106,6 @@ const PatientStories = () => {
                 >
                   <div className='bg-muted/30 rounded-2xl p-4 md:p-12'>
                     <div className='flex flex-col md:flex-row gap-8 items-center'>
-                      <div className='relative w-24 h-24 md:w-32 md:h-32'>
-                        <Image
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          fill
-                          className='object-cover rounded-full'
-                        />
-                        <div className='absolute -top-4 -left-4 text-4xl text-primary/20 font-serif'>
-                          &quot;
-                        </div>
-                      </div>
                       <div className='flex-1 text-center md:text-left'>
                         <div className='flex justify-center md:justify-start gap-1 mb-3'>
                           {[...Array(testimonial.rating)].map(
