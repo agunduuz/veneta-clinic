@@ -8,9 +8,11 @@ import { useState, useEffect } from 'react';
 export const Navigation = ({
   items,
   isMobile,
+  onNavigate,
 }: {
   items: MenuItem[];
   isMobile?: boolean;
+  onNavigate?: () => void;
 }) => {
   const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<number[]>([]);
@@ -20,12 +22,24 @@ export const Navigation = ({
     setMounted(true);
   }, []);
 
+  // Close all submenus when pathname changes
+  useEffect(() => {
+    setOpenMenus([]);
+  }, [pathname]);
+
   const toggleMenu = (index: number) => {
     setOpenMenus((prev) =>
       prev.includes(index)
         ? prev.filter((i) => i !== index)
         : [...prev, index]
     );
+  };
+
+  const handleLinkClick = () => {
+    // Close mobile menu when any link is clicked
+    if (onNavigate) {
+      onNavigate();
+    }
   };
 
   if (!mounted) return null;
@@ -37,28 +51,32 @@ export const Navigation = ({
           <div key={index} className='relative'>
             {item.subMenus ? (
               <div>
-                <Link
-                  href={item.href}
-                  onClick={() => toggleMenu(index)}
-                  className={`w-full text-left py-2 flex items-center justify-between text-lg font-medium ${
-                    pathname === item.href
-                      ? 'text-primary'
-                      : 'text-accent-foreground'
-                  }`}
-                >
-                  {item.title}
+                <div className='flex items-center justify-between'>
+                  <Link
+                    href={item.href}
+                    onClick={handleLinkClick}
+                    className={`w-full text-left py-2 flex items-center justify-between text-lg font-medium ${
+                      pathname === item.href
+                        ? 'text-primary'
+                        : 'text-accent-foreground'
+                    }`}
+                  >
+                    {item.title}
+                  </Link>
                   <ChevronDown
+                    onClick={() => toggleMenu(index)}
                     className={`h-5 w-5 transition-transform duration-200 ${
                       openMenus.includes(index) ? 'rotate-180' : ''
                     }`}
                   />
-                </Link>
+                </div>
                 {openMenus.includes(index) && (
                   <div className='mt-2 ml-4 space-y-2'>
                     {item.subMenus.map((subMenu, subIndex) => (
                       <Link
                         key={subIndex}
                         href={subMenu.href}
+                        onClick={handleLinkClick}
                         className='block py-2 text-accent-foreground hover:text-primary transition-colors'
                       >
                         {subMenu.title}
@@ -70,6 +88,7 @@ export const Navigation = ({
             ) : (
               <Link
                 href={item.href}
+                onClick={handleLinkClick}
                 className={`block py-2 text-lg font-medium ${
                   pathname === item.href
                     ? 'text-primary'

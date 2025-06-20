@@ -164,6 +164,7 @@ const Header = () => {
               <Navigation
                 items={currentNavigationItems}
                 isMobile={true}
+                onNavigate={() => setIsMenuOpen(false)}
               />
             </div>
           </div>
