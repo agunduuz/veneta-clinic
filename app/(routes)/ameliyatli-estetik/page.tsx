@@ -12,7 +12,7 @@ import {
   Heart,
 } from 'lucide-react';
 import Link from 'next/link';
-import WhatsAppButton from '@/components/WhatsAppButton';
+import WhatsAppButton from '@/components/Header/WhatsAppButton';
 import PhoneButton from '@/components/Header/PhoneButton';
 
 export default function AmeliyatliEstetikPage() {

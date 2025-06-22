@@ -1,25 +1,10 @@
 // app/(routes)/ameliyatli-estetik/[category]/page.tsx
 import { navigationItems } from '@/data/navigation';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import { Metadata } from 'next';
-import {
-  Award,
-  Users,
-  Clock,
-  Shield,
-  Star,
-  CheckCircle,
-  Phone,
-  MapPin,
-  Calendar,
-  Heart,
-  Zap,
-  TrendingUp,
-} from 'lucide-react';
-import Link from 'next/link';
+import CategoryPageContent from '@/components/CategoryComponent/CategoryPageContent';
 import PhoneButton from '@/components/Header/PhoneButton';
-import WhatsAppButton from '@/components/WhatsAppButton';
+import WhatsAppButton from '@/components/Header/WhatsAppButton';
 
 // Her operasyon için özel SEO verileri
 const operationData = {
@@ -66,6 +51,7 @@ const operationData = {
       },
     ],
     image: '/images/goz-kapagi.jpeg',
+    images: [],
   },
   'burun-estetigi': {
     title: 'Burun Estetiği',
@@ -110,6 +96,7 @@ const operationData = {
       },
     ],
     image: '/images/burun-estetigi.jpg',
+    images: [],
   },
   'yuz-germe': {
     title: 'Yüz Germe',
@@ -152,6 +139,7 @@ const operationData = {
       },
     ],
     image: '/images/yuz-germe.jpg',
+    images: [],
   },
   'goz-kapagi-estetigi': {
     title: 'Göz Kapak Estetiği',
@@ -195,6 +183,14 @@ const operationData = {
       },
     ],
     image: '/images/goz-kapagi-1.jpeg',
+    images: [
+      '/images/goz-kapagi-1.jpeg',
+      '/images/goz-kapagi-2.jpeg',
+      '/images/goz-kapagi-3.jpeg',
+      '/images/goz-kapagi-4.jpeg',
+      '/images/goz-kapagi-5.jpeg',
+      '/images/goz-kapagi-6.jpeg',
+    ],
   },
   vucut: {
     title: 'Vücut Estetiği',
@@ -238,6 +234,7 @@ const operationData = {
       },
     ],
     image: '/images/vucut-estetigi.jpg',
+    images: [],
   },
   'karin-germe': {
     title: 'Karın Germe',
@@ -282,6 +279,7 @@ const operationData = {
       },
     ],
     image: '/images/karin-germe.jpg',
+    images: [],
   },
   liposuction: {
     title: 'Liposuction',
@@ -326,6 +324,7 @@ const operationData = {
       },
     ],
     image: '/images/liposuction.jpeg',
+    images: [],
   },
   meme: {
     title: 'Meme Estetiği',
@@ -368,6 +367,7 @@ const operationData = {
       },
     ],
     image: '/images/meme-estetigi.jpg',
+    images: [],
   },
   buyutme: {
     title: 'Meme Büyütme Ameliyatı',
@@ -413,6 +413,7 @@ const operationData = {
       },
     ],
     image: '/images/meme-buyutme.jpg',
+    images: [],
   },
   kucultme: {
     title: 'Meme Küçültme Ameliyatı',
@@ -454,6 +455,7 @@ const operationData = {
       },
     ],
     image: '/images/meme-kucultme.jpg',
+    images: [],
   },
 };
 
@@ -552,437 +554,12 @@ export default async function CategoryPage({
   const operationInfo =
     operationData[category as keyof typeof operationData];
 
-  const stats = [
-    { icon: Users, value: '15,000+', label: 'Mutlu Hasta' },
-    { icon: Award, value: '15+', label: 'Yıllık Deneyim' },
-    { icon: Star, value: '4.9/5', label: 'Hasta Puanı' },
-    { icon: Shield, value: '100%', label: 'Güvenlik' },
-  ];
-
-  const features = [
-    {
-      icon: Zap,
-      title: 'Modern Teknoloji',
-      description: 'En son teknolojik cihazlar ve yöntemler',
-    },
-    {
-      icon: Heart,
-      title: 'Hasta Odaklı',
-      description: 'Her hastanın özel ihtiyaçlarına göre planlama',
-    },
-    {
-      icon: Clock,
-      title: 'Hızlı İyileşme',
-      description: 'Minimal invaziv yöntemlerle hızlı toparlanma',
-    },
-    {
-      icon: TrendingUp,
-      title: 'Kanıtlanmış Sonuçlar',
-      description: 'Bilimsel araştırmalarla desteklenen yöntemler',
-    },
-  ];
-
   return (
     <>
-      {/* Hero Section */}
-      <section className='relative bg-gradient-to-br from-primary/10 via-background to-secondary/10 overflow-hidden'>
-        <div className='absolute inset-0 bg-grid-pattern opacity-5'></div>
-        <div className='container py-16 md:py-24 relative z-10'>
-          <div className='flex flex-col lg:flex-row items-center gap-12'>
-            <div className='flex-1 space-y-6'>
-              <div className='inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium animate-fade-in'>
-                <Award className='h-4 w-4' />
-                Türkiye&apos;nin En İyi Estetik Kliniği
-              </div>
-
-              <h1 className='text-4xl md:text-6xl font-bold leading-tight animate-title-slide-up'>
-                {operationInfo?.title || subMenu.title}
-                <span className='block text-primary'>
-                  Uzman Doktorlar
-                </span>
-              </h1>
-
-              <p className='text-xl text-muted-foreground leading-relaxed animate-fade-up'>
-                15+ yıllık deneyimimiz ve modern teknolojimizle{' '}
-                {operationInfo?.title || subMenu.title.toLowerCase()}{' '}
-                konusunda Türkiye&apos;nin lider kliniği olarak hizmet
-                veriyoruz. Güvenli, etkili ve doğal sonuçlar için
-                uzman ekibimizle tanışın.
-              </p>
-
-              <div className='flex flex-col sm:flex-row gap-4 animate-fade-up'>
-                <Link
-                  href='tel:+902125612322'
-                  target='_blank'
-                  className='bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-lg'
-                >
-                  <Phone className='h-5 w-5 inline mr-2' />
-                  Ücretsiz Konsültasyon
-                </Link>
-                <Link
-                  href='https://wa.me/905309153488'
-                  target='_blank'
-                  className='border-2 border-primary text-primary px-8 py-4 rounded-full font-semibold hover:bg-primary hover:text-primary-foreground transition-all duration-300'
-                >
-                  <Calendar className='h-5 w-5 inline mr-2' />
-                  Randevu Al
-                </Link>
-              </div>
-            </div>
-
-            <div className='flex-1 flex justify-center'>
-              <div className='relative'>
-                <Image
-                  src={
-                    operationInfo?.image || '/images/doctors-team.jpg'
-                  }
-                  alt={`${
-                    operationInfo?.title || subMenu.title
-                  } - Veneta Clinic Uzman Doktorları`}
-                  width={500}
-                  height={400}
-                  className='rounded-2xl shadow-2xl object-cover animate-float'
-                  priority
-                />
-                <div className='absolute -bottom-6 -left-6 bg-white rounded-xl p-4 shadow-lg animate-slide-in-right'>
-                  <div className='flex items-center gap-3'>
-                    <div className='w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center'>
-                      <Star className='h-6 w-6 text-primary' />
-                    </div>
-                    <div>
-                      <p className='font-bold text-lg'>4.9/5</p>
-                      <p className='text-sm text-muted-foreground'>
-                        Hasta Puanı
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className='py-16 bg-muted/30'>
-        <div className='container'>
-          <div className='grid grid-cols-2 md:grid-cols-4 gap-8'>
-            {stats.map((stat, idx) => (
-              <div
-                key={stat.label}
-                className='stats-card text-center animate-fade-in'
-                style={{ animationDelay: `${idx * 100}ms` }}
-              >
-                <stat.icon className='h-8 w-8 text-primary mx-auto mb-2' />
-                <div className='text-2xl font-bold text-foreground'>
-                  {stat.value}
-                </div>
-                <div className='text-sm text-muted-foreground'>
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className='py-16'>
-        <div className='container'>
-          <div className='text-center mb-12'>
-            <h2 className='text-3xl md:text-4xl font-bold mb-4'>
-              Neden Veneta Clinic?
-            </h2>
-            <p className='text-xl text-muted-foreground max-w-3xl mx-auto'>
-              Türkiye&apos;nin en güvenilir estetik kliniği olarak,
-              her hastamıza en yüksek kalitede hizmet sunuyoruz.
-            </p>
-          </div>
-
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
-            {features.map((feature, idx) => (
-              <div
-                key={feature.title}
-                className='feature-card bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in'
-                style={{ animationDelay: `${idx * 150}ms` }}
-              >
-                <div className='icon-container w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 transition-transform duration-300'>
-                  <feature.icon className='h-8 w-8 text-primary' />
-                </div>
-                <h3 className='text-xl font-semibold mb-2'>
-                  {feature.title}
-                </h3>
-                <p className='text-muted-foreground'>
-                  {feature.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section className='py-16 bg-gradient-to-r from-primary/5 to-secondary/5'>
-        <div className='container'>
-          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
-            <div className='space-y-6'>
-              <h2 className='text-3xl md:text-4xl font-bold'>
-                {operationInfo?.title || subMenu.title} Konusunda
-                Neden Bizi Seçmelisiniz?
-              </h2>
-              <p className='text-lg text-muted-foreground'>
-                Uzman doktorlarımız, modern teknolojimiz ve hasta
-                odaklı yaklaşımımızla en güvenli ve etkili tedavi
-                yöntemlerini uyguluyoruz.
-              </p>
-
-              <div className='space-y-4'>
-                {[
-                  'Uzman ve deneyimli doktor kadrosu',
-                  'Modern ve güvenli teknoloji',
-                  'Kişiselleştirilmiş tedavi planları',
-                  'Hızlı iyileşme süreçleri',
-                  'Sürekli hasta takibi',
-                  'Uygun fiyat garantisi',
-                ].map((item, idx) => (
-                  <div
-                    key={item}
-                    className='flex items-center gap-3 animate-fade-in'
-                    style={{ animationDelay: `${idx * 100}ms` }}
-                  >
-                    <CheckCircle className='h-5 w-5 text-primary flex-shrink-0' />
-                    <span className='text-foreground'>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className='relative'>
-              <Image
-                src='/images/klinik-resimleri.jpeg'
-                alt='Veneta Clinic Modern Klinik Ortamı'
-                width={600}
-                height={400}
-                className='rounded-2xl shadow-xl object-cover'
-              />
-              <div className='absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-lg'>
-                <div className='flex items-center gap-3'>
-                  <MapPin className='h-5 w-5 text-primary' />
-                  <div>
-                    <p className='font-semibold'>
-                      İstanbul, Nişantaşı
-                    </p>
-                    <p className='text-sm text-muted-foreground'>
-                      Merkezi Konum
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SEO Content Section */}
-      <section className='py-16 bg-gradient-to-r from-primary/5 to-secondary/5'>
-        <div className='container'>
-          <div className='max-w-4xl mx-auto'>
-            <h1 className='text-3xl md:text-4xl font-bold mb-8 text-center'>
-              {operationInfo?.title || subMenu.title} -
-              Türkiye&apos;nin En İyi Estetik Kliniği
-            </h1>
-
-            <div className='prose prose-lg max-w-none'>
-              <h2 className='text-2xl md:text-3xl font-bold mb-6 text-primary'>
-                {operationInfo?.title || subMenu.title} Nedir?
-              </h2>
-              <p className='text-lg text-muted-foreground mb-8 leading-relaxed'>
-                {operationInfo?.description ||
-                  `${subMenu.title}, modern tıbbi teknolojiler ve uzman doktor kadromuzla gerçekleştirilen 
-                güvenli ve etkili estetik cerrahi işlemlerinden biridir. 15+ yıllık deneyimimizle, 
-                her hastanın özel ihtiyaçlarına göre kişiselleştirilmiş tedavi planları hazırlıyoruz.`}
-              </p>
-
-              <h2 className='text-2xl md:text-3xl font-bold mb-6 text-primary'>
-                {operationInfo?.title || subMenu.title} Avantajları
-              </h2>
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-8'>
-                {operationInfo?.advantages?.map((advantage, idx) => (
-                  <div
-                    key={idx}
-                    className='bg-white rounded-xl p-6 shadow-lg'
-                  >
-                    <h3 className='text-xl font-semibold mb-3 text-foreground'>
-                      {advantage}
-                    </h3>
-                    <p className='text-muted-foreground'>
-                      {operationInfo?.title || subMenu.title} ile elde
-                      edilen önemli faydalardan biridir.
-                    </p>
-                  </div>
-                )) || [
-                  <div
-                    key='1'
-                    className='bg-white rounded-xl p-6 shadow-lg'
-                  >
-                    <h3 className='text-xl font-semibold mb-3 text-foreground'>
-                      Güvenli Teknoloji
-                    </h3>
-                    <p className='text-muted-foreground'>
-                      En son teknolojik cihazlar ve minimal invaziv
-                      yöntemlerle güvenli operasyonlar.
-                    </p>
-                  </div>,
-                  <div
-                    key='2'
-                    className='bg-white rounded-xl p-6 shadow-lg'
-                  >
-                    <h3 className='text-xl font-semibold mb-3 text-foreground'>
-                      Uzman Doktorlar
-                    </h3>
-                    <p className='text-muted-foreground'>
-                      Alanında uzman ve deneyimli cerrahlarımızla
-                      profesyonel hizmet.
-                    </p>
-                  </div>,
-                ]}
-              </div>
-
-              <h2 className='text-2xl md:text-3xl font-bold mb-6 text-primary'>
-                {operationInfo?.title || subMenu.title} Süreci
-              </h2>
-              <div className='space-y-6 mb-8'>
-                {operationInfo?.process?.map((step, idx) => (
-                  <div key={idx} className='flex items-start gap-4'>
-                    <div className='w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1'>
-                      {idx + 1}
-                    </div>
-                    <div>
-                      <h3 className='text-xl font-semibold mb-2'>
-                        {step.step}
-                      </h3>
-                      <p className='text-muted-foreground'>
-                        {step.description}
-                      </p>
-                    </div>
-                  </div>
-                )) || [
-                  <div key='1' className='flex items-start gap-4'>
-                    <div className='w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1'>
-                      1
-                    </div>
-                    <div>
-                      <h3 className='text-xl font-semibold mb-2'>
-                        İlk Konsültasyon
-                      </h3>
-                      <p className='text-muted-foreground'>
-                        Uzman doktorumuzla detaylı görüşme ve
-                        kişiselleştirilmiş tedavi planı hazırlama.
-                      </p>
-                    </div>
-                  </div>,
-                ]}
-              </div>
-
-              <h2 className='text-2xl md:text-3xl font-bold mb-6 text-primary'>
-                {operationInfo?.title || subMenu.title} Fiyatları
-              </h2>
-              <p className='text-lg text-muted-foreground mb-6'>
-                {operationInfo?.title || subMenu.title} fiyatları,
-                hastanın özel durumuna ve işlemin kapsamına göre
-                değişiklik gösterebilir. Detaylı bilgi ve fiyat
-                teklifi için ücretsiz konsültasyon randevusu
-                alabilirsiniz.
-              </p>
-
-              <div className='bg-primary/10 rounded-xl p-6 mb-8'>
-                <h3 className='text-xl font-semibold mb-3 text-primary'>
-                  Neden Veneta Clinic&apos;i Seçmelisiniz?
-                </h3>
-                <ul className='space-y-2 text-muted-foreground'>
-                  <li className='flex items-center gap-2'>
-                    <CheckCircle className='h-5 w-5 text-primary flex-shrink-0' />
-                    15+ yıllık deneyim ve uzman kadro
-                  </li>
-                  <li className='flex items-center gap-2'>
-                    <CheckCircle className='h-5 w-5 text-primary flex-shrink-0' />
-                    Modern teknoloji ve güvenli ortam
-                  </li>
-                  <li className='flex items-center gap-2'>
-                    <CheckCircle className='h-5 w-5 text-primary flex-shrink-0' />
-                    Kişiselleştirilmiş tedavi planları
-                  </li>
-                  <li className='flex items-center gap-2'>
-                    <CheckCircle className='h-5 w-5 text-primary flex-shrink-0' />
-                    Sürekli hasta takibi ve destek
-                  </li>
-                </ul>
-              </div>
-
-              <h2 className='text-2xl md:text-3xl font-bold mb-6 text-primary'>
-                {operationInfo?.title || subMenu.title} Hakkında Sık
-                Sorulan Sorular
-              </h2>
-              <div className='space-y-4 mb-8'>
-                {operationInfo?.faqs?.map((faq, idx) => (
-                  <div
-                    key={idx}
-                    className='bg-white rounded-xl p-6 shadow-lg'
-                  >
-                    <h3 className='text-xl font-semibold mb-2 text-foreground'>
-                      {faq.question}
-                    </h3>
-                    <p className='text-muted-foreground'>
-                      {faq.answer}
-                    </p>
-                  </div>
-                )) || [
-                  <div
-                    key='1'
-                    className='bg-white rounded-xl p-6 shadow-lg'
-                  >
-                    <h3 className='text-xl font-semibold mb-2 text-foreground'>
-                      {operationInfo?.title || subMenu.title} ne kadar
-                      sürer?
-                    </h3>
-                    <p className='text-muted-foreground'>
-                      Operasyon süresi hastanın durumuna göre 1-3 saat
-                      arasında değişmektedir.
-                    </p>
-                  </div>,
-                ]}
-              </div>
-
-              <div className='text-center bg-primary text-primary-foreground rounded-2xl p-8'>
-                <h2 className='text-2xl md:text-3xl font-bold mb-4'>
-                  {operationInfo?.title || subMenu.title} İçin Hemen
-                  İletişime Geçin
-                </h2>
-                <p className='text-lg mb-6 opacity-90'>
-                  Uzman doktorlarımızla ücretsiz konsültasyon için
-                  hemen arayın veya WhatsApp&apos;tan mesaj gönderin.
-                </p>
-                <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-                  <Link
-                    href='tel:+902125612322'
-                    className='bg-white text-primary px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300'
-                  >
-                    <Phone className='h-5 w-5 inline mr-2' />
-                    Hemen Ara
-                  </Link>
-                  <Link
-                    href='https://wa.me/905309153488'
-                    target='_blank'
-                    className='border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition-all duration-300'
-                  >
-                    WhatsApp&apos;tan Mesaj
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CategoryPageContent
+        operationInfo={operationInfo}
+        subMenu={subMenu}
+      />
       <PhoneButton />
       <WhatsAppButton />
     </>

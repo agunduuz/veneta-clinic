@@ -39,7 +39,7 @@ const WhatsAppButton = () => {
       {/* Tooltip */}
       <div
         className='absolute right-full mr-3 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg 
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap'
+                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap hidden md:block'
       >
         WhatsApp ile iletişime geç
         <div className='absolute top-1/2 left-full transform -translate-y-1/2 border-4 border-transparent border-l-gray-900'></div>
