@@ -75,7 +75,6 @@ const Procedures = () => {
       opacity: 1,
       transition: {
         duration: 0.4,
-        ease: 'easeOut',
       },
     },
     exit: {
@@ -83,7 +82,6 @@ const Procedures = () => {
       opacity: 0,
       transition: {
         duration: 0.4,
-        ease: 'easeIn',
       },
     },
   };
