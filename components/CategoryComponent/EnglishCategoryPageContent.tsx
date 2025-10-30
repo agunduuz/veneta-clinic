@@ -150,20 +150,14 @@ interface OperationInfo {
   images?: string[];
 }
 
-interface SubMenu {
-  title: string;
-  href: string;
-}
-
 interface EnglishCategoryPageContentProps {
   operationInfo: OperationInfo | undefined;
-  subMenu: SubMenu;
 }
 
 export default function EnglishCategoryPageContent({
   operationInfo,
-  subMenu,
 }: EnglishCategoryPageContentProps) {
+  const pageTitle = operationInfo?.title || "Aesthetic Operation";
   const stats = [
     { icon: Users, value: "15,000+", label: "Happy Patients" },
     { icon: Award, value: "15+", label: "Years Experience" },
@@ -219,7 +213,7 @@ export default function EnglishCategoryPageContent({
                 className="text-4xl md:text-6xl font-bold leading-tight"
                 variants={itemVariants}
               >
-                {operationInfo?.title || subMenu.title}
+                {pageTitle}
                 <span className="block text-primary">Expert Doctors</span>
               </motion.h1>
 
@@ -228,9 +222,8 @@ export default function EnglishCategoryPageContent({
                 variants={itemVariants}
               >
                 With 15+ years of experience and modern technology, we serve as
-                Turkey&apos;s leading clinic in{" "}
-                {operationInfo?.title || subMenu.title.toLowerCase()}. Meet our
-                expert team for safe, effective and natural results.
+                Turkey&apos;s leading clinic in {pageTitle.toLowerCase()}. Meet
+                our expert team for safe, effective and natural results.
               </motion.p>
 
               <motion.div
@@ -275,9 +268,7 @@ export default function EnglishCategoryPageContent({
               <div className="relative">
                 <Image
                   src={operationInfo?.image || "/images/doctors-team.jpg"}
-                  alt={`${
-                    operationInfo?.title || subMenu.title
-                  } - Veneta Clinic Expert Doctors`}
+                  alt={`${pageTitle} - Veneta Clinic Expert Doctors`}
                   width={500}
                   height={400}
                   className="rounded-2xl shadow-2xl object-cover"
@@ -392,11 +383,10 @@ export default function EnglishCategoryPageContent({
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {operationInfo?.title || subMenu.title} Gallery
+                {pageTitle} Gallery
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Examples and results from our{" "}
-                {operationInfo?.title || subMenu.title} operations
+                Examples and results from our {pageTitle} operations
               </p>
             </motion.div>
 
@@ -408,9 +398,7 @@ export default function EnglishCategoryPageContent({
             >
               <GallerySlider
                 images={operationInfo.images}
-                alt={`${
-                  operationInfo?.title || subMenu.title
-                } - Veneta Clinic Gallery`}
+                alt={`${pageTitle} - Veneta Clinic Gallery`}
               />
             </motion.div>
           </div>
@@ -429,8 +417,7 @@ export default function EnglishCategoryPageContent({
           >
             <motion.div className="space-y-6" variants={whyChooseVariants}>
               <h2 className="text-3xl md:text-4xl font-bold">
-                Why Should You Choose Us for{" "}
-                {operationInfo?.title || subMenu.title}?
+                Why Should You Choose Us for {pageTitle}?
               </h2>
               <p className="text-lg text-muted-foreground">
                 We apply the safest and most effective treatment methods with
@@ -500,13 +487,12 @@ export default function EnglishCategoryPageContent({
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-              {operationInfo?.title || subMenu.title} - Turkey&apos;s Best
-              Aesthetic Clinic
+              {pageTitle} - Turkey&apos;s Best Aesthetic Clinic
             </h1>
 
             <div className="prose prose-lg max-w-none">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                What is {operationInfo?.title || subMenu.title}?
+                What is {pageTitle}?
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 {operationInfo?.description ||
@@ -514,7 +500,7 @@ export default function EnglishCategoryPageContent({
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Advantages
+                {pageTitle} Advantages
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {operationInfo?.advantages?.map((advantage: string) => (
@@ -527,7 +513,7 @@ export default function EnglishCategoryPageContent({
                     </h3>
                     <p className="text-muted-foreground">
                       This is one of the important benefits achieved with{" "}
-                      {operationInfo?.title || subMenu.title}.
+                      {pageTitle}.
                     </p>
                   </div>
                 )) || [
@@ -553,7 +539,7 @@ export default function EnglishCategoryPageContent({
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Process
+                {pageTitle} Process
               </h2>
               <div className="space-y-6 mb-8">
                 {operationInfo?.process?.map(
@@ -591,13 +577,13 @@ export default function EnglishCategoryPageContent({
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Prices
+                {pageTitle} Prices
               </h2>
               <p className="text-lg text-muted-foreground mb-6">
-                {operationInfo?.title || subMenu.title} prices may vary
-                depending on the patient&apos;s special condition and the scope
-                of the procedure. You can make a free consultation appointment
-                for detailed information and price offer.
+                {pageTitle} prices may vary depending on the patient&apos;s
+                special condition and the scope of the procedure. You can make a
+                free consultation appointment for detailed information and price
+                offer.
               </p>
 
               <div className="bg-primary/10 rounded-xl p-6 mb-8">
@@ -625,8 +611,7 @@ export default function EnglishCategoryPageContent({
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                Frequently Asked Questions About{" "}
-                {operationInfo?.title || subMenu.title}
+                Frequently Asked Questions About {pageTitle}
               </h2>
               <div className="space-y-4 mb-8">
                 {operationInfo?.faqs?.map(
@@ -644,8 +629,7 @@ export default function EnglishCategoryPageContent({
                 ) || [
                   <div key="1" className="bg-white rounded-xl p-6 shadow-lg">
                     <h3 className="text-xl font-semibold mb-2 text-foreground">
-                      How long does {operationInfo?.title || subMenu.title}{" "}
-                      take?
+                      How long does {pageTitle} take?
                     </h3>
                     <p className="text-muted-foreground">
                       Surgery duration varies between 1-3 hours depending on the
@@ -663,7 +647,7 @@ export default function EnglishCategoryPageContent({
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  Contact Us Now for {operationInfo?.title || subMenu.title}
+                  Contact Us Now for {pageTitle}
                 </h2>
                 <p className="text-lg mb-6 opacity-90">
                   Call now or send a message via WhatsApp for free consultation
