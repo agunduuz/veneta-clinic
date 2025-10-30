@@ -496,7 +496,7 @@ export default function EnglishCategoryPageContent({
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 {operationInfo?.description ||
-                  `${subMenu.title} is one of the safe and effective aesthetic surgical procedures performed with modern medical technologies and our expert doctor staff. With 15+ years of experience, we prepare personalized treatment plans according to each patient\'s special needs.`}
+                  `${pageTitle} is one of the safe and effective aesthetic surgical procedures performed with modern medical technologies and our expert doctor staff. With 15+ years of experience, we prepare personalized treatment plans according to each patient\'s special needs.`}
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
