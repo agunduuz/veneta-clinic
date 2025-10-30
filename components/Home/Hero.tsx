@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
+import { useLocale, useTranslation } from "@/lib/i18n/context";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,8 @@ import { useEffect } from "react";
 import Link from "next/link";
 
 export default function Hero() {
-  const { t, locale } = useTranslation();
+  const { t } = useTranslation();
+  const { locale } = useLocale();
 
   useEffect(() => {
     const counters: NodeListOf<HTMLElement> =
