@@ -1,0 +1,32 @@
+{
+  "header": {
+    "title": "Sağlığınız İçin\nBize Ulaşın",
+    "description": "Alanında uzman doktorlarımızla hızlıca iletişime geçin, sağlığınız için en doğru adımı atın.",
+    "button": "Hemen Başvur",
+    "imageAlt": "Doktorlar Ekibi"
+  },
+  "form": {
+    "title": "Sağlık İhtiyaçlarınız İçin Bizimle İletişime Geçin",
+    "description": "Destek, geri bildirim veya randevu için bize ulaşın. Formu doldurun, ziyaretinizi onaylayalım ve sağlık profesyonellerimizle buluşun.",
+    "happyCustomers": "400+ Memnun Müşteri",
+    "rating": "(4.9)",
+    "reviewsText": "400+ Google değerlendirmesi",
+    "addressLabel": "Adres",
+    "addressText": "Teşvikiye, Vali Konağı Cd. Demir Han No: 36 Kat:7 Nişantaşı, Şişli / İstanbul",
+    "phoneLabel": "Telefon",
+    "phoneText": "+90 212 561 23 22",
+    "hoursLabel": "Çalışma Saatleri",
+    "hoursText": "7/24 Hizmet",
+    "formTitle": "İletişim Formu",
+    "formSubtitle": "Bize dilediğiniz zaman ulaşabilirsiniz",
+    "firstNamePlaceholder": "Adınız",
+    "lastNamePlaceholder": "Soyadınız",
+    "emailPlaceholder": "E-posta",
+    "phonePlaceholder": "Telefon",
+    "messagePlaceholder": "Mesajınız",
+    "submitButton": "Gönder",
+    "submittingButton": "Gönderiliyor...",
+    "successMessage": "Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.",
+    "errorMessage": "Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin veya telefon ile iletişime geçin."
+  }
+}

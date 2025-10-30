@@ -1,0 +1,95 @@
+{
+  "hero": {
+    "title": "Lazer Epilasyon İstanbul",
+    "titleHighlight": "ALMA SOPRANO ile Garantili Sonuç",
+    "description": "İstanbul'da lazer epilasyon tedavisi için Veneta Klinik'i tercih edin. Dünya'nın en gelişmiş ALMA SOPRANO lazer cihazı, uzman doktorlar ve uygun fiyatlarla kalıcı sonuçlar elde edin.",
+    "buttonReviews": "Müşteri Yorumları",
+    "buttonPhone": "0212 561 23 22",
+    "imageAlt": "ALMA SOPRANO Lazer Epilasyon Cihazı - Veneta Klinik"
+  },
+  "features": {
+    "feature1Title": "ALMA SOPRANO Lazer",
+    "feature1Description": "Dünya'nın en gelişmiş lazer epilasyon cihazı ile güvenli ve etkili tedavi",
+    "feature2Title": "Uzman Doktorlar",
+    "feature2Description": "15+ yıl deneyimli dermatologlar tarafından uygulanan tedaviler",
+    "feature3Title": "Garantili Sonuç",
+    "feature3Description": "%95 başarı oranı ile kalıcı kıl azaltma garantisi"
+  },
+  "device": {
+    "title": "ALMA SOPRANO Lazer Epilasyon Cihazı",
+    "description": "Veneta Klinik'te kullanılan ALMA SOPRANO lazer epilasyon cihazı, dünya standartlarında en gelişmiş teknolojiye sahiptir. FDA onaylı bu cihaz, tüm cilt tipleri ve kıl renkleri için güvenle kullanılabilir.",
+    "featuresTitle": "ALMA SOPRANO Özellikleri",
+    "feature1": "755nm, 810nm, 1064nm dalga boyları",
+    "feature2": "Tüm cilt tipleri için uygun",
+    "feature3": "Minimal ağrı ve yan etki",
+    "feature4": "FDA ve CE onaylı",
+    "advantagesTitle": "Avantajları",
+    "advantage1": "%95 başarı oranı",
+    "advantage2": "Daha az seans sayısı",
+    "advantage3": "Kalıcı sonuç garantisi",
+    "advantage4": "Tüm mevsimlerde uygulanabilir"
+  },
+  "areas": {
+    "title": "Tedavi Uygulanan Bölgeler",
+    "description": "ALMA SOPRANO lazer epilasyon, vücudun hemen her bölgesine güvenle uygulanabilir.",
+    "area1": "Yüz Bölgesi",
+    "area1Description": "Kaş arası, bıyık, sakal, yanaklar",
+    "area2": "Kol Bölgesi",
+    "area2Description": "Tüm kol, ön kol, parmaklar",
+    "area3": "Bacak Bölgesi",
+    "area3Description": "Tüm bacak, dizaltı, dizüstü",
+    "area4": "Bikini Bölgesi",
+    "area4Description": "Standart bikini, tam bikini, brazilian",
+    "area5": "Vücut",
+    "area5Description": "Sırt, göğüs, karın, kalça",
+    "area6": "Koltuk Altı",
+    "area6Description": "Her iki koltuk altı bölgesi"
+  },
+  "pricing": {
+    "title": "Fiyatlandırma",
+    "description": "Uygun fiyat ve taksit seçenekleriyle herkes için erişilebilir lazer epilasyon",
+    "sessionPackages": "Seans Paketleri",
+    "allAreas": "Tüm Vücut",
+    "allAreasDescription": "8 seans paket",
+    "halfBody": "Yarım Vücut",
+    "halfBodyDescription": "6 seans paket",
+    "singleArea": "Tek Bölge",
+    "singleAreaDescription": "6 seans paket",
+    "features1": "Taksit imkanı",
+    "features2": "Ücretsiz muayene",
+    "features3": "Garanti belgesi",
+    "callForPrice": "Fiyat için arayın"
+  },
+  "whyUs": {
+    "title": "Neden Veneta Klinik?",
+    "reason1Title": "ALMA SOPRANO",
+    "reason1Description": "Dünya'nın en gelişmiş lazer cihazı",
+    "reason2Title": "Uzman Kadro",
+    "reason2Description": "15+ yıl tecrübeli doktorlar",
+    "reason3Title": "Uygun Fiyat",
+    "reason3Description": "Taksit imkanı",
+    "reason4Title": "%100 Memnuniyet",
+    "reason4Description": "Garantili sonuç"
+  },
+  "faq": {
+    "title": "Sık Sorulan Sorular",
+    "question1": "Lazer epilasyon kaç seans sürer?",
+    "answer1": "Genellikle 6-8 seans yeterlidir. Kıl yoğunluğu ve cilt tipine göre değişebilir.",
+    "question2": "Lazer epilasyon ağrılı mı?",
+    "answer2": "ALMA SOPRANO cihazı sayesinde minimal ağrı hissedilir. Soğutma sistemi ile rahat bir deneyim sunuyoruz.",
+    "question3": "Hangi lazer cihazını kullanıyorsunuz?",
+    "answer3": "ALMA SOPRANO lazer epilasyon cihazı kullanıyoruz. Bu cihaz dünya'nın en gelişmiş teknolojisine sahip olup, tüm cilt tipleri için güvenle uygulanabilir.",
+    "question4": "Hangi bölgeler için uygundur?",
+    "answer4": "Yüz, bacak, koltuk altı, bikini, sırt, göğüs ve kollar için güvenle uygulanabilir.",
+    "question5": "Sonuçlar ne kadar kalıcı?",
+    "answer5": "Tamamlanan tedavi sonrası %80-90 oranında kalıcı kıl azalması elde edilir.",
+    "question6": "Fiyatlar taksitli mi?",
+    "answer6": "Evet, tüm tedavilerimiz için taksit imkanı sunuyoruz. Detaylı bilgi için bizi arayın."
+  },
+  "cta": {
+    "title": "Hemen Randevu Alın",
+    "description": "Ücretsiz muayene ve kişiye özel tedavi planı için hemen iletişime geçin",
+    "buttonPhone": "0212 561 23 22",
+    "buttonWhatsApp": "WhatsApp"
+  }
+}

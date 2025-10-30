@@ -1,23 +1,24 @@
-import HeroEnglish from '@/components/HomeEnglish/HeroEnglish';
-import FeaturesEnglish from '@/components/HomeEnglish/FeaturesEnglish';
-import ProceduresEnglish from '@/components/HomeEnglish/ProceduresEnglish';
-import PatientStoriesEnglish from '@/components/HomeEnglish/PatientStoriesEnglish';
-import LatestBlogEnglish from '@/components/HomeEnglish/LatestBlogEnglish';
-import CallToActionEnglish from '@/components/HomeEnglish/CallToActionEnglish';
-import WhatsAppButton from '@/components/Header/WhatsAppButton';
-import PhoneButton from '@/components/Header/PhoneButton';
-import AboutEnglish from '@/components/HomeEnglish/AboutEnglish';
+// app/(routes)/en/page.tsx
+import Hero from "@/components/Home/Hero";
+import About from "@/components/Home/About";
+import Features from "@/components/Home/Features";
+import Procedures from "@/components/Home/Procedures";
+import PatientStories from "@/components/Home/PatientStories";
+import LatestBlog from "@/components/Home/LatestBlog";
+import CallToAction from "@/components/Home/CallToAction";
+import WhatsAppButton from "@/components/Header/WhatsAppButton";
+import PhoneButton from "@/components/Header/PhoneButton";
 
-export default function Home() {
+export default function HomeEnglish() {
   return (
     <>
-      <HeroEnglish />
-      <AboutEnglish />
-      <FeaturesEnglish />
-      <ProceduresEnglish />
-      <PatientStoriesEnglish />
-      <LatestBlogEnglish />
-      <CallToActionEnglish />
+      <Hero />
+      <About />
+      <Features />
+      <Procedures />
+      <PatientStories />
+      <LatestBlog />
+      <CallToAction />
       <PhoneButton />
       <WhatsAppButton />
     </>

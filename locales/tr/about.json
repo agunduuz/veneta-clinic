@@ -1,0 +1,50 @@
+{
+  "header": {
+    "title": "Veneta Klinik",
+    "titleHighlight": "Hakkında",
+    "subtitle": "2010'dan beri estetikte mükemmelliğin öncüsü",
+    "description": "Veneta Klinik'te, sanatsal vizyonu tıbbi uzmanlıkla birleştirerek doğal güzelliğinizi ön plana çıkarıyoruz. Modern tesisimiz ve alanında uzman ekibimizle, kişiye özel bakım ve hem cerrahi hem de cerrahi olmayan estetik uygulamalarda üstün sonuçlar sunmaya kendimizi adadık.",
+    "buttonServices": "Hizmetlerimiz",
+    "buttonContact": "İletişim",
+    "imageAlt": "Veneta Klinik Modern Tedavi Odası",
+    "experienceYears": "13+",
+    "experienceText": "Yıllık\nDeneyim"
+  },
+  "features": {
+    "title": "Bizi Farklı Kılan",
+    "titleHighlight": "Özelliklerimiz",
+    "subtitle": "Modern teknoloji ve uzman kadromuz ile size en iyi deneyimi sunuyoruz",
+    "feature1Id": "01",
+    "feature1Title": "İleri Teknoloji",
+    "feature1Description": "En son teknolojik cihazlar ve yöntemler ile estetik tedavilerinizi gerçekleştiriyoruz. Amacımız doğru teşhis, etkili tedavi ve hasta konforu sağlamak.",
+    "feature2Id": "02",
+    "feature2Title": "Uzman Ekip",
+    "feature2Description": "Alanında uzman doktorlarımız ve deneyimli ekibimiz ile size özel tedavi planları oluşturuyor ve en iyi sonuçları elde etmeyi hedefliyoruz.",
+    "feature3Id": "03",
+    "feature3Title": "Kişiye Özel Bakım",
+    "feature3Description": "Kliniğimiz kişiye özel bakım hizmeti sunar. Ekibimiz, detaylı muayene ve görüşmeler sonrasında size özel tedavi planları oluşturmakta uzmanlaşmıştır."
+  },
+  "mission": {
+    "quote": "Mükemmelliğe olan bağlılığımız, hasta bakımından en son estetik yeniliklere kadar yaptığımız her şeyi yönlendiriyor.",
+    "doctorName": "Dr. Batıbey Batmacı",
+    "doctorTitle": "Medikal Direktör & Plastik Cerrahi Uzmanı",
+    "doctorInfo1": "• Selçuk Üniversitesi Meram Tıp Fakültesi Mezunu",
+    "doctorInfo2": "• 13+ Yıl Plastik Cerrahi Deneyimi",
+    "doctorInfo3": "• 5000+ Başarılı Operasyon",
+    "doctorInfo4": "• Uluslararası Estetik Cerrahi Derneği Üyesi",
+    "doctorInfo5": "• En Son Teknolojik Yöntemler Uzmanı",
+    "title": "Misyonumuz",
+    "subtitle": "Estetik bakımda mükemmellik yoluyla özgüven kazandırmak",
+    "description1": "Veneta Klinik olarak misyonumuz, bireylerin kendi ciltlerinde kendilerini güvende hissetmelerini sağlamak ve doğal güzelliklerini ortaya çıkaran olağanüstü estetik bakım hizmeti sunmaktır. Her hastanın benzersiz hedeflerine ve yaşam tarzına uygun kişiselleştirilmiş tedavi planları oluşturmaya inanıyoruz.",
+    "description2": "Sürekli eğitim, en son teknolojilerin benimsenmesi ve hasta güvenliğine olan sarsılmaz bağlılığımız ile, güven ve üstün sonuçlara dayalı kalıcı ilişkiler kurarak önde gelen bir estetik klinik olma konumumuzu korumaya çalışıyoruz.",
+    "stat1Value": "13",
+    "stat1Label": "Yıllık Deneyim",
+    "stat2Value": "5000",
+    "stat2Label": "Mutlu Hasta",
+    "stat3Value": "20",
+    "stat3Label": "Uzman Hekim",
+    "stat4Value": "30",
+    "stat4Label": "Uygulanan Prosedür",
+    "doctorImageAlt": "Uzman Doktor"
+  }
+}

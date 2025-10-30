@@ -1,26 +1,28 @@
-'use client';
+"use client";
+
+import { useTranslation } from "@/lib/i18n/context";
 
 const CallToAction = () => {
+  const { t } = useTranslation();
+
   return (
-    <section className='relative py-16 bg-primary/70 overflow-hidden'>
+    <section className="relative py-16 bg-primary/70 overflow-hidden">
       {/* Soft background circles */}
-      <div className='absolute left-8 top-8 w-40 h-40 bg-primary/30 rounded-full z-0' />
-      <div className='absolute right-0 top-0 w-72 h-72 bg-primary/30 rounded-full z-0' />
-      <div className='container mx-auto px-4 relative z-10 flex flex-col items-center text-center'>
-        <h2 className='text-2xl md:text-4xl font-bold font-playfair mb-4 text-foreground'>
-          Dönüşüm Yolculuğunuza Başlamaya Hazır mısınız?
+      <div className="absolute left-8 top-8 w-40 h-40 bg-primary/30 rounded-full z-0" />
+      <div className="absolute right-0 top-0 w-72 h-72 bg-primary/30 rounded-full z-0" />
+      <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
+        <h2 className="text-2xl md:text-4xl font-bold font-playfair mb-4 text-foreground">
+          {t("home.cta.title")}
         </h2>
-        <p className='text-base md:text-lg text-foreground mb-8 max-w-2xl'>
-          Uzmanlarımızla bir danışmanlık randevusu alarak estetik
-          hedeflerinizi konuşun ve size özel bir tedavi planı
-          oluşturun.
+        <p className="text-base md:text-lg text-foreground mb-8 max-w-2xl">
+          {t("home.cta.description")}
         </p>
-        <div className='flex flex-col sm:flex-row gap-4 justify-center'>
-          <button className='bg-background text-primary font-semibold px-8 py-3 rounded-md shadow hover:bg-primary/90 hover:text-background transition-colors border border-transparent'>
-            Danışmanlık Al
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <button className="bg-background text-primary font-semibold px-8 py-3 rounded-md shadow hover:bg-primary/90 hover:text-background transition-colors border border-transparent">
+            {t("home.cta.button")}
           </button>
-          <button className='bg-transparent text-foreground font-semibold px-8 py-3 rounded-md border border-foreground/40 hover:bg-background/60 transition-colors'>
-            İletişime Geç
+          <button className="bg-transparent text-foreground font-semibold px-8 py-3 rounded-md border border-foreground/40 hover:bg-background/60 transition-colors">
+            {t("home.cta.buttonSecondary")}
           </button>
         </div>
       </div>

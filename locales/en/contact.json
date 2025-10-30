@@ -1,0 +1,32 @@
+{
+  "header": {
+    "title": "Contact Us\nFor Your Health",
+    "description": "Get in touch with our specialist doctors quickly and take the right step for your health.",
+    "button": "Apply Now",
+    "imageAlt": "Medical Team"
+  },
+  "form": {
+    "title": "Contact Us For Your Health Needs",
+    "description": "Reach out to us for support, feedback, or appointments. Fill out the form, let's confirm your visit and meet with our healthcare professionals.",
+    "happyCustomers": "400+ Happy Customers",
+    "rating": "(4.9)",
+    "reviewsText": "400+ Google reviews",
+    "addressLabel": "Address",
+    "addressText": "Teşvikiye, Vali Konağı Cd. Demir Han No: 36 Floor:7 Nişantaşı, Şişli / Istanbul",
+    "phoneLabel": "Phone",
+    "phoneText": "+90 212 561 23 22",
+    "hoursLabel": "Working Hours",
+    "hoursText": "24/7 Service",
+    "formTitle": "Contact Form",
+    "formSubtitle": "You can reach us anytime",
+    "firstNamePlaceholder": "First Name",
+    "lastNamePlaceholder": "Last Name",
+    "emailPlaceholder": "Email",
+    "phonePlaceholder": "Phone",
+    "messagePlaceholder": "Your Message",
+    "submitButton": "Send",
+    "submittingButton": "Sending...",
+    "successMessage": "Your message has been sent successfully! We will get back to you as soon as possible.",
+    "errorMessage": "An error occurred while sending the message. Please try again or contact us by phone."
+  }
+}

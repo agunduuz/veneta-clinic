@@ -1,0 +1,112 @@
+{
+  "hero": {
+    "title": "Surgical Aesthetics Istanbul",
+    "subtitle": "Guaranteed Results with Expert Surgeons",
+    "description": "Choose Veneta Clinic for surgical aesthetic treatments in Istanbul. Get natural and permanent results with the latest techniques, expert surgeons, and affordable prices in facial, body, and breast aesthetics.",
+    "ctaReviews": "Customer Reviews",
+    "ctaPhone": "0212 561 23 22",
+    "imageAlt": "Surgical Aesthetics - Veneta Clinic Istanbul"
+  },
+  "features": {
+    "feature1Title": "Expert Surgeons",
+    "feature1Description": "Surgical aesthetic procedures performed by plastic surgeons with 15+ years of experience",
+    "feature2Title": "Latest Techniques",
+    "feature2Description": "World-standard surgical aesthetic techniques and advanced technology",
+    "feature3Title": "Guaranteed Results",
+    "feature3Description": "95% success rate with natural and permanent aesthetic results"
+  },
+  "categories": {
+    "title": "Surgical Aesthetics Categories",
+    "description": "Discover the world of surgical aesthetics with the latest techniques, expert doctors, and real patient experiences in facial, body, and breast aesthetics.",
+    "viewDetails": "View Details",
+    "badges": {
+      "popular": "Popular",
+      "new": "New"
+    },
+    "items": {
+      "facialAesthetics": {
+        "description": "Get detailed information and case examples about Facial Aesthetics with our expert doctors."
+      },
+      "rhinoplasty": {
+        "description": "Get detailed information and case examples about Rhinoplasty with our expert doctors."
+      },
+      "faceLift": {
+        "description": "Get detailed information and case examples about Face Lift with our expert doctors."
+      },
+      "eyelidSurgery": {
+        "description": "Get detailed information and case examples about Eye Bag Surgery with our expert doctors."
+      },
+      "bodyAesthetics": {
+        "description": "Get detailed information and case examples about Body Aesthetics with our expert doctors."
+      },
+      "tummyTuck": {
+        "description": "Get detailed information and case examples about Tummy Tuck with our expert doctors."
+      },
+      "liposuction": {
+        "description": "Get detailed information and case examples about Liposuction with our expert doctors."
+      },
+      "breastAesthetics": {
+        "description": "Get detailed information and case examples about Breast Aesthetics with our expert doctors."
+      },
+      "breastAugmentation": {
+        "description": "Get detailed information and case examples about Breast Augmentation with our expert doctors."
+      },
+      "breastReduction": {
+        "description": "Get detailed information and case examples about Breast Reduction with our expert doctors."
+      }
+    }
+  },
+  "about": {
+    "title": "What is Surgical Aesthetics?",
+    "description": "Surgical aesthetics are aesthetic procedures performed using surgical methods to improve a person's appearance and achieve a younger, more beautiful look. These procedures are performed by expert plastic surgeons in safe environments.",
+    "areasTitle": "Surgical Aesthetic Areas",
+    "area1": "Facial aesthetics (Rhinoplasty, Blepharoplasty)",
+    "area2": "Body aesthetics (Liposuction, Abdominoplasty)",
+    "area3": "Breast aesthetics (Breast augmentation, reduction)",
+    "area4": "Hair transplantation and hair aesthetics",
+    "advantagesTitle": "Advantages",
+    "advantage1": "Permanent and natural results",
+    "advantage2": "Application by expert surgeons",
+    "advantage3": "Safe and controlled environment",
+    "advantage4": "Personalized treatment plan"
+  },
+  "process": {
+    "title": "How Does the Surgical Aesthetics Process Work?",
+    "step1Title": "Consultation & Planning",
+    "step1Description": "After detailed examination, a personalized treatment plan is prepared and expectations are determined.",
+    "step2Title": "Surgery Process",
+    "step2Description": "Surgery is performed by expert surgeon in a safe environment, procedure duration varies according to treatment.",
+    "step3Title": "Recovery & Results",
+    "step3Description": "Recovery process is monitored with regular check-ups, natural and permanent results are achieved."
+  },
+  "whyUs": {
+    "title": "Why Choose Veneta Clinic?",
+    "reason1Title": "15+ Years Experience",
+    "reason1Description": "Thousands of successful surgeries",
+    "reason2Title": "Expert Surgeons",
+    "reason2Description": "Experienced plastic surgeons",
+    "reason3Title": "Safe Environment",
+    "reason3Description": "Modern operating room",
+    "reason4Title": "100% Satisfaction",
+    "reason4Description": "Guaranteed results"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "question1": "Are surgical aesthetic procedures safe?",
+    "answer1": "Yes, surgical aesthetic procedures performed by expert surgeons in safe environments are quite safe.",
+    "question2": "How long does the recovery process take?",
+    "answer2": "Recovery time varies depending on the procedure performed. Usually, return to daily life is achieved within 1-3 weeks.",
+    "question3": "In which areas is surgical aesthetics performed?",
+    "answer3": "Surgical aesthetic procedures can be applied in many areas such as facial, body, breast aesthetics, and hair transplantation.",
+    "question4": "How permanent are the results?",
+    "answer4": "Results of surgical aesthetic procedures are generally permanent. The aging process continues, but a better appearance compared to before the procedure is maintained.",
+    "question5": "Are prices available on installments?",
+    "answer5": "Yes, we offer installment options for all our surgical aesthetic procedures. Please call us for detailed information."
+  },
+  "cta": {
+    "title": "Book Your Appointment Now",
+    "description": "Contact us immediately for free consultation and personalized treatment plan",
+    "ctaPhone": "0212 561 23 22",
+    "ctaWhatsApp": "WhatsApp"
+  }
+}
