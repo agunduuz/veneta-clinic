@@ -443,7 +443,6 @@ const operationData = {
   },
 };
 
-// ✅ FIXED: Proper URL extraction
 export async function generateStaticParams() {
   const ameliyatli = navigationItems.find(
     (item) => item.titleKey === "nav.surgicalAesthetics"
@@ -451,10 +450,9 @@ export async function generateStaticParams() {
 
   return (
     ameliyatli?.subMenus?.map((sub) => {
-      // Extract slug from full path
       const slug = sub.href.tr.split("/").pop() || "";
       return {
-        category: slug, // ✅ Returns: "yuz", "burun-estetigi", etc.
+        category: slug,
       };
     }) || []
   );
@@ -470,7 +468,6 @@ export async function generateMetadata({
     (item) => item.titleKey === "nav.surgicalAesthetics"
   );
 
-  // ✅ FIXED: Match by slug (last part of path)
   const subMenu = ameliyatli?.subMenus?.find((sub) => {
     const slug = sub.href.tr.split("/").pop();
     return slug === category;
@@ -536,7 +533,6 @@ export default async function CategoryPage({
     (item) => item.titleKey === "nav.surgicalAesthetics"
   );
 
-  // ✅ FIXED: Match by slug (last part of path)
   const subMenu = ameliyatli?.subMenus?.find((sub) => {
     const slug = sub.href.tr.split("/").pop();
     return slug === category;
@@ -548,7 +544,7 @@ export default async function CategoryPage({
 
   return (
     <>
-      <CategoryPageContent operationInfo={operationInfo} subMenu={subMenu} />
+      <CategoryPageContent operationInfo={operationInfo} />
       <PhoneButton />
       <WhatsAppButton />
     </>

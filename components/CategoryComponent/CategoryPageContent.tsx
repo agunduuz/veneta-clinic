@@ -150,19 +150,13 @@ interface OperationInfo {
   images?: string[];
 }
 
-interface SubMenu {
-  title: string;
-  href: string;
-}
-
+// ✅ FIXED: Removed SubMenu interface requirement
 interface CategoryPageContentProps {
   operationInfo: OperationInfo | undefined;
-  subMenu: SubMenu;
 }
 
 export default function CategoryPageContent({
   operationInfo,
-  subMenu,
 }: CategoryPageContentProps) {
   const stats = [
     { icon: Users, value: "15,000+", label: "Mutlu Hasta" },
@@ -194,6 +188,9 @@ export default function CategoryPageContent({
     },
   ];
 
+  // ✅ FIXED: Use operationInfo.title directly
+  const pageTitle = operationInfo?.title || "Estetik Operasyon";
+
   return (
     <>
       {/* Hero Section */}
@@ -219,7 +216,7 @@ export default function CategoryPageContent({
                 className="text-4xl md:text-6xl font-bold leading-tight"
                 variants={itemVariants}
               >
-                {operationInfo?.title || subMenu.title}
+                {pageTitle}
                 <span className="block text-primary">Uzman Doktorlar</span>
               </motion.h1>
 
@@ -228,9 +225,9 @@ export default function CategoryPageContent({
                 variants={itemVariants}
               >
                 15+ yıllık deneyimimiz ve modern teknolojimizle{" "}
-                {operationInfo?.title || subMenu.title.toLowerCase()} konusunda
-                Türkiye&apos;nin lider kliniği olarak hizmet veriyoruz. Güvenli,
-                etkili ve doğal sonuçlar için uzman ekibimizle tanışın.
+                {pageTitle.toLowerCase()} konusunda Türkiye&apos;nin lider
+                kliniği olarak hizmet veriyoruz. Güvenli, etkili ve doğal
+                sonuçlar için uzman ekibimizle tanışın.
               </motion.p>
 
               <motion.div
@@ -275,9 +272,7 @@ export default function CategoryPageContent({
               <div className="relative">
                 <Image
                   src={operationInfo?.image || "/images/doctors-team.jpg"}
-                  alt={`$ {
-                    operationInfo?.title || subMenu.title
-                  } - Veneta Clinic Uzman Doktorları`}
+                  alt={`${pageTitle} - Veneta Clinic Uzman Doktorları`}
                   width={500}
                   height={400}
                   className="rounded-2xl shadow-2xl object-cover"
@@ -392,11 +387,10 @@ export default function CategoryPageContent({
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {operationInfo?.title || subMenu.title} Galeri
+                {pageTitle} Galeri
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                {operationInfo?.title || subMenu.title} operasyonlarımızdan
-                örnekler ve sonuçlar
+                {pageTitle} operasyonlarımızdan örnekler ve sonuçlar
               </p>
             </motion.div>
 
@@ -408,9 +402,7 @@ export default function CategoryPageContent({
             >
               <GallerySlider
                 images={operationInfo.images}
-                alt={`${
-                  operationInfo?.title || subMenu.title
-                } - Veneta Clinic Galeri`}
+                alt={`${pageTitle} - Veneta Clinic Galeri`}
               />
             </motion.div>
           </div>
@@ -429,8 +421,7 @@ export default function CategoryPageContent({
           >
             <motion.div className="space-y-6" variants={whyChooseVariants}>
               <h2 className="text-3xl md:text-4xl font-bold">
-                {operationInfo?.title || subMenu.title} Konusunda Neden Bizi
-                Seçmelisiniz?
+                {pageTitle} Konusunda Neden Bizi Seçmelisiniz?
               </h2>
               <p className="text-lg text-muted-foreground">
                 Uzman doktorlarımız, modern teknolojimiz ve hasta odaklı
@@ -500,23 +491,22 @@ export default function CategoryPageContent({
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-              {operationInfo?.title || subMenu.title} - Türkiye&apos;nin En İyi
-              Estetik Kliniği
+              {pageTitle} - Türkiye&apos;nin En İyi Estetik Kliniği
             </h1>
 
             <div className="prose prose-lg max-w-none">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Nedir?
+                {pageTitle} Nedir?
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 {operationInfo?.description ||
-                  `${subMenu.title}, modern tıbbi teknolojiler ve uzman doktor kadromuzla gerçekleştirilen 
+                  `${pageTitle}, modern tıbbi teknolojiler ve uzman doktor kadromuzla gerçekleştirilen 
                 güvenli ve etkili estetik cerrahi işlemlerinden biridir. 15+ yıllık deneyimimizle, 
                 her hastanın özel ihtiyaçlarına göre kişiselleştirilmiş tedavi planları hazırlıyoruz.`}
               </p>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Avantajları
+                {pageTitle} Avantajları
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 {operationInfo?.advantages?.map((advantage: string) => (
@@ -528,8 +518,7 @@ export default function CategoryPageContent({
                       {advantage}
                     </h3>
                     <p className="text-muted-foreground">
-                      {operationInfo?.title || subMenu.title} ile elde edilen
-                      önemli faydalardan biridir.
+                      {pageTitle} ile elde edilen önemli faydalardan biridir.
                     </p>
                   </div>
                 )) || [
@@ -555,14 +544,17 @@ export default function CategoryPageContent({
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Süreci
+                {pageTitle} Süreci
               </h2>
               <div className="space-y-6 mb-8">
                 {operationInfo?.process?.map(
-                  (step: { step: string; description: string }) => (
+                  (
+                    step: { step: string; description: string },
+                    index: number
+                  ) => (
                     <div key={step.step} className="flex items-start gap-4">
                       <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                        1
+                        {index + 1}
                       </div>
                       <div>
                         <h3 className="text-xl font-semibold mb-2">
@@ -593,13 +585,12 @@ export default function CategoryPageContent({
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Fiyatları
+                {pageTitle} Fiyatları
               </h2>
               <p className="text-lg text-muted-foreground mb-6">
-                {operationInfo?.title || subMenu.title} fiyatları, hastanın özel
-                durumuna ve işlemin kapsamına göre değişiklik gösterebilir.
-                Detaylı bilgi ve fiyat teklifi için ücretsiz konsültasyon
-                randevusu alabilirsiniz.
+                {pageTitle} fiyatları, hastanın özel durumuna ve işlemin
+                kapsamına göre değişiklik gösterebilir. Detaylı bilgi ve fiyat
+                teklifi için ücretsiz konsültasyon randevusu alabilirsiniz.
               </p>
 
               <div className="bg-primary/10 rounded-xl p-6 mb-8">
@@ -627,8 +618,7 @@ export default function CategoryPageContent({
               </div>
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {operationInfo?.title || subMenu.title} Hakkında Sık Sorulan
-                Sorular
+                {pageTitle} Hakkında Sık Sorulan Sorular
               </h2>
               <div className="space-y-4 mb-8">
                 {operationInfo?.faqs?.map(
@@ -646,7 +636,7 @@ export default function CategoryPageContent({
                 ) || [
                   <div key="1" className="bg-white rounded-xl p-6 shadow-lg">
                     <h3 className="text-xl font-semibold mb-2 text-foreground">
-                      {operationInfo?.title || subMenu.title} ne kadar sürer?
+                      {pageTitle} ne kadar sürer?
                     </h3>
                     <p className="text-muted-foreground">
                       Operasyon süresi hastanın durumuna göre 1-3 saat arasında
@@ -664,8 +654,7 @@ export default function CategoryPageContent({
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  {operationInfo?.title || subMenu.title} İçin Hemen İletişime
-                  Geçin
+                  {pageTitle} İçin Hemen İletişime Geçin
                 </h2>
                 <p className="text-lg mb-6 opacity-90">
                   Uzman doktorlarımızla ücretsiz konsültasyon için hemen arayın

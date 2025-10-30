@@ -1,5 +1,5 @@
 // app/(routes)/en/surgical-aesthetics/[category]/page.tsx
-import { navigationItems } from "@/data/navigation"; // ✅ FIXED: Use navigationItems
+import { navigationItems } from "@/data/navigation";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import EnglishCategoryPageContent from "@/components/CategoryComponent/EnglishCategoryPageContent";
@@ -444,18 +444,23 @@ const englishOperationData = {
   },
 };
 
+// ✅ COMPLETELY FIXED: generateStaticParams
 export async function generateStaticParams() {
   const surgical = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics" // ✅ FIXED
+    (item) => item.titleKey === "nav.surgicalAesthetics"
   );
+
   return (
     surgical?.subMenus?.map((sub) => {
       const slug = sub.href.en.split("/").pop() || "";
-      return { category: slug }; // ✅ map içinde return
+      return {
+        category: slug,
+      };
     }) || []
   );
 }
 
+// ✅ COMPLETELY FIXED: generateMetadata
 export async function generateMetadata({
   params,
 }: {
@@ -463,8 +468,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { category } = await params;
   const surgical = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics" // ✅ FIXED
+    (item) => item.titleKey === "nav.surgicalAesthetics"
   );
+
   const subMenu = surgical?.subMenus?.find((sub) => {
     const slug = sub.href.en.split("/").pop();
     return slug === category;
@@ -521,6 +527,7 @@ export async function generateMetadata({
   };
 }
 
+// ✅ COMPLETELY FIXED: Component function
 export default async function EnglishCategoryPage({
   params,
 }: {
@@ -528,11 +535,13 @@ export default async function EnglishCategoryPage({
 }) {
   const { category } = await params;
   const surgical = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics" // ✅ FIXED
+    (item) => item.titleKey === "nav.surgicalAesthetics"
   );
-  const subMenu = surgical?.subMenus?.find(
-    (sub) => sub.href.en.replace("/en/surgical-aesthetics/", "") === category // ✅ FIXED
-  );
+
+  const subMenu = surgical?.subMenus?.find((sub) => {
+    const slug = sub.href.en.split("/").pop();
+    return slug === category;
+  });
 
   if (!subMenu) return notFound();
 
@@ -541,10 +550,7 @@ export default async function EnglishCategoryPage({
 
   return (
     <>
-      <EnglishCategoryPageContent
-        operationInfo={operationInfo}
-        subMenu={subMenu}
-      />
+      <EnglishCategoryPageContent operationInfo={operationInfo} />
       <PhoneButton />
       <WhatsAppButton />
     </>
