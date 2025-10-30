@@ -1,15 +1,18 @@
-import AboutHeaderEnglish from '@/components/AboutComponentEN/AboutHeaderEn';
-import AboutMissionEnglish from '@/components/AboutComponentEN/AboutMissionEn';
-import AboutFeaturesEnglish from '@/components/AboutComponentEN/AboutFeaturesEn';
+// app/(routes)/en/about/page.tsx
+import AboutHeader from "@/components/AboutComponent/AboutHeader";
+import AboutFeatures from "@/components/AboutComponent/AboutFeatures";
+import AboutMission from "@/components/AboutComponent/AboutMission";
+import PhoneButton from "@/components/Header/PhoneButton";
+import WhatsAppButton from "@/components/Header/WhatsAppButton";
 
-const Page = () => {
+export default function AboutPage() {
   return (
-    <main className='bg-background min-h-[60vh] flex flex-col items-center justify-center py-8 lg:py-16 px-4'>
-      <AboutHeaderEnglish />
-      <AboutMissionEnglish />
-      <AboutFeaturesEnglish />
-    </main>
+    <>
+      <AboutHeader />
+      <AboutFeatures />
+      <AboutMission />
+      <PhoneButton />
+      <WhatsAppButton />
+    </>
   );
-};
-
-export default Page;
+}

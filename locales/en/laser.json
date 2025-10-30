@@ -1,0 +1,95 @@
+{
+  "hero": {
+    "title": "Laser Hair Removal Istanbul",
+    "titleHighlight": "Guaranteed Results with ALMA SOPRANO",
+    "description": "Choose Veneta Clinic for laser hair removal treatment in Istanbul. Get permanent results with the world's most advanced ALMA SOPRANO laser device, expert doctors, and affordable prices.",
+    "buttonReviews": "Customer Reviews",
+    "buttonPhone": "0212 561 23 22",
+    "imageAlt": "ALMA SOPRANO Laser Hair Removal Device - Veneta Clinic"
+  },
+  "features": {
+    "feature1Title": "ALMA SOPRANO Laser",
+    "feature1Description": "Safe and effective treatment with the world's most advanced laser hair removal device",
+    "feature2Title": "Expert Doctors",
+    "feature2Description": "Treatments performed by dermatologists with 15+ years of experience",
+    "feature3Title": "Guaranteed Results",
+    "feature3Description": "95% success rate with permanent hair reduction guarantee"
+  },
+  "device": {
+    "title": "ALMA SOPRANO Laser Hair Removal Device",
+    "description": "The ALMA SOPRANO laser hair removal device used at Veneta Clinic features world-class advanced technology. This FDA-approved device can be safely used for all skin types and hair colors.",
+    "featuresTitle": "ALMA SOPRANO Features",
+    "feature1": "755nm, 810nm, 1064nm wavelengths",
+    "feature2": "Suitable for all skin types",
+    "feature3": "Minimal pain and side effects",
+    "feature4": "FDA and CE approved",
+    "advantagesTitle": "Advantages",
+    "advantage1": "95% success rate",
+    "advantage2": "Fewer session requirements",
+    "advantage3": "Permanent result guarantee",
+    "advantage4": "Applicable in all seasons"
+  },
+  "areas": {
+    "title": "Treatment Areas",
+    "description": "ALMA SOPRANO laser hair removal can be safely applied to almost any area of the body.",
+    "area1": "Facial Area",
+    "area1Description": "Between eyebrows, upper lip, beard, cheeks",
+    "area2": "Arm Area",
+    "area2Description": "Full arm, forearm, fingers",
+    "area3": "Leg Area",
+    "area3Description": "Full leg, lower leg, upper leg",
+    "area4": "Bikini Area",
+    "area4Description": "Standard bikini, full bikini, brazilian",
+    "area5": "Body",
+    "area5Description": "Back, chest, abdomen, buttocks",
+    "area6": "Underarm",
+    "area6Description": "Both underarm areas"
+  },
+  "pricing": {
+    "title": "Pricing",
+    "description": "Accessible laser hair removal for everyone with affordable prices and installment options",
+    "sessionPackages": "Session Packages",
+    "allAreas": "Full Body",
+    "allAreasDescription": "8 session package",
+    "halfBody": "Half Body",
+    "halfBodyDescription": "6 session package",
+    "singleArea": "Single Area",
+    "singleAreaDescription": "6 session package",
+    "features1": "Installment options",
+    "features2": "Free consultation",
+    "features3": "Guarantee certificate",
+    "callForPrice": "Call for pricing"
+  },
+  "whyUs": {
+    "title": "Why Veneta Clinic?",
+    "reason1Title": "ALMA SOPRANO",
+    "reason1Description": "World's most advanced laser device",
+    "reason2Title": "Expert Team",
+    "reason2Description": "Doctors with 15+ years experience",
+    "reason3Title": "Affordable Price",
+    "reason3Description": "Installment options available",
+    "reason4Title": "100% Satisfaction",
+    "reason4Description": "Guaranteed results"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "question1": "How many sessions does laser hair removal take?",
+    "answer1": "Usually 6-8 sessions are sufficient. It may vary depending on hair density and skin type.",
+    "question2": "Is laser hair removal painful?",
+    "answer2": "Minimal pain is felt thanks to the ALMA SOPRANO device. We provide a comfortable experience with the cooling system.",
+    "question3": "Which laser device do you use?",
+    "answer3": "We use the ALMA SOPRANO laser hair removal device. This device has the world's most advanced technology and can be safely applied to all skin types.",
+    "question4": "Which areas is it suitable for?",
+    "answer4": "Can be safely applied to face, legs, underarms, bikini, back, chest, and arms.",
+    "question5": "How permanent are the results?",
+    "answer5": "After completed treatment, 80-90% permanent hair reduction is achieved.",
+    "question6": "Are prices installment-based?",
+    "answer6": "Yes, we offer installment options for all our treatments. Call us for detailed information."
+  },
+  "cta": {
+    "title": "Book Your Appointment Now",
+    "description": "Contact us now for a free consultation and personalized treatment plan",
+    "buttonPhone": "0212 561 23 22",
+    "buttonWhatsApp": "WhatsApp"
+  }
+}

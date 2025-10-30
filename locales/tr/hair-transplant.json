@@ -1,0 +1,88 @@
+{
+  "hero": {
+    "title": "Saç Ekimi İstanbul",
+    "subtitle": "FUE Tekniği ile Doğal Sonuçlar",
+    "description": "İstanbul'da saç ekimi tedavisi için Veneta Klinik'i tercih edin. En gelişmiş FUE tekniği, uzman cerrahlar ve doğal sonuçlarla kalıcı saç restorasyonu elde edin.",
+    "ctaReviews": "Müşteri Yorumları",
+    "ctaPhone": "0212 561 23 22",
+    "imageAlt": "Saç Ekimi - Veneta Klinik"
+  },
+  "features": {
+    "feature1Title": "FUE Tekniği",
+    "feature1Description": "En gelişmiş saç ekimi tekniği ile doğal ve kalıcı sonuçlar",
+    "feature2Title": "Uzman Cerrahlar",
+    "feature2Description": "15+ yıl deneyimli plastik cerrahlar tarafından uygulanan operasyonlar",
+    "feature3Title": "95% Başarı Oranı",
+    "feature3Description": "Binlerce başarılı vaka ile kanıtlanmış sonuçlar"
+  },
+  "fueSection": {
+    "title": "FUE (Follicular Unit Extraction) Saç Ekimi Tekniği",
+    "description": "Veneta Klinik'te kullanılan FUE tekniği, saç ekimi alanında en gelişmiş ve güvenli yöntemdir. Bu teknik ile saç kökleri tek tek alınarak saçsız bölgelere nakledilir, doğal görünüm elde edilir.",
+    "advantagesTitle": "FUE Tekniğinin Avantajları",
+    "advantage1": "İz bırakmayan minimal invaziv teknik",
+    "advantage2": "Doğal saç çizgisi oluşturma",
+    "advantage3": "Hızlı iyileşme süreci",
+    "advantage4": "Yüksek saç kökü canlılığı",
+    "applicationsTitle": "Uygulama Alanları",
+    "application1": "Erkek tipi saç dökülmesi",
+    "application2": "Kadın tipi saç dökülmesi",
+    "application3": "Kaş ve sakal ekimi",
+    "application4": "Yara izi ve yanık tedavisi"
+  },
+  "process": {
+    "title": "Saç Ekimi Nasıl Yapılır?",
+    "step1Title": "Muayene ve Planlama",
+    "step1Description": "Saç dökülme tipi analiz edilir, kişiye özel tedavi planı hazırlanır.",
+    "step2Title": "Saç Kökü Alma",
+    "step2Description": "FUE tekniği ile saç kökleri tek tek alınır, özel solüsyonlarda korunur.",
+    "step3Title": "Saç Kökü Ekimi",
+    "step3Description": "Mikroskop altında saç kökleri doğal açılarla ekilir.",
+    "step4Title": "Takip ve Sonuç",
+    "step4Description": "6-12 ay sonra doğal saçlar çıkar, düzenli takip yapılır."
+  },
+  "aftercare": {
+    "title": "Saç Ekimi Sonrası Bakım",
+    "phase1Title": "İlk 7 Gün",
+    "phase1Item1": "Başı yüksekte tutun",
+    "phase1Item2": "Soğuk kompres uygulayın",
+    "phase1Item3": "Reçeteli ilaçları kullanın",
+    "phase1Item4": "Saçları yıkamayın",
+    "phase2Title": "1-3 Ay Sonrası",
+    "phase2Item1": "Özel şampuan kullanın",
+    "phase2Item2": "Güneşten koruyun",
+    "phase2Item3": "Saç kökleri çıkmaya başlar",
+    "phase2Item4": "Düzenli kontroller"
+  },
+  "whyUs": {
+    "title": "Neden Veneta Klinik?",
+    "reason1Title": "15+ Yıl Deneyim",
+    "reason1Description": "Binlerce başarılı saç ekimi",
+    "reason2Title": "FUE Tekniği",
+    "reason2Description": "En gelişmiş saç ekimi yöntemi",
+    "reason3Title": "Güvenli Ortam",
+    "reason3Description": "Steril ameliyathane",
+    "reason4Title": "Ömür Boyu Garanti",
+    "reason4Description": "Kalıcı sonuç garantisi"
+  },
+  "faq": {
+    "title": "Sık Sorulan Sorular",
+    "question1": "Saç ekimi ağrılı bir işlem mi?",
+    "answer1": "Lokal anestezi altında yapıldığı için ağrı hissedilmez. Sadece hafif bir baskı hissi olabilir.",
+    "question2": "Saç ekimi sonrası ne kadar sürede sonuç alınır?",
+    "answer2": "İlk 3 ay saç kökleri çıkmaya başlar, 6-12 ay sonra tam sonuç elde edilir.",
+    "question3": "Hangi yaş grubu için uygundur?",
+    "answer3": "25-65 yaş arası erkekler ve kadınlar için uygundur. Saç dökülme durumuna göre değerlendirme yapılır.",
+    "question4": "Kaç saç kökü ekilebilir?",
+    "answer4": "Kişinin saç yoğunluğuna göre 2000-5000 saç kökü tek seansında ekilebilir.",
+    "question5": "Saç ekimi sonrası normal hayata ne zaman dönülür?",
+    "answer5": "1 hafta sonra normal aktivitelere dönülebilir, 2-3 hafta sonra spor yapılabilir.",
+    "question6": "Fiyatlar taksitli mi?",
+    "answer6": "Evet, tüm saç ekimi tedavilerimiz için taksit imkanı sunuyoruz. Detaylı bilgi için bizi arayın."
+  },
+  "cta": {
+    "title": "Hemen Randevu Alın",
+    "description": "Ücretsiz muayene ve kişiye özel saç ekimi planı için hemen iletişime geçin",
+    "ctaPhone": "0212 561 23 22",
+    "ctaWhatsApp": "WhatsApp"
+  }
+}

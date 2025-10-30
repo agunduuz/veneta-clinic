@@ -1,0 +1,48 @@
+{
+  "common": {
+    "language": "English",
+    "phoneNumber": "+90 (212) 561 23 22",
+    "email": "info@venetaclinic.com",
+    "address": "Nişantaşı, Istanbul, Turkey"
+  },
+  "nav": {
+    "home": "Home",
+    "surgicalAesthetics": "Surgical Aesthetics",
+    "laserHairRemoval": "Laser Hair Removal",
+    "hairTransplant": "Hair Transplant",
+    "about": "About Us",
+    "customerReviews": "Customer Reviews",
+    "contact": "Contact",
+    "facialAesthetics": "Facial Aesthetics",
+    "rhinoplasty": "Rhinoplasty",
+    "faceLift": "Face Lift",
+    "eyelidSurgery": "Eye Bag Surgery",
+    "bodyAesthetics": "Body Aesthetics",
+    "tummyTuck": "Tummy Tuck",
+    "liposuction": "Liposuction",
+    "breastAesthetics": "Breast Aesthetics",
+    "breastAugmentation": "Breast Augmentation",
+    "breastReduction": "Breast Reduction"
+  },
+  "footer": {
+    "corporate": "Corporate",
+    "services": "Services",
+    "contact": "Contact",
+    "location": "Istanbul, Turkey",
+    "copyright": "All rights reserved.",
+    "aboutUs": "About Us",
+    "ourServices": "Our Services",
+    "ourDoctors": "Our Doctors",
+    "blog": "Blog",
+    "aesthetics": "Aesthetics",
+    "skinCare": "Skin Care",
+    "fillers": "Fillers",
+    "wrinkleTreatment": "Wrinkle Treatment"
+  },
+  "cta": {
+    "phoneTooltip": "Call us",
+    "whatsappTooltip": "Contact via WhatsApp",
+    "whatsappMessage": "Hello! I would like to get information about Veneta Clinic.",
+    "viewDetails": "View Details"
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "hero": {
+    "title": "Ameliyatlı Estetik İstanbul",
+    "subtitle": "Uzman Cerrahlarla Garantili Sonuç",
+    "description": "İstanbul'da ameliyatlı estetik tedavileri için Veneta Klinik'i tercih edin. Yüz, vücut ve meme estetiğinde en güncel teknikler, uzman cerrahlar ve uygun fiyatlarla doğal ve kalıcı sonuçlar elde edin.",
+    "ctaReviews": "Müşteri Yorumları",
+    "ctaPhone": "0212 561 23 22",
+    "imageAlt": "Ameliyatlı Estetik - Veneta Klinik İstanbul"
+  },
+  "features": {
+    "feature1Title": "Uzman Cerrahlar",
+    "feature1Description": "15+ yıl deneyimli plastik cerrahlar tarafından uygulanan ameliyatlı estetik işlemleri",
+    "feature2Title": "En Güncel Teknikler",
+    "feature2Description": "Dünya standartlarında ameliyatlı estetik teknikleri ve gelişmiş teknoloji",
+    "feature3Title": "Garantili Sonuç",
+    "feature3Description": "%95 başarı oranı ile doğal ve kalıcı estetik sonuçlar"
+  },
+  "categories": {
+    "title": "Ameliyatlı Estetik Kategorileri",
+    "description": "Yüz, vücut ve meme estetiğinde en güncel teknikler, uzman doktorlar ve gerçek hasta deneyimleriyle ameliyatlı estetik dünyasını keşfedin.",
+    "viewDetails": "Detayları Gör",
+    "badges": {
+      "popular": "Popüler",
+      "new": "Yeni"
+    },
+    "items": {
+      "facialAesthetics": {
+        "description": "Yüz estetiği hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "rhinoplasty": {
+        "description": "Burun estetiği hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "faceLift": {
+        "description": "Yüz germe hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "eyelidSurgery": {
+        "description": "Göz kapağı estetiği hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "bodyAesthetics": {
+        "description": "Vücut estetiği hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "tummyTuck": {
+        "description": "Karın germe hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "liposuction": {
+        "description": "Liposuction hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "breastAesthetics": {
+        "description": "Meme estetiği hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "breastAugmentation": {
+        "description": "Meme büyütme ameliyatı hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      },
+      "breastReduction": {
+        "description": "Meme küçültme ameliyatı hakkında detaylı bilgi ve örnek vakalara uzman doktorlarımızla ulaşın."
+      }
+    }
+  },
+  "about": {
+    "title": "Ameliyatlı Estetik Nedir?",
+    "description": "Ameliyatlı estetik, kişinin görünümünü iyileştirmek ve daha genç, daha güzel bir görünüm elde etmek amacıyla cerrahi yöntemlerle yapılan estetik işlemlerdir. Bu işlemler uzman plastik cerrahlar tarafından güvenli ortamlarda gerçekleştirilir.",
+    "areasTitle": "Ameliyatlı Estetik Alanları",
+    "area1": "Yüz estetiği (Rinoplasti, Blefaroplasti)",
+    "area2": "Vücut estetiği (Liposuction, Abdominoplasti)",
+    "area3": "Meme estetiği (Meme büyütme, küçültme)",
+    "area4": "Saç ekimi ve saç estetiği",
+    "advantagesTitle": "Avantajları",
+    "advantage1": "Kalıcı ve doğal sonuçlar",
+    "advantage2": "Uzman cerrahlar tarafından uygulama",
+    "advantage3": "Güvenli ve kontrollü ortam",
+    "advantage4": "Kişiye özel tedavi planı"
+  },
+  "process": {
+    "title": "Ameliyatlı Estetik Süreci Nasıl İşler?",
+    "step1Title": "Muayene ve Planlama",
+    "step1Description": "Detaylı muayene sonrası kişiye özel tedavi planı hazırlanır ve beklentiler belirlenir.",
+    "step2Title": "Ameliyat Süreci",
+    "step2Description": "Uzman cerrah tarafından güvenli ortamda ameliyat gerçekleştirilir, işlem süresi tedaviye göre değişir.",
+    "step3Title": "İyileşme ve Sonuç",
+    "step3Description": "Düzenli kontroller ile iyileşme süreci takip edilir, doğal ve kalıcı sonuçlar elde edilir."
+  },
+  "whyUs": {
+    "title": "Neden Veneta Klinik?",
+    "reason1Title": "15+ Yıl Deneyim",
+    "reason1Description": "Binlerce başarılı ameliyat",
+    "reason2Title": "Uzman Cerrahlar",
+    "reason2Description": "Deneyimli plastik cerrahlar",
+    "reason3Title": "Güvenli Ortam",
+    "reason3Description": "Modern ameliyathane",
+    "reason4Title": "%100 Memnuniyet",
+    "reason4Description": "Garantili sonuç"
+  },
+  "faq": {
+    "title": "Sık Sorulan Sorular",
+    "question1": "Ameliyatlı estetik işlemleri güvenli mi?",
+    "answer1": "Evet, uzman cerrahlar tarafından güvenli ortamlarda gerçekleştirilen ameliyatlı estetik işlemleri oldukça güvenlidir.",
+    "question2": "İyileşme süreci ne kadar sürer?",
+    "answer2": "İyileşme süreci yapılan işleme göre değişir. Genellikle 1-3 hafta arasında günlük hayata dönüş sağlanır.",
+    "question3": "Hangi alanlarda ameliyatlı estetik yapılır?",
+    "answer3": "Yüz, vücut, meme estetiği ve saç ekimi gibi birçok alanda ameliyatlı estetik işlemleri uygulanabilir.",
+    "question4": "Sonuçlar ne kadar kalıcı?",
+    "answer4": "Ameliyatlı estetik işlemlerinin sonuçları genellikle kalıcıdır. Yaşlanma süreci devam eder ancak işlem öncesine göre daha iyi görünüm korunur.",
+    "question5": "Fiyatlar taksitli mi?",
+    "answer5": "Evet, tüm ameliyatlı estetik işlemlerimiz için taksit imkanı sunuyoruz. Detaylı bilgi için bizi arayın."
+  },
+  "cta": {
+    "title": "Hemen Randevu Alın",
+    "description": "Ücretsiz muayene ve kişiye özel tedavi planı için hemen iletişime geçin",
+    "ctaPhone": "0212 561 23 22",
+    "ctaWhatsApp": "WhatsApp"
+  }
+}
