@@ -1,3 +1,4 @@
+// components/LazerEpilasyon/LazerTreatmentAreas.tsx
 "use client";
 import { useTranslation } from "@/lib/i18n/context";
 

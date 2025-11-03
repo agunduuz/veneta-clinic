@@ -1,3 +1,4 @@
+// components/Home/Hero.tsx
 "use client";
 
 import { useLocale, useTranslation } from "@/lib/i18n/context";

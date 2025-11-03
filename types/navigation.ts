@@ -1,3 +1,4 @@
+// types/navigation.ts
 export interface MenuItem {
   id: string;
   label: string;

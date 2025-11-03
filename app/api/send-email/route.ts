@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+// app/api/send-email/route.ts
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
     // For now, I'll simulate a successful email send
     // In production, you should use a real email service
 
-    console.log('Email would be sent to eyup17@gmail.com:', {
+    console.log("Email would be sent to eyup17@gmail.com:", {
       from_name,
       from_email,
       phone,
@@ -70,14 +71,14 @@ export async function POST(request: NextRequest) {
     // Return success response
     return NextResponse.json({
       success: true,
-      message: 'Email sent successfully',
+      message: "Email sent successfully",
     });
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error("Email sending error:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to send email',
+        message: "Failed to send email",
       },
       { status: 500 }
     );
