@@ -1,3 +1,4 @@
+// components/LazerEpilasyon/LazerCTA.tsx
 "use client";
 import { useTranslation } from "@/lib/i18n/context";
 import Link from "next/link";

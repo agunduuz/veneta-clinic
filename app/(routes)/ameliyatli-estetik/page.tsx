@@ -1,5 +1,4 @@
-// import CategoryList from "@/components/SurgicalAesthetics/CategoryList";
-// import { navigationItems } from "@/data/navigation";
+// app/(routes)/ameliyatli-estetik/page.tsx
 import PhoneButton from "@/components/Header/PhoneButton";
 import WhatsAppButton from "@/components/Header/WhatsAppButton";
 import Hero from "@/components/SurgicalAesthetics/Hero";
@@ -12,28 +11,6 @@ import FAQ from "@/components/SurgicalAesthetics/FAQ";
 import CTA from "@/components/SurgicalAesthetics/CTA";
 
 export default function AmeliyatliEstetikPage() {
-  // Find surgical aesthetics menu item
-  /* const surgicalAesthetics = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );*/
-
-  // Map submenus to category format
-  /* const categories =
-    surgicalAesthetics?.subMenus?.map((sub, i) => {
-      // Extract the category name from titleKey (e.g., "nav.rhinoplasty" -> "rhinoplasty")
-      const categoryKey = sub.titleKey.replace("nav.", "");
-
-      return {
-        title: sub.titleKey, // i18n key - will be translated by CategoryList
-        href: sub.href.tr, // Turkish href
-        description: `surgicalAesthetics.categories.items.${categoryKey}.description`, // ✅ Unique description for each category
-        image: `/images/ameliyatli-${i + 1}.jpeg`
-          ? `/images/ameliyatli-${i + 1}.jpeg`
-          : "/images/doctors-team.jpg", // Default image with fallback
-        badge: i === 0 ? "Popüler" : i === 1 ? "Yeni" : undefined, // Raw text for badge
-      };
-    }) || []; */
-
   return (
     <>
       <main className="container py-12">

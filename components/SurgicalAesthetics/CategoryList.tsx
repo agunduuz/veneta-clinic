@@ -1,3 +1,4 @@
+// components/SurgicalAesthetics/CategoryList.tsx
 "use client";
 
 import Image from "next/image";

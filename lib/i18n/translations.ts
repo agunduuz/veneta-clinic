@@ -59,23 +59,3 @@ export function getTranslation(locale: Locale, key: string): string {
 
   return typeof value === "string" ? value : key;
 }
-
-// Dynamic loader for future use (optional, for code splitting later)
-// const additionalFiles = [
-//   // Buraya gelecekte eklenecek dosyalar
-//   // 'hair-transplant',
-//   // 'procedures',
-// ];
-
-// export async function loadAdditionalTranslations(locale: Locale) {
-//   if (additionalFiles.length === 0) return {};
-
-//   const modules = await Promise.all(
-//     additionalFiles.map((file) => import(`@/locales/${locale}/${file}.json`))
-//   );
-
-//   return additionalFiles.reduce((acc, file, index) => {
-//     acc[file] = modules[index].default;
-//     return acc;
-//   }, {} as Record<string, any>);
-// }

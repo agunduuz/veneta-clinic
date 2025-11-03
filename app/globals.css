@@ -1,5 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+/* app/globals.css */
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -94,12 +95,7 @@
 
   /* Fonksiyonel Renkler */
   --destructive: #cf6679;
-  --border: rgba(
-    178,
-    214,
-    161,
-    0.2
-  ); /* Kurumsal rengin transparan hali */
+  --border: rgba(178, 214, 161, 0.2); /* Kurumsal rengin transparan hali */
   --input: rgba(178, 214, 161, 0.1);
   --ring: #b2d6a1;
 }
@@ -265,11 +261,7 @@ body {
 
 /* Background Pattern */
 .bg-grid-pattern {
-  background-image: linear-gradient(
-      to right,
-      #000 1px,
-      transparent 1px
-    ),
+  background-image: linear-gradient(to right, #000 1px, transparent 1px),
     linear-gradient(to bottom, #000 1px, transparent 1px);
   background-size: 24px 24px;
 }
@@ -280,7 +272,7 @@ body {
 }
 
 .feature-card::after {
-  content: '';
+  content: "";
   @apply absolute inset-0 bg-gradient-to-b from-transparent to-primary/5 
          opacity-0 transition-opacity duration-300 rounded-xl pointer-events-none;
 }
