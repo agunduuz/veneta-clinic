@@ -1,3 +1,4 @@
+// app/admin/login/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -110,7 +111,8 @@ export default function LoginPage() {
 
       router.push("/admin");
       router.refresh();
-    } catch (error) {
+    } catch (err) {
+      console.error("Login error:", err);
       setError("Bir hata oluştu. Lütfen tekrar deneyin.");
       setLoading(false);
     }
