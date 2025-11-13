@@ -1,3 +1,4 @@
+// app/(routes)/blog/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,7 +42,7 @@ async function getRelatedPosts(currentSlug: string): Promise<BlogPost[]> {
     if (!res.ok) return [];
     const posts = await res.json();
     return posts.filter((p: BlogPost) => p.slug !== currentSlug).slice(0, 3);
-  } catch (error) {
+  } catch {
     return [];
   }
 }

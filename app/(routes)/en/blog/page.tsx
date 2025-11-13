@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,11 +24,7 @@ export default function EnglishBlogPage() {
     "all" | "surgical" | "non-surgical"
   >("all");
 
-  useEffect(() => {
-    loadBlogPosts();
-  }, [activeFilter]);
-
-  const loadBlogPosts = async () => {
+  const loadBlogPosts = useCallback(async () => {
     setLoading(true);
     try {
       const url =
@@ -46,7 +42,10 @@ export default function EnglishBlogPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeFilter]);
+  useEffect(() => {
+    loadBlogPosts();
+  }, [loadBlogPosts]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
