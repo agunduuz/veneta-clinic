@@ -8,35 +8,30 @@ import { Locale } from "@/types/i18n";
 interface I18nContextType {
   locale: Locale;
   t: (key: string, params?: Record<string, string>) => string;
-  translations: Record<string, any>;
+  translations: Record<string, unknown>;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 interface I18nProviderProps {
   children: React.ReactNode;
-  translations: Record<Locale, any>;
+  translations: Record<Locale, Record<string, unknown>>;
 }
 
 export function I18nProvider({ children, translations }: I18nProviderProps) {
   const pathname = usePathname();
 
-  // ✅ useState ile locale'i yönet (force re-render için)
   const [locale, setLocale] = useState<Locale>(
     pathname.startsWith("/en") ? "en" : "tr"
   );
 
-  // ✅ pathname değiştiğinde locale'i güncelle
   useEffect(() => {
     const newLocale: Locale = pathname.startsWith("/en") ? "en" : "tr";
-    setLocale(newLocale); // ✅ State güncellemesi → Re-render tetikleniyor!
+    setLocale(newLocale);
   }, [pathname]);
 
   const t = (key: string, params?: Record<string, string>): string => {
-    // ✅ Split key into parts
     const parts = key.split(".");
-
-    // ✅ Get the full translation object for current locale
     const localeTranslations = translations[locale];
 
     if (!localeTranslations) {
@@ -44,25 +39,22 @@ export function I18nProvider({ children, translations }: I18nProviderProps) {
       return key;
     }
 
-    // ✅ Navigate through the object using the parts
-    let value: any = localeTranslations;
+    let value: unknown = localeTranslations;
 
     for (const part of parts) {
       if (value && typeof value === "object" && part in value) {
-        value = value[part];
+        value = (value as Record<string, unknown>)[part];
       } else {
         console.warn(`Translation key not found: ${key} for locale: ${locale}`);
         return key;
       }
     }
 
-    // ✅ Check if final value is a string
     if (typeof value !== "string") {
       console.warn(`Translation value is not a string: ${key}`);
       return key;
     }
 
-    // ✅ Replace parameters if provided
     if (params) {
       return Object.keys(params).reduce((str, paramKey) => {
         return str.replace(`{{${paramKey}}}`, params[paramKey]);

@@ -1,3 +1,4 @@
+// app/api/homepage/hero/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -19,10 +20,13 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(hero);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching hero section:", error);
     return NextResponse.json(
-      { error: "Failed to fetch hero section", details: error.message },
+      {
+        error: "Failed to fetch hero section",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
@@ -67,10 +71,13 @@ export async function PUT(request: NextRequest) {
     });
 
     return NextResponse.json(hero);
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error updating hero section:", error);
     return NextResponse.json(
-      { error: "Failed to update hero section", details: error.message },
+      {
+        error: "Failed to update hero section",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
