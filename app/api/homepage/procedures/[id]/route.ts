@@ -1,3 +1,4 @@
+// app/api/homepage/procedures/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -19,10 +20,13 @@ export async function GET(
     }
 
     return NextResponse.json(procedure);
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Procedure GET Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch procedure", details: error.message },
+      {
+        error: "Failed to fetch procedure",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
@@ -63,10 +67,13 @@ export async function PUT(
     });
 
     return NextResponse.json(procedure);
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Procedure Update Error:", error);
     return NextResponse.json(
-      { error: "Failed to update procedure", details: error.message },
+      {
+        error: "Failed to update procedure",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
@@ -83,10 +90,13 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Procedure Delete Error:", error);
     return NextResponse.json(
-      { error: "Failed to delete procedure", details: error.message },
+      {
+        error: "Failed to delete procedure",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
