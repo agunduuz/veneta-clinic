@@ -5,11 +5,13 @@ import { prisma } from "@/lib/prisma";
 // GET - Tek procedure getir
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const procedure = await prisma.procedure.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!procedure) {
@@ -35,7 +37,7 @@ export async function GET(
 // PUT - Procedure güncelle
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
@@ -51,8 +53,10 @@ export async function PUT(
       published,
     } = body;
 
+    const { id } = await params;
+
     const procedure = await prisma.procedure.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(title && { title }),
         ...(slug && { slug }),
@@ -82,11 +86,13 @@ export async function PUT(
 // DELETE - Procedure sil
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     await prisma.procedure.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
