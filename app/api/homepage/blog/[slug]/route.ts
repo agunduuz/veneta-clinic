@@ -4,12 +4,13 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  context: { params: { slug: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const locale = (searchParams.get("locale") as "tr" | "en") || "tr";
-    const { slug } = context.params;
+
+    const { slug } = params;
 
     const blogPost = await prisma.blogPost.findFirst({
       where: { slug, locale, published: true },
