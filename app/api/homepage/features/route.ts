@@ -1,3 +1,4 @@
+// app/api/homepage/features/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
@@ -21,10 +22,13 @@ export async function GET(request: NextRequest) {
     console.log("✅ Features API - Found:", features.length, "items");
 
     return NextResponse.json(features);
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Features API Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch features", details: error.message },
+      {
+        error: "Failed to fetch features",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
@@ -51,15 +55,21 @@ export async function PUT(request: NextRequest) {
     }
 
     // Her feature'ı güncelle
-    const updatePromises = features.map((feature: any) =>
-      prisma.feature.update({
-        where: { id: feature.id },
-        data: {
-          title: feature.title,
-          description: feature.description,
-          order: feature.order,
-        },
-      })
+    const updatePromises = features.map(
+      (feature: {
+        id: string;
+        title: string;
+        description: string;
+        order: number;
+      }) =>
+        prisma.feature.update({
+          where: { id: feature.id },
+          data: {
+            title: feature.title,
+            description: feature.description,
+            order: feature.order,
+          },
+        })
     );
 
     const updatedFeatures = await Promise.all(updatePromises);
@@ -67,10 +77,13 @@ export async function PUT(request: NextRequest) {
     console.log("✅ Features API - Updated successfully");
 
     return NextResponse.json(updatedFeatures);
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Features API Update Error:", error);
     return NextResponse.json(
-      { error: "Failed to update features", details: error.message },
+      {
+        error: "Failed to update features",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
