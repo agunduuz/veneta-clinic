@@ -8,46 +8,26 @@ import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 type Testimonial = {
-  id: number;
-  nameKey: string;
-  procedureKey: string;
-  image: string;
+  id: string;
+  locale: string;
+  name: string;
+  procedure: string;
+  comment: string;
   rating: number;
-  commentKey: string;
+  imageUrl: string | null;
+  active: boolean;
+  order: number;
 };
 
-const PatientStories = () => {
+interface PatientStoriesProps {
+  data?: Testimonial[] | null;
+}
+
+const PatientStories = ({ data }: PatientStoriesProps) => {
   const { t } = useTranslation();
 
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      nameKey: "home.testimonials.patient1Name",
-      procedureKey: "home.testimonials.patient1Procedure",
-      image:
-        "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      rating: 5,
-      commentKey: "home.testimonials.patient1Comment",
-    },
-    {
-      id: 2,
-      nameKey: "home.testimonials.patient2Name",
-      procedureKey: "home.testimonials.patient2Procedure",
-      image:
-        "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      rating: 5,
-      commentKey: "home.testimonials.patient2Comment",
-    },
-    {
-      id: 3,
-      nameKey: "home.testimonials.patient3Name",
-      procedureKey: "home.testimonials.patient3Procedure",
-      image:
-        "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      rating: 5,
-      commentKey: "home.testimonials.patient3Comment",
-    },
-  ];
+  // Use database data if available
+  const testimonials = data && data.length > 0 ? data : [];
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -76,6 +56,11 @@ const PatientStories = () => {
       emblaApi.off("select", onSelect);
     };
   }, [emblaApi, onSelect]);
+
+  // If no data, show loading or empty state
+  if (!testimonials || testimonials.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-10 bg-background">
@@ -119,13 +104,13 @@ const PatientStories = () => {
                           ))}
                         </div>
                         <p className="text-foreground italic mb-4 text-sm md:text-base">
-                          &quot;{t(testimonial.commentKey)}&quot;
+                          &quot;{testimonial.comment}&quot;
                         </p>
                         <h3 className="font-semibold text-lg md:text-xl">
-                          {t(testimonial.nameKey)}
+                          {testimonial.name}
                         </h3>
                         <p className="text-muted-foreground text-sm">
-                          {t(testimonial.procedureKey)}
+                          {testimonial.procedure}
                         </p>
                       </div>
                     </div>
