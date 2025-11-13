@@ -1,14 +1,18 @@
+// app/api/blog/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// GET - Tüm blog yazılarını getir (blog liste sayfası için)
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const locale = (searchParams.get("locale") as "tr" | "en") || "tr";
     const category = searchParams.get("category");
 
-    const where: any = {
+    const where: {
+      locale: string;
+      published: boolean;
+      category?: string;
+    } = {
       locale,
       published: true,
     };
@@ -34,10 +38,13 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(blogPosts);
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Blog List API Error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch blog posts", details: error.message },
+      {
+        error: "Failed to fetch blog posts",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }

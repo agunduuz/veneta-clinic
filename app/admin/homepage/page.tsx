@@ -1,6 +1,7 @@
+// app/admin/homepage/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ImageUpload from "@/components/admin/ImageUpload";
 
@@ -13,6 +14,47 @@ type TabType =
   | "blog"
   | "cta";
 type Locale = "tr" | "en";
+
+interface Feature {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+}
+
+interface Procedure {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  imageUrl: string;
+  badge?: string | null;
+  detailLink?: string | null;
+  order: number;
+  published: boolean;
+}
+
+interface Testimonial {
+  id: string;
+  name: string;
+  procedure: string;
+  comment: string;
+  rating: number;
+  imageUrl?: string;
+  active: boolean;
+  order: number;
+}
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  author?: string | null;
+  readTime?: string | null;
+  published: boolean;
+}
 
 export default function HomepageEditor() {
   const [activeTab, setActiveTab] = useState<TabType>("hero");
@@ -46,16 +88,16 @@ export default function HomepageEditor() {
   });
 
   // Features State
-  const [features, setFeatures] = useState<any[]>([]);
+  const [features, setFeatures] = useState<Feature[]>([]);
 
   // Procedures State
-  const [procedures, setProcedures] = useState<any[]>([]);
+  const [procedures, setProcedures] = useState<Procedure[]>([]);
 
   // Testimonials State
-  const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   // Blog State
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
 
   // CTA Section State
   const [cta, setCta] = useState({
@@ -67,6 +109,62 @@ export default function HomepageEditor() {
     button2Link: "",
   });
 
+  const loadHeroData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/hero?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setHero(data);
+    }
+  }, [locale]);
+
+  const loadAboutData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/about?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setAbout(data);
+    }
+  }, [locale]);
+
+  const loadFeaturesData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/features?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setFeatures(data || []);
+    }
+  }, [locale]);
+
+  const loadProceduresData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/procedures?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setProcedures(data || []);
+    }
+  }, [locale]);
+
+  const loadBlogData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/blog?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setBlogPosts(data || []);
+    }
+  }, [locale]);
+
+  const loadCtaData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/cta?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setCta(data);
+    }
+  }, [locale]);
+
+  const loadTestimonialsData = useCallback(async () => {
+    const res = await fetch(`/api/homepage/testimonials?locale=${locale}`);
+    if (res.ok) {
+      const data = await res.json();
+      setTestimonials(data || []);
+    }
+  }, [locale]);
+
   // Load data when locale changes
   useEffect(() => {
     loadHeroData();
@@ -76,68 +174,15 @@ export default function HomepageEditor() {
     loadTestimonialsData();
     loadBlogData();
     loadCtaData();
-  }, [locale]);
-
-  const loadHeroData = async () => {
-    const res = await fetch(`/api/homepage/hero?locale=${locale}`);
-    if (res.ok) {
-      const data = await res.json();
-      setHero(data);
-    }
-  };
-
-  const loadAboutData = async () => {
-    const res = await fetch(`/api/homepage/about?locale=${locale}`);
-    if (res.ok) {
-      const data = await res.json();
-      setAbout(data);
-    }
-  };
-
-  const loadFeaturesData = async () => {
-    console.log("🔍 Loading features for locale:", locale);
-    const res = await fetch(`/api/homepage/features?locale=${locale}`);
-    console.log("📊 Features response status:", res.status);
-    if (res.ok) {
-      const data = await res.json();
-      console.log("✅ Features data:", data);
-      console.log("📦 Is array?", Array.isArray(data));
-      setFeatures(data || []); // Ensure it's always an array
-    } else {
-      console.error("❌ Features fetch failed:", res.status);
-    }
-  };
-
-  const loadProceduresData = async () => {
-    const res = await fetch(`/api/homepage/procedures?locale=${locale}`);
-    if (res.ok) {
-      const data = await res.json();
-      setProcedures(data || []);
-    }
-  };
-
-  const loadBlogData = async () => {
-    const res = await fetch(`/api/homepage/blog?locale=${locale}`);
-    if (res.ok) {
-      const data = await res.json();
-      setBlogPosts(data || []);
-    }
-  };
-
-  const loadCtaData = async () => {
-    const res = await fetch(`/api/homepage/cta?locale=${locale}`);
-    if (res.ok) {
-      const data = await res.json();
-      setCta(data);
-    }
-  };
-  const loadTestimonialsData = async () => {
-    const res = await fetch(`/api/homepage/testimonials?locale=${locale}`);
-    if (res.ok) {
-      const data = await res.json();
-      setTestimonials(data || []);
-    }
-  };
+  }, [
+    loadHeroData,
+    loadAboutData,
+    loadFeaturesData,
+    loadProceduresData,
+    loadTestimonialsData,
+    loadBlogData,
+    loadCtaData,
+  ]);
 
   const saveHero = async () => {
     setLoading(true);
