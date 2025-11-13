@@ -1,11 +1,10 @@
-// app/layout.tsx
+// app/layout.tsx - GÜNCELLENMİŞ
 import type { Metadata } from "next";
 import { Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import { I18nProvider } from "@/lib/i18n/context";
 import { translations } from "@/lib/i18n/translations";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -19,7 +18,6 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
-// Base metadata for Turkish (default)
 export const metadata: Metadata = {
   metadataBase: new URL("https://venetaclinic.com"),
   title: {
@@ -114,15 +112,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className="">
+    <html lang="tr">
       <body
         className={`${playfair.variable} ${montserrat.variable} antialiased`}
       >
-        {/* ✅ initialLocale parametresini kaldırdık - pathname'den alacak */}
         <I18nProvider translations={translations}>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
+          <ConditionalLayout>{children}</ConditionalLayout>
         </I18nProvider>
       </body>
     </html>

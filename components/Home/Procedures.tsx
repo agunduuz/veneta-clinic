@@ -1,60 +1,59 @@
 // components/Home/Procedures.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
+import { useTranslation, useLocale } from "@/lib/i18n/context";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
 type Procedure = {
-  id: number;
-  titleKey: string;
-  descriptionKey: string;
-  image: string;
+  id: string;
+  locale: string;
+  slug?: string | null;
+  title: string;
+  description: string;
+  imageUrl: string;
   category: "surgical" | "non-surgical";
+  badge?: string | null;
+  detailLink?: string | null;
+  order: number;
 };
 
-const Procedures = () => {
+interface ProceduresProps {
+  data?: Procedure[] | null;
+}
+
+const Procedures = ({ data }: ProceduresProps) => {
   const { t } = useTranslation();
-
-  const procedures: Procedure[] = [
-    {
-      id: 1,
-      titleKey: "home.procedures.procedure1Title",
-      descriptionKey: "home.procedures.procedure1Description",
-      image:
-        "https://images.pexels.com/photos/7581577/pexels-photo-7581577.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "non-surgical",
-    },
-    {
-      id: 2,
-      titleKey: "home.procedures.procedure2Title",
-      descriptionKey: "home.procedures.procedure2Description",
-      image:
-        "https://images.pexels.com/photos/30686774/pexels-photo-30686774/free-photo-of-plastik-cerrah-klinikte-hastanin-burnunu-inceliyor.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "surgical",
-    },
-    {
-      id: 3,
-      titleKey: "home.procedures.procedure3Title",
-      descriptionKey: "home.procedures.procedure3Description",
-      image:
-        "https://images.pexels.com/photos/16131210/pexels-photo-16131210/free-photo-of-adam-tedavi-shot-atis.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "non-surgical",
-    },
-    {
-      id: 4,
-      titleKey: "home.procedures.procedure4Title",
-      descriptionKey: "home.procedures.procedure4Description",
-      image:
-        "https://images.pexels.com/photos/7772658/pexels-photo-7772658.jpeg?auto=compress&cs=tinysrgb&w=600",
-      category: "surgical",
-    },
-  ];
-
+  const { locale } = useLocale();
+  const [procedures, setProcedures] = useState<Procedure[]>(data || []);
   const [activeFilter, setActiveFilter] = useState<
     "all" | "surgical" | "non-surgical"
   >("all");
+  const [loading, setLoading] = useState(!data);
+
+  // Fetch procedures from API if no data provided
+  useEffect(() => {
+    if (!data) {
+      fetchProcedures();
+    }
+  }, [locale, data]);
+
+  const fetchProcedures = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/homepage/procedures?locale=${locale}`);
+      if (res.ok) {
+        const fetchedData = await res.json();
+        setProcedures(fetchedData);
+      }
+    } catch (error) {
+      console.error("Failed to fetch procedures:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -87,6 +86,20 @@ const Procedures = () => {
     },
   };
 
+  const filteredProcedures = procedures.filter(
+    (proc) => activeFilter === "all" || proc.category === activeFilter
+  );
+
+  if (loading) {
+    return (
+      <section className="py-12 md:py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center">Loading procedures...</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-12 md:py-20 bg-muted/30">
       <motion.div
@@ -110,6 +123,8 @@ const Procedures = () => {
             {t("home.procedures.subtitle")}
           </motion.p>
         </div>
+
+        {/* Filter Buttons */}
         <motion.div
           variants={itemVariants}
           className="relative flex flex-col items-center mb-12"
@@ -121,11 +136,11 @@ const Procedures = () => {
                 key={filter}
                 onClick={() => setActiveFilter(filter as typeof activeFilter)}
                 className={`relative px-6 py-2.5 rounded-full transition-all duration-500 text-sm md:text-base
-          ${
-            activeFilter === filter
-              ? "text-primary-foreground"
-              : "text-foreground/70 hover:text-foreground"
-          }`}
+                  ${
+                    activeFilter === filter
+                      ? "text-primary-foreground"
+                      : "text-foreground/70 hover:text-foreground"
+                  }`}
               >
                 {activeFilter === filter && (
                   <motion.div
@@ -150,89 +165,80 @@ const Procedures = () => {
             ))}
           </div>
         </motion.div>
+
+        {/* Procedures Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <AnimatePresence mode="wait">
-            {procedures.map((procedure) => (
+            {filteredProcedures.map((procedure) => (
               <motion.div
                 key={procedure.id}
                 variants={itemVariants}
                 initial="hidden"
-                animate={
-                  activeFilter === "all" || procedure.category === activeFilter
-                    ? "visible"
-                    : "hidden"
-                }
+                animate="visible"
                 exit="exit"
-                className={`group relative bg-background rounded-xl overflow-hidden shadow-md 
-                         hover:shadow-xl transition-all duration-300
-                         ${
-                           activeFilter !== "all" &&
-                           procedure.category !== activeFilter
-                             ? "hidden"
-                             : ""
-                         }`}
-                style={{
-                  height:
-                    activeFilter !== "all" &&
-                    procedure.category !== activeFilter
-                      ? 0
-                      : "auto",
-                }}
+                className="group relative bg-background rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <div className="relative h-48 sm:h-56 md:h-64">
                   <Image
-                    src={procedure.image}
-                    alt={t(procedure.titleKey)}
+                    src={procedure.imageUrl}
+                    alt={procedure.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
                   />
-                  <div className="absolute top-4 right-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm
-                      ${
-                        procedure.category === "surgical"
-                          ? "bg-accent/90 text-accent-foreground"
-                          : "bg-secondary/90 text-secondary-foreground"
-                      }`}
-                    >
-                      {procedure.category === "surgical"
-                        ? t("home.procedures.categorySurgical")
-                        : t("home.procedures.categoryNonSurgical")}
-                    </span>
-                  </div>
+                  {procedure.badge && (
+                    <div className="absolute top-4 right-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
+                          procedure.category === "surgical"
+                            ? "bg-accent/90 text-accent-foreground"
+                            : "bg-secondary/90 text-secondary-foreground"
+                        }`}
+                      >
+                        {procedure.badge}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-4 md:p-6">
                   <h3 className="text-lg md:text-xl font-semibold font-playfair mb-2">
-                    {t(procedure.titleKey)}
+                    {procedure.title}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                    {t(procedure.descriptionKey)}
+                    {procedure.description}
                   </p>
-                  <button
-                    className="text-primary font-medium group-hover:text-primary/80 
-                                   transition-colors flex items-center gap-2 text-sm md:text-base"
-                  >
-                    {t("home.procedures.learnMore")}
-                    <svg
-                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                  {procedure.slug && (
+                    <Link
+                      href={`/${
+                        locale === "en"
+                          ? "en/surgical-aesthetics"
+                          : "ameliyatli-estetik"
+                      }/${procedure.slug}`}
+                      className="text-primary font-medium group-hover:text-primary/80 
+               transition-colors flex items-center gap-2 text-sm md:text-base"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
+                      {t("home.procedures.learnMore")}
+                      <svg
+                        className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
+
         <motion.div
           variants={itemVariants}
           className="text-center mt-8 md:mt-12"

@@ -77,7 +77,7 @@ export default function LanguageSwitcher() {
           />
 
           {/* Dropdown menu */}
-          <div className="absolute right-0 mt-2 w-44 bg-card border border-border rounded-lg shadow-lg z-50 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-44 bg-background border border-border rounded-lg shadow-lg z-50 overflow-hidden">
             {languages.map((lang) => {
               const isActive = locale === lang.code;
 

@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for admin authentication
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Hash'lenmiş şifre (bcrypt)
+  name      String?
+  role      String   @default("admin") // admin, editor, viewer
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ========================================
+// HOMEPAGE MODELS (FAZ 3B) - WITH LOCALE SUPPORT
+// ========================================
+
+// Hero Section (En üst bölüm)
+model HeroSection {
+  id          String   @id @default(cuid())
+  locale      String   @default("tr") // "tr" veya "en"
+  title       String   // "Özel Tıbbi Bakım Hizmetleri"
+  description String   @db.Text
+  stat1Number String   // "1500+"
+  stat1Text   String   // "Mutlu Hasta"
+  stat2Number String   // "15"
+  stat2Text   String   // "Yıl Tecrübe"
+  button1Text String   // "Randevu Alın"
+  button1Link String
+  button2Text String   // "Hakkımızda"
+  button2Link String
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([locale])
+  @@map("hero_section")
+}
+
+// About Section (Hakkımızda bölümü)
+model AboutSection {
+  id          String   @id @default(cuid())
+  locale      String   @default("tr") // "tr" veya "en"
+  title       String   // "Veneta Klinik Hakkında"
+  description String   @db.Text
+  buttonText  String   // "Devamını Oku"
+  buttonLink  String
+  imageUrl    String
+  rating      Float    @default(4.88)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([locale])
+  @@map("about_section")
+}
+
+// Features (Özellikler - 4 kart) - Icon kaldırıldı
+model Feature {
+  id          String   @id @default(cuid())
+  locale      String   @default("tr") // "tr" veya "en"
+  title       String   // "Uzman Kadro"
+  description String
+  order       Int      // Sıralama (1-4)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([locale])
+  @@map("features")
+}
+
+// Testimonials (Hasta Yorumları)
+model Testimonial {
+  id        String   @id @default(cuid())
+  locale    String   @default("tr") // "tr" veya "en"
+  name      String   // "Ayşe Yılmaz"
+  procedure String   // "Burun Estetiği", "Lazer Epilasyon"
+  comment   String   @db.Text
+  rating    Int      @default(5) // 1-5
+  imageUrl  String?  // Opsiyonel hasta fotoğrafı
+  active    Boolean  @default(true) // Admin aktif/pasif yapar
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([locale])
+  @@index([active])
+  @@map("testimonials")
+}
+
+// Blog Posts (Blog Yazıları)
+model BlogPost {
+  id          String   @id @default(cuid())
+  locale      String   @default("tr") // "tr" veya "en"
+  title       String
+  slug        String
+  excerpt     String   // Kısa özet (anasayfa için)
+  content     String?  @db.Text // Tam içerik (detay sayfası için)
+  imageUrl    String
+  category    String?  // "surgical", "non-surgical", "general"
+  author      String?  // "Dr. Ahmet Yılmaz"
+  readTime    String?  // "5 dakika"
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([locale, slug])
+  @@index([locale])
+  @@index([published])
+  @@map("blog_posts")
+}
+
+// CTA Section (Call-to-Action - En alt bölüm)
+model CTASection {
+  id          String   @id @default(cuid())
+  locale      String   @default("tr") // "tr" veya "en"
+  title       String   // "Dönüşümü Yolculuğunuza..."
+  description String
+  button1Text String   // "Randevunuzu Alın"
+  button1Link String
+  button2Text String   // "İletişime Geç"
+  button2Link String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([locale])
+  @@map("cta_section")
+}
+
+// Procedures (Prosedürler)
+model Procedure {
+  id          String   @id @default(cuid())
+  locale      String   @default("tr") // "tr" veya "en"
+  title       String   // "Burun Estetiği"
+  slug        String   // "burun-estetigi"
+  description String   @db.Text
+  category    String   // "surgical", "non-surgical"
+  imageUrl    String
+  badge       String?  // "Popüler", "Yeni" (opsiyonel)
+  detailLink  String?
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([locale, slug])
+  @@index([locale, published])
+  @@index([category])
+  @@map("procedures")
+}

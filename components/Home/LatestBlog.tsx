@@ -1,60 +1,38 @@
 // components/Home/LatestBlog.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
+import { useTranslation, useLocale } from "@/lib/i18n/context";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
 type BlogPost = {
-  id: number;
-  titleKey: string;
-  descriptionKey: string;
-  image: string;
-  category: "surgical" | "non-surgical";
-  authorKey: string;
-  dateKey: string;
-  readTimeKey: string;
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  imageUrl: string;
+  category: string | null;
+  author: string | null;
+  readTime: string | null;
+  createdAt: string;
 };
 
-const LatestBlog = () => {
-  const { t } = useTranslation();
+interface LatestBlogProps {
+  data?: BlogPost[] | null;
+}
 
-  const blogPosts: BlogPost[] = [
-    {
-      id: 1,
-      titleKey: "home.blog.post1Title",
-      descriptionKey: "home.blog.post1Description",
-      image:
-        "https://images.pexels.com/photos/7319307/pexels-photo-7319307.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      category: "non-surgical",
-      authorKey: "home.blog.post1Author",
-      dateKey: "home.blog.post1Date",
-      readTimeKey: "home.blog.post1ReadTime",
-    },
-    {
-      id: 2,
-      titleKey: "home.blog.post2Title",
-      descriptionKey: "home.blog.post2Description",
-      image:
-        "https://images.pexels.com/photos/4269274/pexels-photo-4269274.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      category: "surgical",
-      authorKey: "home.blog.post2Author",
-      dateKey: "home.blog.post2Date",
-      readTimeKey: "home.blog.post2ReadTime",
-    },
-    {
-      id: 3,
-      titleKey: "home.blog.post3Title",
-      descriptionKey: "home.blog.post3Description",
-      image:
-        "https://images.pexels.com/photos/7319170/pexels-photo-7319170.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      category: "non-surgical",
-      authorKey: "home.blog.post3Author",
-      dateKey: "home.blog.post3Date",
-      readTimeKey: "home.blog.post3ReadTime",
-    },
-  ];
+const LatestBlog = ({ data }: LatestBlogProps) => {
+  const { t } = useTranslation();
+  const { locale } = useLocale();
+
+  // Use database data
+  const blogPosts = data && data.length > 0 ? data : [];
+
+  // If no data, don't show section
+  if (blogPosts.length === 0) {
+    return null;
+  }
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -115,47 +93,57 @@ const LatestBlog = () => {
             >
               <div className="relative h-48 md:h-56 overflow-hidden">
                 <Image
-                  src={post.image}
-                  alt={t(post.titleKey)}
+                  src={post.imageUrl}
+                  alt={post.title}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute top-4 left-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium 
-                    ${
-                      post.category === "surgical"
-                        ? "bg-accent/90 text-accent-foreground"
-                        : "bg-secondary/90 text-secondary-foreground"
-                    }
-                    backdrop-blur-sm`}
-                  >
-                    {post.category === "surgical"
-                      ? t("home.blog.categorySurgical")
-                      : t("home.blog.categoryNonSurgical")}
-                  </span>
-                </div>
+                {post.category && (
+                  <div className="absolute top-4 left-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium 
+            ${
+              post.category === "surgical"
+                ? "bg-accent/90 text-accent-foreground"
+                : "bg-secondary/90 text-secondary-foreground"
+            }
+            backdrop-blur-sm`}
+                    >
+                      {post.category === "surgical"
+                        ? t("home.blog.categorySurgical")
+                        : t("home.blog.categoryNonSurgical")}
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="p-6">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                  <span>{t(post.authorKey)}</span>
-                  <span>•</span>
-                  <span>{t(post.dateKey)}</span>
-                  <span>•</span>
-                  <span>{t(post.readTimeKey)}</span>
+                  {post.author && <span>{post.author}</span>}
+                  {post.author && <span>•</span>}
+                  <span>
+                    {new Date(post.createdAt).toLocaleDateString(
+                      locale === "tr" ? "tr-TR" : "en-US"
+                    )}
+                  </span>
+                  {post.readTime && (
+                    <>
+                      <span>•</span>
+                      <span>{post.readTime}</span>
+                    </>
+                  )}
                 </div>
 
                 <h3 className="text-xl font-semibold font-playfair mb-3 group-hover:text-primary transition-colors">
-                  {t(post.titleKey)}
+                  {post.title}
                 </h3>
 
                 <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                  {t(post.descriptionKey)}
+                  {post.excerpt}
                 </p>
 
                 <Link
-                  href="#"
+                  href={`/${locale === "en" ? "en/" : ""}blog/${post.slug}`}
                   className="inline-flex items-center text-primary font-medium text-sm group-hover:text-primary/80 transition-colors"
                 >
                   {t("home.blog.readMore")}

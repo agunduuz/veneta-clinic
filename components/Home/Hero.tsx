@@ -13,8 +13,13 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import Link from "next/link";
+import { HeroData } from "@/lib/homepage";
 
-export default function Hero() {
+interface HeroProps {
+  data?: HeroData | null;
+}
+
+export default function Hero({ data }: HeroProps) {
   const { t } = useTranslation();
   const { locale } = useLocale();
 
@@ -61,6 +66,13 @@ export default function Hero() {
     counters.forEach((counter) => observer.observe(counter));
     return () => observer.disconnect();
   }, []);
+
+  // Fallback values if no data
+  const stat1Number = data?.stat1Number || "2";
+  const stat1Text = data?.stat1Text || t("home.hero.statsDoctor");
+  const stat2Number = data?.stat2Number || "12";
+  const stat2Text = data?.stat2Text || t("home.hero.statsExperience");
+  const heroImage = data?.imageUrl || "/images/doctors-team.jpg";
 
   return (
     <section className="relative bg-gradient-to-b from-muted to-background min-h-[90vh] flex items-center sm:py-5 overflow-hidden pb-5">
@@ -120,7 +132,7 @@ export default function Hero() {
               </span>
             </p>
 
-            {/* İstatistikler */}
+            {/* İstatistikler - DATABASE'DEN */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
               <div className="stats-card hover:scale-105 transition-transform">
                 <div className="relative">
@@ -131,7 +143,7 @@ export default function Hero() {
                   <div className="flex items-baseline gap-1">
                     <span
                       className="counter text-2xl font-bold text-primary"
-                      data-target="2"
+                      data-target={stat1Number.replace(/\D/g, "")}
                       data-duration="2000"
                     >
                       0
@@ -139,7 +151,7 @@ export default function Hero() {
                     <span className="text-xl text-primary">+</span>
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {t("home.hero.statsDoctor")}
+                    {stat1Text}
                   </span>
                 </div>
               </div>
@@ -153,7 +165,7 @@ export default function Hero() {
                   <div className="flex items-baseline gap-1">
                     <span
                       className="counter text-2xl font-bold text-primary"
-                      data-target="12"
+                      data-target={stat2Number.replace(/\D/g, "")}
                       data-duration="2000"
                     >
                       0
@@ -161,7 +173,7 @@ export default function Hero() {
                     <span className="text-xl text-primary">+</span>
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {t("home.hero.statsExperience")}
+                    {stat2Text}
                   </span>
                 </div>
               </div>
@@ -192,11 +204,11 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Sağ Kolon - Görsel */}
+          {/* Sağ Kolon - Görsel - DATABASE'DEN */}
           <div className="relative aspect-[4/3] lg:aspect-square w-full max-w-2xl mx-auto lg:max-w-none rounded-xl overflow-hidden shadow-2xl transform lg:translate-x-0 opacity-0 animate-slide-in-right hidden md:block">
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
             <Image
-              src="/images/doctors-team.jpg"
+              src={heroImage}
               alt={t("home.hero.imageAlt")}
               fill
               className="object-cover hover:scale-105 transition-transform duration-700"
