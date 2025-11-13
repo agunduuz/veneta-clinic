@@ -5,7 +5,7 @@ import { useTranslation, useLocale } from "@/lib/i18n/context";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 type Procedure = {
   id: string;
@@ -33,27 +33,30 @@ const Procedures = ({ data }: ProceduresProps) => {
   >("all");
   const [loading, setLoading] = useState(!data);
 
-  // Fetch procedures from API if no data provided
-  useEffect(() => {
-    if (!data) {
-      fetchProcedures();
-    }
-  }, [locale, data]);
-
-  const fetchProcedures = async () => {
+  const fetchProcedures = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/homepage/procedures?locale=${locale}`);
+      const url =
+        activeFilter === "all"
+          ? `/api/homepage/procedures?locale=${locale}`
+          : `/api/homepage/procedures?locale=${locale}&category=${activeFilter}`;
+
+      const res = await fetch(url);
       if (res.ok) {
-        const fetchedData = await res.json();
-        setProcedures(fetchedData);
+        const data = await res.json();
+        setProcedures(data);
       }
     } catch (error) {
-      console.error("Failed to fetch procedures:", error);
+      console.error("Failed to load procedures:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeFilter, locale]);
+
+  // Fetch procedures from API if no data provided
+  useEffect(() => {
+    fetchProcedures();
+  }, [fetchProcedures]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
