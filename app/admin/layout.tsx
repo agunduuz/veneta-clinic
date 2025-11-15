@@ -1,3 +1,4 @@
+// app/admin/layout.tsx
 import type { Metadata } from "next";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminSessionProvider from "@/components/admin/AdminSessionProvider";
