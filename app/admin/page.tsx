@@ -1,11 +1,14 @@
+// app/admin/page.tsx
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import AdminHeader from "@/components/admin/AdminHeader";
+import Link from "next/link";
 
 export default async function AdminDashboard() {
   const session = await auth();
 
-  if (!session) {
+  // ✅ Auth kontrolü - Giriş yapmamışsa login'e yönlendir
+  if (!session || session.user?.role !== "admin") {
     redirect("/admin/login");
   }
 
@@ -146,7 +149,7 @@ export default async function AdminDashboard() {
               🚀 Hızlı İşlemler
             </h4>
             <div className="space-y-3">
-              <a
+              <Link
                 href="/admin/homepage"
                 className="block p-4 bg-[#f0f9ed] hover:bg-[#e8f5e2] rounded-lg transition-colors"
               >
@@ -156,7 +159,7 @@ export default async function AdminDashboard() {
                 <p className="text-sm text-gray-600 mt-1">
                   Hero, istatistikler ve hizmetleri yönetin
                 </p>
-              </a>
+              </Link>
               <button className="w-full p-4 bg-gray-100 rounded-lg cursor-not-allowed opacity-60">
                 <p className="font-medium text-gray-500">Mesajları Görüntüle</p>
                 <p className="text-sm text-gray-400 mt-1">
