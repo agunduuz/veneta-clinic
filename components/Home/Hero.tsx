@@ -67,12 +67,19 @@ export default function Hero({ data }: HeroProps) {
     return () => observer.disconnect();
   }, []);
 
-  // Fallback values if no data
+  // ✅ DATABASE'DEN GELEN DATA'YI KULLAN
+  const title = data?.title || t("home.hero.titleLine1");
+  const description = data?.description || t("home.hero.descriptionLine1");
   const stat1Number = data?.stat1Number || "2";
   const stat1Text = data?.stat1Text || t("home.hero.statsDoctor");
   const stat2Number = data?.stat2Number || "12";
   const stat2Text = data?.stat2Text || t("home.hero.statsExperience");
   const heroImage = data?.imageUrl || "/images/doctors-team.jpg";
+  const button1Text = data?.button1Text || t("home.hero.ctaAppointment");
+  const button1Link = data?.button1Link || "/iletisim";
+  const button2Text = data?.button2Text || t("home.hero.ctaAbout");
+  const button2Link =
+    data?.button2Link || (locale === "en" ? "/en/about" : "/hakkimizda");
 
   return (
     <section className="relative bg-gradient-to-b from-muted to-background min-h-[90vh] flex items-center sm:py-5 overflow-hidden pb-5">
@@ -82,53 +89,20 @@ export default function Hero({ data }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Sol Kolon - İçerik */}
           <div className="space-y-6 md:space-y-8 max-w-2xl">
-            {/* Başlık Grubu */}
+            {/* Başlık Grubu - DATABASE'DEN */}
             <div className="relative">
               <div className="absolute -left-3 top-0 w-1 h-full bg-primary rounded-full transform origin-top scale-y-0 animate-scale-y" />
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-foreground leading-tight">
                 <span className="block transform translate-y-8 opacity-0 animate-title-slide-up [--animation-delay:200ms]">
-                  {t("home.hero.titleLine1")}
-                </span>
-                <span className="block transform translate-y-8 opacity-0 animate-title-slide-up [--animation-delay:400ms]">
-                  <span className="text-primary bg-clip-text bg-gradient-to-r from-primary to-primary/80">
-                    {t("home.hero.titleLine2")}
-                  </span>
-                </span>
-                <span className="block transform translate-y-8 opacity-0 animate-title-slide-up [--animation-delay:600ms]">
-                  {t("home.hero.titleLine3")}
+                  {title}
                 </span>
               </h1>
             </div>
 
-            {/* Açıklama */}
+            {/* Açıklama - DATABASE'DEN */}
             <p className="text-base sm:text-lg text-muted-foreground font-montserrat leading-relaxed animate-fade-up mt-6">
               <span className="sm:block opacity-0 animate-fade-in [--animation-delay:800ms]">
-                {t("home.hero.descriptionLine1")}
-                <span className="font-semibold text-primary">
-                  {" "}
-                  {t("home.hero.descriptionHighlight")}{" "}
-                </span>
-                {t("home.hero.descriptionLine2")}
-              </span>
-              <span className="sm:block relative opacity-0 animate-fade-in [--animation-delay:1000ms]">
-                <span className="italic">
-                  {t("home.hero.descriptionItalic")}
-                </span>{" "}
-                {t("home.hero.descriptionLine3")}
-                <span className="relative inline-block sm:ml-2">
-                  {t("home.hero.descriptionEnd")}
-                  <svg
-                    className="absolute -bottom-1 left-0 w-full h-1 text-primary"
-                    viewBox="0 0 120 4"
-                  >
-                    <path
-                      d="M0 2 Q30 0, 60 2 T120 2"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                </span>
+                {description}
               </span>
             </p>
 
@@ -179,27 +153,29 @@ export default function Hero({ data }: HeroProps) {
               </div>
             </div>
 
-            {/* Butonlar */}
+            {/* Butonlar - DATABASE'DEN */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                variant="primary"
-                size="lg"
-                className="relative overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-primary/30"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
-                <span className="relative flex items-center gap-2 z-10">
-                  <Calendar className="w-5 h-5 animate-float" />
-                  {t("home.hero.ctaAppointment")}
-                  <ChevronRight className="w-4 h-4 transition-transform hover:translate-x-1" />
-                </span>
-              </Button>
+              <Link href={button1Link}>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="relative overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-primary/30"
+                >
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="relative flex items-center gap-2 z-10">
+                    <Calendar className="w-5 h-5 animate-float" />
+                    {button1Text}
+                    <ChevronRight className="w-4 h-4 transition-transform hover:translate-x-1" />
+                  </span>
+                </Button>
+              </Link>
 
               <Link
-                href={locale === "en" ? "/en/about" : "/hakkimizda"}
+                href={button2Link}
                 className="inline-flex items-center justify-center px-8 py-2 rounded-full font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-primary/30"
               >
                 <Info className="w-5 h-5 mr-2" />
-                {t("home.hero.ctaAbout")}
+                {button2Text}
               </Link>
             </div>
           </div>
@@ -209,7 +185,7 @@ export default function Hero({ data }: HeroProps) {
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10" />
             <Image
               src={heroImage}
-              alt={t("home.hero.imageAlt")}
+              alt={title}
               fill
               className="object-cover hover:scale-105 transition-transform duration-700"
               sizes="(max-width: 768px) 100vw, 50vw"
