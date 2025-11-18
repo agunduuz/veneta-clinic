@@ -1,3 +1,4 @@
+// prisma/seed.ts
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -554,6 +555,275 @@ async function main() {
       },
     });
     console.log("✅ CTA Section created (TR & EN)!");
+  }
+
+  // ========================================
+  // FOOTER CONTENT
+  // ========================================
+  const existingFooterContent = await prisma.footerContent.findFirst();
+  if (!existingFooterContent) {
+    // TR Footer Content
+    await prisma.footerContent.create({
+      data: {
+        locale: "tr",
+        phone: "+90 212 561 23 22",
+        phoneSecondary: null,
+        email: "info@venetaclinic.com",
+        address: "İstanbul, Türkiye",
+        mapLink: null,
+        facebookUrl: "https://facebook.com/venetaclinic",
+        instagramUrl: "https://instagram.com/venetaclinic",
+        twitterUrl: "https://twitter.com/venetaclinic",
+        linkedinUrl: "https://linkedin.com/company/venetaclinic",
+        youtubeUrl: null,
+        copyrightText: "© 2024 Veneta Clinic. Tüm hakları saklıdır.",
+      },
+    });
+
+    // EN Footer Content
+    await prisma.footerContent.create({
+      data: {
+        locale: "en",
+        phone: "+90 212 561 23 22",
+        phoneSecondary: null,
+        email: "info@venetaclinic.com",
+        address: "Istanbul, Turkey",
+        mapLink: null,
+        facebookUrl: "https://facebook.com/venetaclinic",
+        instagramUrl: "https://instagram.com/venetaclinic",
+        twitterUrl: "https://twitter.com/venetaclinic",
+        linkedinUrl: "https://linkedin.com/company/venetaclinic",
+        youtubeUrl: null,
+        copyrightText: "© 2024 Veneta Clinic. All rights reserved.",
+      },
+    });
+    console.log("✅ Footer Content created (TR & EN)!");
+  }
+
+  // ========================================
+  // FOOTER LINK GROUPS
+  // ========================================
+  const existingFooterGroups = await prisma.footerLinkGroup.findMany();
+  if (existingFooterGroups.length === 0) {
+    // TR - Kurumsal Grup
+    const corporateGroupTR = await prisma.footerLinkGroup.create({
+      data: {
+        locale: "tr",
+        title: "Kurumsal",
+        slug: "corporate",
+        order: 1,
+        active: true,
+      },
+    });
+
+    // TR - Hizmetler Grup
+    const servicesGroupTR = await prisma.footerLinkGroup.create({
+      data: {
+        locale: "tr",
+        title: "Hizmetler",
+        slug: "services",
+        order: 2,
+        active: true,
+      },
+    });
+
+    // EN - Corporate Group
+    const corporateGroupEN = await prisma.footerLinkGroup.create({
+      data: {
+        locale: "en",
+        title: "Corporate",
+        slug: "corporate",
+        order: 1,
+        active: true,
+      },
+    });
+
+    // EN - Services Group
+    const servicesGroupEN = await prisma.footerLinkGroup.create({
+      data: {
+        locale: "en",
+        title: "Services",
+        slug: "services",
+        order: 2,
+        active: true,
+      },
+    });
+
+    console.log("✅ Footer Link Groups created (TR & EN)!");
+
+    // ========================================
+    // FOOTER LINKS - TR
+    // ========================================
+
+    // TR - Kurumsal Links
+    await prisma.footerLink.createMany({
+      data: [
+        {
+          groupId: corporateGroupTR.id,
+          title: "Hakkımızda",
+          href: "/hakkimizda",
+          order: 1,
+          active: true,
+        },
+        {
+          groupId: corporateGroupTR.id,
+          title: "Hizmetlerimiz",
+          href: "/hizmetlerimiz",
+          order: 2,
+          active: true,
+        },
+        {
+          groupId: corporateGroupTR.id,
+          title: "Doktorlarımız",
+          href: "/doktorlarimiz",
+          order: 3,
+          active: true,
+        },
+        {
+          groupId: corporateGroupTR.id,
+          title: "Blog",
+          href: "/blog",
+          order: 4,
+          active: true,
+        },
+        {
+          groupId: corporateGroupTR.id,
+          title: "İletişim",
+          href: "/iletisim",
+          order: 5,
+          active: true,
+        },
+      ],
+    });
+
+    // TR - Hizmet Links
+    await prisma.footerLink.createMany({
+      data: [
+        {
+          groupId: servicesGroupTR.id,
+          title: "Ameliyatlı Estetik",
+          href: "/ameliyatli-estetik",
+          order: 1,
+          active: true,
+        },
+        {
+          groupId: servicesGroupTR.id,
+          title: "Lazer Epilasyon",
+          href: "/lazer-epilasyon",
+          order: 2,
+          active: true,
+        },
+        {
+          groupId: servicesGroupTR.id,
+          title: "Cilt Bakımı",
+          href: "/cilt-bakimi",
+          order: 3,
+          active: true,
+        },
+        {
+          groupId: servicesGroupTR.id,
+          title: "Dolgu",
+          href: "/dolgu",
+          order: 4,
+          active: true,
+        },
+        {
+          groupId: servicesGroupTR.id,
+          title: "Kırışıklık Tedavisi",
+          href: "/kirisiklik",
+          order: 5,
+          active: true,
+        },
+      ],
+    });
+
+    // ========================================
+    // FOOTER LINKS - EN
+    // ========================================
+
+    // EN - Corporate Links
+    await prisma.footerLink.createMany({
+      data: [
+        {
+          groupId: corporateGroupEN.id,
+          title: "About Us",
+          href: "/en/about",
+          order: 1,
+          active: true,
+        },
+        {
+          groupId: corporateGroupEN.id,
+          title: "Our Services",
+          href: "/en/services",
+          order: 2,
+          active: true,
+        },
+        {
+          groupId: corporateGroupEN.id,
+          title: "Our Doctors",
+          href: "/en/doctors",
+          order: 3,
+          active: true,
+        },
+        {
+          groupId: corporateGroupEN.id,
+          title: "Blog",
+          href: "/en/blog",
+          order: 4,
+          active: true,
+        },
+        {
+          groupId: corporateGroupEN.id,
+          title: "Contact",
+          href: "/en/contact",
+          order: 5,
+          active: true,
+        },
+      ],
+    });
+
+    // EN - Service Links
+    await prisma.footerLink.createMany({
+      data: [
+        {
+          groupId: servicesGroupEN.id,
+          title: "Surgical Aesthetics",
+          href: "/en/surgical-aesthetics",
+          order: 1,
+          active: true,
+        },
+        {
+          groupId: servicesGroupEN.id,
+          title: "Laser Hair Removal",
+          href: "/en/laser-hair-removal",
+          order: 2,
+          active: true,
+        },
+        {
+          groupId: servicesGroupEN.id,
+          title: "Skin Care",
+          href: "/en/skin-care",
+          order: 3,
+          active: true,
+        },
+        {
+          groupId: servicesGroupEN.id,
+          title: "Fillers",
+          href: "/en/fillers",
+          order: 4,
+          active: true,
+        },
+        {
+          groupId: servicesGroupEN.id,
+          title: "Wrinkle Treatment",
+          href: "/en/wrinkle-treatment",
+          order: 5,
+          active: true,
+        },
+      ],
+    });
+
+    console.log("✅ Footer Links created (TR & EN)!");
   }
 
   console.log("\n🎉 Seeding completed successfully!");

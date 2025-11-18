@@ -157,3 +157,73 @@ model Procedure {
   @@index([category])
   @@map("procedures")
 }
+
+// ========================================
+// FOOTER MODELS - DYNAMIC STRUCTURE
+// ========================================
+
+// Footer Ana İçerik (İletişim, Sosyal Medya, Copyright)
+model FooterContent {
+  id              String   @id @default(cuid())
+  locale          String   @unique // "tr" | "en"
+  
+  // İletişim Bilgileri
+  phone           String   // "+90 212 561 23 22"
+  phoneSecondary  String?  // İkinci telefon (opsiyonel)
+  email           String   // "info@venetaclinic.com"
+  address         String   // "İstanbul, Türkiye"
+  mapLink         String?  // Google Maps embed link (opsiyonel)
+  
+  // Sosyal Medya
+  facebookUrl     String?
+  instagramUrl    String?
+  twitterUrl      String?
+  linkedinUrl     String?
+  youtubeUrl      String?
+  
+  // Copyright
+  copyrightText   String   // "© 2024 Veneta Clinic. Tüm hakları saklıdır."
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("footer_content")
+}
+
+// Footer Link Grupları (Kurumsal, Hizmetler, Yasal, vb.)
+model FooterLinkGroup {
+  id        String   @id @default(cuid())
+  locale    String   // "tr" | "en"
+  title     String   // "Kurumsal", "Hizmetler", "Yasal"
+  slug      String   // "corporate", "services", "legal"
+  order     Int      @default(0) // Sıralama (1, 2, 3...)
+  active    Boolean  @default(true) // Aktif/Pasif
+  
+  links     FooterLink[] // İlişki: Bu gruba ait linkler
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([locale, slug])
+  @@index([locale, active, order])
+  @@map("footer_link_groups")
+}
+
+// Footer Linkleri
+model FooterLink {
+  id      String   @id @default(cuid())
+  groupId String   // Hangi gruba ait (FooterLinkGroup.id)
+  
+  title   String   // "Hakkımızda", "About Us"
+  href    String   // "/hakkimizda", "/en/about"
+  order   Int      @default(0) // Grup içinde sıralama
+  active  Boolean  @default(true) // Aktif/Pasif
+  
+  group   FooterLinkGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([groupId, active, order])
+  @@map("footer_links")
+}
