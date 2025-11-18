@@ -826,6 +826,402 @@ async function main() {
     console.log("✅ Footer Links created (TR & EN)!");
   }
 
+  // ========================================
+  // HEADER NAVIGATION
+  // ========================================
+  const existingHeaderNav = await prisma.headerNavItem.findMany();
+  if (existingHeaderNav.length === 0) {
+    console.log("🔄 Seeding header navigation...");
+
+    // ========================================
+    // TÜRKÇE NAVİGASYON
+    // ========================================
+
+    // 1. Anasayfa
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "Anasayfa",
+        href: "/",
+        parentId: null,
+        order: 1,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 2. Ameliyatlı Estetik (Ana Menü - Dropdown)
+    const surgicalTR = await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "Ameliyatlı Estetik",
+        href: "/ameliyatli-estetik",
+        parentId: null,
+        order: 2,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // Alt Menü - Yüz Estetiği Grubu
+    await prisma.headerNavItem.createMany({
+      data: [
+        {
+          locale: "tr",
+          title: "Yüz Estetiği",
+          href: "/ameliyatli-estetik/yuz",
+          parentId: surgicalTR.id,
+          order: 1,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Burun Estetiği",
+          href: "/ameliyatli-estetik/burun-estetigi",
+          parentId: surgicalTR.id,
+          order: 2,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Yüz Germe",
+          href: "/ameliyatli-estetik/yuz-germe",
+          parentId: surgicalTR.id,
+          order: 3,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Göz Kapağı Estetiği",
+          href: "/ameliyatli-estetik/goz-kapagi-estetigi",
+          parentId: surgicalTR.id,
+          order: 4,
+          active: true,
+          openInNewTab: false,
+        },
+        // Vücut Estetiği Grubu
+        {
+          locale: "tr",
+          title: "Vücut Estetiği",
+          href: "/ameliyatli-estetik/vucut",
+          parentId: surgicalTR.id,
+          order: 5,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Karın Germe",
+          href: "/ameliyatli-estetik/karin-germe",
+          parentId: surgicalTR.id,
+          order: 6,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Liposuction",
+          href: "/ameliyatli-estetik/liposuction",
+          parentId: surgicalTR.id,
+          order: 7,
+          active: true,
+          openInNewTab: false,
+        },
+        // Meme Estetiği Grubu
+        {
+          locale: "tr",
+          title: "Meme Estetiği",
+          href: "/ameliyatli-estetik/meme",
+          parentId: surgicalTR.id,
+          order: 8,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Meme Büyütme",
+          href: "/ameliyatli-estetik/meme-buyutme",
+          parentId: surgicalTR.id,
+          order: 9,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "tr",
+          title: "Meme Küçültme",
+          href: "/ameliyatli-estetik/meme-kucultme",
+          parentId: surgicalTR.id,
+          order: 10,
+          active: true,
+          openInNewTab: false,
+        },
+      ],
+    });
+
+    // 3. Lazer Epilasyon
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "Lazer Epilasyon",
+        href: "/lazer-epilasyon",
+        parentId: null,
+        order: 3,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 4. Saç Ekimi
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "Saç Ekimi",
+        href: "/sac-ekimi",
+        parentId: null,
+        order: 4,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 5. Hakkımızda
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "Hakkımızda",
+        href: "/hakkimizda",
+        parentId: null,
+        order: 5,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 6. Müşteri Yorumları (Google - Dış link)
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "Müşteri Yorumları",
+        href: "https://www.google.com/search?sca_esv=6b19787a6a994d6b&sxsrf=AE3TifO7ziWVrPJR7-exDpI2Tc4SHaPgDg:1750273044954&q=lassarium+ni%C5%9Fanta%C5%9F%C4%B1&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E-lKDiz5ZMaKtR0Xzei2bM2K9BLcTk2LlwS4-SH1VUmb6Z4MtebRYz07tnCdFD-x2s953po%3D&uds=AOm0WdEAlSiTiojV6t08JvKtroEmny9Y3G9YSQidmqyrjkNTmw8Y6m2RTAum_iwvoDAao2eBv66DvL4E8-5RROD8YZlw107ephAqUuJc8s73RtQNXzX1-CtBWOu2ptMEq-8LI5cPc6kM&sa=X&ved=2ahUKEwjE3-qY0_uNAxVERfEDHf01CNwQ3PALegQIHhAE&biw=1728&bih=992&dpr=2",
+        parentId: null,
+        order: 6,
+        active: true,
+        openInNewTab: true, // ← Yeni sekmede açılacak
+      },
+    });
+
+    // 7. İletişim
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "tr",
+        title: "İletişim",
+        href: "/iletisim",
+        parentId: null,
+        order: 7,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // ========================================
+    // İNGİLİZCE NAVİGASYON
+    // ========================================
+
+    // 1. Home
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "Home",
+        href: "/en/",
+        parentId: null,
+        order: 1,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 2. Surgical Aesthetics (Main Menu - Dropdown)
+    const surgicalEN = await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "Surgical Aesthetics",
+        href: "/en/surgical-aesthetics",
+        parentId: null,
+        order: 2,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // Submenu - Facial Aesthetics Group
+    await prisma.headerNavItem.createMany({
+      data: [
+        {
+          locale: "en",
+          title: "Facial Aesthetics",
+          href: "/en/surgical-aesthetics/facial",
+          parentId: surgicalEN.id,
+          order: 1,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Rhinoplasty",
+          href: "/en/surgical-aesthetics/rhinoplasty",
+          parentId: surgicalEN.id,
+          order: 2,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Face Lift",
+          href: "/en/surgical-aesthetics/face-lift",
+          parentId: surgicalEN.id,
+          order: 3,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Eyelid Surgery",
+          href: "/en/surgical-aesthetics/eye-bag-surgery",
+          parentId: surgicalEN.id,
+          order: 4,
+          active: true,
+          openInNewTab: false,
+        },
+        // Body Aesthetics Group
+        {
+          locale: "en",
+          title: "Body Aesthetics",
+          href: "/en/surgical-aesthetics/body",
+          parentId: surgicalEN.id,
+          order: 5,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Tummy Tuck",
+          href: "/en/surgical-aesthetics/tummy-tuck",
+          parentId: surgicalEN.id,
+          order: 6,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Liposuction",
+          href: "/en/surgical-aesthetics/liposuction",
+          parentId: surgicalEN.id,
+          order: 7,
+          active: true,
+          openInNewTab: false,
+        },
+        // Breast Aesthetics Group
+        {
+          locale: "en",
+          title: "Breast Aesthetics",
+          href: "/en/surgical-aesthetics/breast",
+          parentId: surgicalEN.id,
+          order: 8,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Breast Augmentation",
+          href: "/en/surgical-aesthetics/augmentation",
+          parentId: surgicalEN.id,
+          order: 9,
+          active: true,
+          openInNewTab: false,
+        },
+        {
+          locale: "en",
+          title: "Breast Reduction",
+          href: "/en/surgical-aesthetics/reduction",
+          parentId: surgicalEN.id,
+          order: 10,
+          active: true,
+          openInNewTab: false,
+        },
+      ],
+    });
+
+    // 3. Laser Hair Removal
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "Laser Hair Removal",
+        href: "/en/laser-hair-removal",
+        parentId: null,
+        order: 3,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 4. Hair Transplant
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "Hair Transplant",
+        href: "/en/hair-transplant",
+        parentId: null,
+        order: 4,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 5. About
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "About",
+        href: "/en/about",
+        parentId: null,
+        order: 5,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    // 6. Customer Reviews (Google - External link)
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "Customer Reviews",
+        href: "https://www.google.com/search?sca_esv=6b19787a6a994d6b&sxsrf=AE3TifO7ziWVrPJR7-exDpI2Tc4SHaPgDg:1750273044954&q=lassarium+ni%C5%9Fanta%C5%9F%C4%B1&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E-lKDiz5ZMaKtR0Xzei2bM2K9BLcTk2LlwS4-SH1VUmb6Z4MtebRYz07tnCdFD-x2s953po%3D&uds=AOm0WdEAlSiTiojV6t08JvKtroEmny9Y3G9YSQidmqyrjkNTmw8Y6m2RTAum_iwvoDAao2eBv66DvL4E8-5RROD8YZlw107ephAqUuJc8s73RtQNXzX1-CtBWOu2ptMEq-8LI5cPc6kM&sa=X&ved=2ahUKEwjE3-qY0_uNAxVERfEDHf01CNwQ3PALegQIHhAE&biw=1728&bih=992&dpr=2",
+        parentId: null,
+        order: 6,
+        active: true,
+        openInNewTab: true, // ← Opens in new tab
+      },
+    });
+
+    // 7. Contact
+    await prisma.headerNavItem.create({
+      data: {
+        locale: "en",
+        title: "Contact",
+        href: "/en/contact",
+        parentId: null,
+        order: 7,
+        active: true,
+        openInNewTab: false,
+      },
+    });
+
+    console.log("✅ Header Navigation created (TR & EN)!");
+  }
+
   console.log("\n🎉 Seeding completed successfully!");
 }
 

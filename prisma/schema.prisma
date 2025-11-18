@@ -227,3 +227,29 @@ model FooterLink {
   @@index([groupId, active, order])
   @@map("footer_links")
 }
+
+// ========================================
+// HEADER MODELS - NAVIGATION
+// ========================================
+
+model HeaderNavItem {
+  id           String   @id @default(cuid())
+  locale       String   // "tr" | "en"
+  title        String   // "Anasayfa", "Home"
+  href         String   // "/", "/en/"
+  parentId     String?  // Alt menü için parent ID
+  order        Int      @default(0) // Sıralama
+  active       Boolean  @default(true) // Aktif/Pasif
+  openInNewTab Boolean  @default(false) // Yeni sekmede aç
+  
+  // Self-referencing relation
+  parent       HeaderNavItem?  @relation("NavItemChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children     HeaderNavItem[] @relation("NavItemChildren")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([locale, active, order])
+  @@index([parentId])
+  @@map("header_nav_items")
+}
