@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 // PUT - Link güncelle
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // ← Promise ekledik
 ) {
   try {
     const session = await auth();
@@ -16,11 +16,12 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params; // ← await params
     const body = await request.json();
     const { title, href, order, active } = body;
 
     const updated = await prisma.footerLink.update({
-      where: { id: params.id },
+      where: { id }, // ← params.id yerine id
       data: {
         ...(title && { title }),
         ...(href && { href }),
@@ -42,7 +43,7 @@ export async function PUT(
 // DELETE - Link sil
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // ← Promise ekledik
 ) {
   try {
     const session = await auth();
@@ -50,8 +51,10 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { id } = await params; // ← await params
+
     await prisma.footerLink.delete({
-      where: { id: params.id },
+      where: { id }, // ← params.id yerine id
     });
 
     return NextResponse.json({ success: true });
