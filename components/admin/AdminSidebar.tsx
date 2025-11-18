@@ -48,6 +48,25 @@ const menuItems = [
     ),
   },
   {
+    name: "Header",
+    href: "/admin/header",
+    icon: (
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+    ),
+  },
+  {
     name: "Footer",
     href: "/admin/footer",
     icon: (

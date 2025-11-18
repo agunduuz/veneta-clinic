@@ -2,10 +2,9 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { navigationItems } from "@/data/navigation";
 import { ThemeSwitcher } from "@/components/Header/ThemeSwitcher";
 import LanguageSwitcher from "@/components/Header/LanguageSwitcher";
-import { Navigation } from "@/components/Header/Navigation";
+import { DynamicNavigation } from "@/components/Header/DynamicNavigation";
 import { Menu, X } from "lucide-react";
 import { useLocale } from "@/lib/i18n/context";
 
@@ -116,9 +115,9 @@ const Header = () => {
             </svg>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - DİNAMİK */}
           <div className="hidden md:block">
-            <Navigation items={navigationItems} />
+            <DynamicNavigation />
           </div>
 
           {/* Kontroller (Theme + Dil) */}
@@ -143,7 +142,7 @@ const Header = () => {
           </div>
         </nav>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - DİNAMİK */}
         <div
           className={`fixed inset-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 z-20 transition-transform duration-300 ease-in-out ${
             isMenuOpen ? "translate-x-0" : "translate-x-full"
@@ -151,8 +150,7 @@ const Header = () => {
         >
           <div className="flex flex-col h-full px-6 pt-16">
             <div className="mobile-navigation">
-              <Navigation
-                items={navigationItems}
+              <DynamicNavigation
                 isMobile={true}
                 onNavigate={() => setIsMenuOpen(false)}
               />
