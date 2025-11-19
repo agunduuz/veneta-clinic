@@ -1,7 +1,7 @@
 // app/admin/contact/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ProtectedPage from "@/components/admin/ProtectedPage";
 import { Save, Eye, Trash2 } from "lucide-react";
@@ -69,29 +69,29 @@ export default function ContactAdmin() {
     useState<Submission | null>(null);
 
   // Load content
-  const loadContent = async () => {
+  const loadContent = useCallback(async () => {
     const res = await fetch(`/api/contact/content?locale=${locale}`);
     if (res.ok) {
       const data = await res.json();
       setContent(data);
     }
-  };
+  }, [locale]);
 
   // Load submissions
-  const loadSubmissions = async () => {
+  const loadSubmissions = useCallback(async () => {
     const res = await fetch(`/api/contact/submissions?locale=${locale}`);
     if (res.ok) {
       const data = await res.json();
       setSubmissions(data);
     }
-  };
+  }, [locale]);
 
   useEffect(() => {
     loadContent();
     if (activeTab === "submissions") {
       loadSubmissions();
     }
-  }, [locale, activeTab]);
+  }, [locale, activeTab, loadContent, loadSubmissions]);
 
   // Save content
   const saveContent = async () => {
