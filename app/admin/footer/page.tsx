@@ -1,7 +1,7 @@
 // app/admin/footer/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ProtectedPage from "@/components/admin/ProtectedPage";
 import { Trash2, Plus, Save } from "lucide-react";
@@ -63,28 +63,28 @@ export default function FooterEditor() {
   const [groups, setGroups] = useState<FooterGroup[]>([]);
 
   // Load Footer Content
-  const loadContent = async () => {
+  const loadContent = useCallback(async () => {
     const res = await fetch(`/api/footer/content?locale=${locale}`);
     if (res.ok) {
       const data = await res.json();
       setContent(data);
     }
-  };
+  }, [locale]);
 
   // Load Footer Groups
-  const loadGroups = async () => {
+  const loadGroups = useCallback(async () => {
     const res = await fetch(`/api/footer/groups?locale=${locale}`);
     if (res.ok) {
       const data = await res.json();
       setGroups(data);
     }
-  };
+  }, [locale]);
 
   // Load data when locale changes
   useEffect(() => {
     loadContent();
     loadGroups();
-  }, [locale]);
+  }, [locale, loadContent, loadGroups]);
 
   // Save Footer Content
   const saveContent = async () => {

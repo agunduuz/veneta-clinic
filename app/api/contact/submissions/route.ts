@@ -1,6 +1,6 @@
 // app/api/contact/submissions/route.ts
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";
 
 const prisma = new PrismaClient();
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status"); // "new", "read", "replied"
     const locale = searchParams.get("locale");
 
-    const where: any = {};
+    const where: Prisma.ContactSubmissionWhereInput = {};
     if (status) where.status = status;
     if (locale) where.locale = locale;
 

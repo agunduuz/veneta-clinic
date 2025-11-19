@@ -1,7 +1,7 @@
 // app/admin/header/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ProtectedPage from "@/components/admin/ProtectedPage";
 import { Trash2, Plus, Save, ChevronDown, ChevronRight } from "lucide-react";
@@ -28,7 +28,7 @@ export default function HeaderEditor() {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
   // Load navigation items
-  const loadNavItems = async () => {
+  const loadNavItems = useCallback(async () => {
     const res = await fetch(`/api/header/nav?locale=${locale}`);
     if (res.ok) {
       const data = await res.json();
@@ -36,11 +36,11 @@ export default function HeaderEditor() {
       setOriginalNavItems(JSON.parse(JSON.stringify(data))); // Deep copy
       setHasChanges(false);
     }
-  };
+  }, [locale]);
 
   useEffect(() => {
     loadNavItems();
-  }, [locale]);
+  }, [locale, loadNavItems]);
 
   // Check if there are changes
   useEffect(() => {
