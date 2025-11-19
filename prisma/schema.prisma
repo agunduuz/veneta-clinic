@@ -253,3 +253,79 @@ model HeaderNavItem {
   @@index([parentId])
   @@map("header_nav_items")
 }
+
+// ========================================
+// CONTACT PAGE MODELS
+// ========================================
+
+model ContactPage {
+  id          String   @id @default(cuid())
+  locale      String   @unique
+  
+  // Header Section
+  headerTitle       String   @db.Text
+  headerDescription String   @db.Text
+  headerButtonText  String
+  headerImage       String
+  
+  // Form Section
+  formTitle           String
+  formDescription     String   @db.Text
+  happyCustomersText  String
+  
+  // Google Reviews
+  reviewsRating       String
+  reviewsText         String
+  reviewsLink         String   @db.Text
+  
+  // Contact Cards
+  addressLabel  String
+  addressText   String   @db.Text
+  addressLink   String   @db.Text
+  
+  phoneLabel    String
+  phoneText     String
+  phoneLink     String
+  
+  hoursLabel    String
+  hoursText     String   @db.Text
+  
+  // Form Fields & Messages
+  formTitleBox          String
+  formSubtitle          String   @db.Text
+  firstNamePlaceholder  String
+  lastNamePlaceholder   String
+  emailPlaceholder      String
+  phonePlaceholder      String
+  messagePlaceholder    String
+  submitButtonText      String
+  submittingButtonText  String
+  successMessage        String   @db.Text
+  errorMessage          String   @db.Text
+  
+  // Email settings
+  emailRecipient  String
+  emailSubject    String
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("contact_page")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  message   String   @db.Text
+  locale    String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@map("contact_submissions")
+}
+
