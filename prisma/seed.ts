@@ -1222,6 +1222,134 @@ async function main() {
     console.log("✅ Header Navigation created (TR & EN)!");
   }
 
+  // ========================================
+  // CONTACT PAGE
+  // ========================================
+  const existingContactPage = await prisma.contactPage.findFirst();
+  if (!existingContactPage) {
+    console.log("🔄 Seeding contact page...");
+
+    // TR Contact Page
+    await prisma.contactPage.create({
+      data: {
+        locale: "tr",
+
+        // Header Section
+        headerTitle: "Bizimle\nİletişime Geçin",
+        headerDescription:
+          "Sorularınız mı var? Size yardımcı olmaktan mutluluk duyarız. Aşağıdaki formu doldurarak bize ulaşabilir veya doğrudan arayabilirsiniz.",
+        headerButtonText: "Randevu Alın",
+        headerImage: "/images/doctors-team.jpg",
+
+        // Form Section
+        formTitle: "İletişim Bilgileri",
+        formDescription:
+          "Aşağıdaki bilgilerden bize ulaşabilir, size en uygun zamanı bulabiliriz.",
+        happyCustomersText: "500+ Mutlu Müşteri",
+
+        // Google Reviews
+        reviewsRating: "4.8",
+        reviewsText: "Google'da 250+ değerlendirme",
+        reviewsLink:
+          "https://www.google.com/search?sca_esv=6b19787a6a994d6b&sxsrf=AE3TifO7ziWVrPJR7-exDpI2Tc4SHaPgDg:1750273044954&q=lassarium+ni%C5%9Fanta%C5%9F%C4%B1&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E-lKDiz5ZMaKtR0Xzei2bM2K9BLcTk2LlwS4-SH1VUmb6Z4MtebRYz07tnCdFD-x2s953po%3D&uds=AOm0WdEAlSiTiojV6t08JvKtroEmny9Y3G9YSQidmqyrjkNTmw8Y6m2RTAum_iwvoDAao2eBv66DvL4E8-5RROD8YZlw107ephAqUuJc8s73RtQNXzX1-CtBWOu2ptMEq-8LI5cPc6kM&sa=X&ved=2ahUKEwjE3-qY0_uNAxVERfEDHf01CNwQ3PALegQIHhAE&biw=1728&bih=992&dpr=2",
+
+        // Contact Cards
+        addressLabel: "Adresimiz",
+        addressText:
+          "Teşvikiye, Halaskargazi Cd. No:38/B, 34365 Şişli/İstanbul",
+        addressLink:
+          "https://www.google.com/maps/place/Soprano+Lazer+Epilasyon+%7C+Buz+Lazer+%7C+Ni%C5%9Fanta%C5%9F%C4%B1+Lazer+Epilasyon+%7C+Laser+Hair+Removal+istanbul+%7C+Epilation+Laser+Epilation/@41.0518288,28.9890787,17z/data=!3m1!4b1!4m6!3m5!1s0x14cabca23318a107:0x5e988f79a28ac1fd!8m2!3d41.0518288!4d28.9916536!16s%2Fg%2F11csqvqcr0?entry=ttu&g_ep=EgoyMDI1MDYxNS4wIKXMDSoASAFQAw%3D%3D",
+
+        phoneLabel: "Telefon",
+        phoneText: "+90 212 561 23 22",
+        phoneLink: "tel:+902125612322",
+
+        hoursLabel: "Çalışma Saatleri",
+        hoursText: "Pazartesi - Cuma: 09:00 - 19:00\nCumartesi: 09:00 - 14:00",
+
+        // Form
+        formTitleBox: "Formu Doldurun",
+        formSubtitle:
+          "Lütfen bilgilerinizi girin, sizinle en kısa sürede iletişime geçelim.",
+        firstNamePlaceholder: "Adınız",
+        lastNamePlaceholder: "Soyadınız",
+        emailPlaceholder: "E-posta",
+        phonePlaceholder: "Telefon",
+        messagePlaceholder: "Mesajınız",
+        submitButtonText: "Gönder",
+        submittingButtonText: "Gönderiliyor...",
+        successMessage:
+          "Mesajınız başarıyla gönderildi! En kısa sürede size geri dönüş yapacağız.",
+        errorMessage: "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+
+        // Email
+        emailRecipient: "eyup17@gmail.com",
+        emailSubject: "Yeni İletişim Formu Mesajı - Veneta Klinik",
+      },
+    });
+
+    // EN Contact Page
+    await prisma.contactPage.create({
+      data: {
+        locale: "en",
+
+        // Header Section
+        headerTitle: "Get in\nTouch",
+        headerDescription:
+          "Have questions? We'd love to help. Fill out the form below or give us a call directly.",
+        headerButtonText: "Book Appointment",
+        headerImage: "/images/doctors-team.jpg",
+
+        // Form Section
+        formTitle: "Contact Information",
+        formDescription:
+          "You can reach us through the information below and we can find the most suitable time for you.",
+        happyCustomersText: "500+ Happy Customers",
+
+        // Google Reviews
+        reviewsRating: "4.8",
+        reviewsText: "250+ reviews on Google",
+        reviewsLink:
+          "https://www.google.com/search?sca_esv=6b19787a6a994d6b&sxsrf=AE3TifO7ziWVrPJR7-exDpI2Tc4SHaPgDg:1750273044954&q=lassarium+ni%C5%9Fanta%C5%9F%C4%B1&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E-lKDiz5ZMaKtR0Xzei2bM2K9BLcTk2LlwS4-SH1VUmb6Z4MtebRYz07tnCdFD-x2s953po%3D&uds=AOm0WdEAlSiTiojV6t08JvKtroEmny9Y3G9YSQidmqyrjkNTmw8Y6m2RTAum_iwvoDAao2eBv66DvL4E8-5RROD8YZlw107ephAqUuJc8s73RtQNXzX1-CtBWOu2ptMEq-8LI5cPc6kM&sa=X&ved=2ahUKEwjE3-qY0_uNAxVERfEDHf01CNwQ3PALegQIHhAE&biw=1728&bih=992&dpr=2",
+
+        // Contact Cards
+        addressLabel: "Address",
+        addressText:
+          "Teşvikiye, Halaskargazi St. No:38/B, 34365 Şişli/Istanbul",
+        addressLink:
+          "https://www.google.com/maps/place/Soprano+Lazer+Epilasyon+%7C+Buz+Lazer+%7C+Ni%C5%9Fanta%C5%9F%C4%B1+Lazer+Epilasyon+%7C+Laser+Hair+Removal+istanbul+%7C+Epilation+Laser+Epilation/@41.0518288,28.9890787,17z/data=!3m1!4b1!4m6!3m5!1s0x14cabca23318a107:0x5e988f79a28ac1fd!8m2!3d41.0518288!4d28.9916536!16s%2Fg%2F11csqvqcr0?entry=ttu&g_ep=EgoyMDI1MDYxNS4wIKXMDSoASAFQAw%3D%3D",
+
+        phoneLabel: "Phone",
+        phoneText: "+90 212 561 23 22",
+        phoneLink: "tel:+902125612322",
+
+        hoursLabel: "Working Hours",
+        hoursText: "Monday - Friday: 09:00 - 19:00\nSaturday: 09:00 - 14:00",
+
+        // Form
+        formTitleBox: "Fill the Form",
+        formSubtitle:
+          "Please enter your information and we'll get in touch with you as soon as possible.",
+        firstNamePlaceholder: "First Name",
+        lastNamePlaceholder: "Last Name",
+        emailPlaceholder: "Email",
+        phonePlaceholder: "Phone",
+        messagePlaceholder: "Your Message",
+        submitButtonText: "Submit",
+        submittingButtonText: "Submitting...",
+        successMessage:
+          "Your message has been sent successfully! We'll get back to you shortly.",
+        errorMessage: "An error occurred. Please try again later.",
+
+        // Email
+        emailRecipient: "eyup17@gmail.com",
+        emailSubject: "New Contact Form Message - Veneta Clinic",
+      },
+    });
+
+    console.log("✅ Contact page created (TR & EN)!");
+  }
+
   console.log("\n🎉 Seeding completed successfully!");
 }
 
