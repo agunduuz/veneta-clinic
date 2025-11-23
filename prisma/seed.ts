@@ -1350,6 +1350,930 @@ async function main() {
     console.log("✅ Contact page created (TR & EN)!");
   }
 
+  // ========================================
+  // ABOUT PAGE
+  // ========================================
+  const existingAboutPage = await prisma.aboutPage.findFirst();
+  if (!existingAboutPage) {
+    console.log("🔄 Seeding about page...");
+
+    // TR About Page
+    await prisma.aboutPage.create({
+      data: {
+        locale: "tr",
+
+        // Header Section
+        headerTitle: "Güzelliğiniz İçin",
+        headerTitleHighlight: "En İyi Eller",
+        headerSubtitle: "Modern Tıbbın Gücü, Geleneksel Dokunuşlarla Buluşuyor",
+        headerDescription:
+          "Veneta Clinic olarak, 15 yılı aşkın tecrübemiz ve uzman kadromuzla size en kaliteli estetik ve medikal hizmetleri sunuyoruz. Güzelliğiniz bizim önceliğimizdir.",
+        headerButtonServices: "Hizmetlerimiz",
+        headerButtonContact: "İletişim",
+        headerImage: "/images/doctors-team.jpg",
+        headerExperienceYears: "15+",
+        headerExperienceText: "Yıl\nTecrübe",
+
+        // Features Section
+        featuresTitle: "Neden Bizi",
+        featuresTitleHighlight: "Seçmelisiniz",
+        featuresSubtitle:
+          "Veneta Clinic'te size en iyi hizmeti sunmak için sürekli gelişiyoruz",
+
+        // Mission Section
+        missionDoctorImage: "/images/doctors-team.jpg",
+        missionQuote:
+          "Güzellik sadece dış görünüş değil, kendinizi iyi hissetmektir. Biz her hastamıza bu güven ve mutluluğu yaşatmak için buradayız.",
+        missionTitle: "Misyonumuz",
+        missionSubtitle: "Size En İyi Hizmeti Sunmak",
+        missionDescription1:
+          "Veneta Clinic olarak, modern tıp teknolojilerini kullanarak güvenli, etkili ve kişiye özel estetik çözümler sunuyoruz. Her hastamızın benzersiz ihtiyaçlarını anlıyor ve en uygun tedavi planlarını oluşturuyoruz.",
+        missionDescription2:
+          "Uzman kadromuz, en son teknolojileri kullanarak size en doğal ve kalıcı sonuçları sunmak için sürekli kendini geliştirmektedir. Güzelliğiniz bizim işimiz, mutluluğunuz bizim başarımız.",
+
+        // Statistics
+        stat1Value: "500",
+        stat1Label: "Mutlu Müşteri",
+        stat2Value: "15",
+        stat2Label: "Yıl Tecrübe",
+        stat3Value: "25",
+        stat3Label: "Uzman Ekip",
+        stat4Value: "10000",
+        stat4Label: "Başarılı İşlem",
+      },
+    });
+
+    // EN About Page
+    await prisma.aboutPage.create({
+      data: {
+        locale: "en",
+
+        // Header Section
+        headerTitle: "The Best Hands For",
+        headerTitleHighlight: "Your Beauty",
+        headerSubtitle: "Modern Medicine Meets Traditional Touch",
+        headerDescription:
+          "At Veneta Clinic, with over 15 years of experience and our expert team, we provide you with the highest quality aesthetic and medical services. Your beauty is our priority.",
+        headerButtonServices: "Our Services",
+        headerButtonContact: "Contact",
+        headerImage: "/images/doctors-team.jpg",
+        headerExperienceYears: "15+",
+        headerExperienceText: "Years\nExperience",
+
+        // Features Section
+        featuresTitle: "Why Choose",
+        featuresTitleHighlight: "Us",
+        featuresSubtitle:
+          "At Veneta Clinic, we are constantly evolving to provide you with the best service",
+
+        // Mission Section
+        missionDoctorImage: "/images/doctors-team.jpg",
+        missionQuote:
+          "Beauty is not just about appearance, it's about feeling good about yourself. We are here to give every patient that confidence and happiness.",
+        missionTitle: "Our Mission",
+        missionSubtitle: "To Provide You With The Best Service",
+        missionDescription1:
+          "As Veneta Clinic, we offer safe, effective and personalized aesthetic solutions using modern medical technologies. We understand the unique needs of each patient and create the most suitable treatment plans.",
+        missionDescription2:
+          "Our expert team is constantly improving itself to provide you with the most natural and permanent results using the latest technologies. Your beauty is our business, your happiness is our success.",
+
+        // Statistics
+        stat1Value: "500",
+        stat1Label: "Happy Customers",
+        stat2Value: "15",
+        stat2Label: "Years Experience",
+        stat3Value: "25",
+        stat3Label: "Expert Team",
+        stat4Value: "10000",
+        stat4Label: "Successful Procedures",
+      },
+    });
+
+    // TR Features
+    await prisma.aboutFeature.createMany({
+      data: [
+        {
+          locale: "tr",
+          featureId: "01",
+          title: "Uzman Kadro",
+          description:
+            "15 yılı aşkın tecrübesiyle alanında uzman doktor ve ekibimiz, size en iyi hizmeti sunmak için burada.",
+          image:
+            "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200",
+          order: 1,
+          active: true,
+        },
+        {
+          locale: "tr",
+          featureId: "02",
+          title: "Modern Teknoloji",
+          description:
+            "En son teknolojileri kullanarak güvenli, etkili ve konforlu tedaviler sunuyoruz.",
+          image:
+            "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400",
+          order: 2,
+          active: true,
+        },
+        {
+          locale: "tr",
+          featureId: "03",
+          title: "Kişiye Özel Çözümler",
+          description:
+            "Her hastamızın benzersiz ihtiyaçlarını anlıyor ve kişiye özel tedavi planları oluşturuyoruz.",
+          image:
+            "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1000",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Features
+    await prisma.aboutFeature.createMany({
+      data: [
+        {
+          locale: "en",
+          featureId: "01",
+          title: "Expert Team",
+          description:
+            "With over 15 years of experience, our expert doctors and team are here to provide you with the best service.",
+          image:
+            "https://images.unsplash.com/photo-1612776572997-76cc42e058c3?q=80&w=1200",
+          order: 1,
+          active: true,
+        },
+        {
+          locale: "en",
+          featureId: "02",
+          title: "Modern Technology",
+          description:
+            "We offer safe, effective and comfortable treatments using the latest technologies.",
+          image:
+            "https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=400",
+          order: 2,
+          active: true,
+        },
+        {
+          locale: "en",
+          featureId: "03",
+          title: "Personalized Solutions",
+          description:
+            "We understand the unique needs of each patient and create personalized treatment plans.",
+          image:
+            "https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1000",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
+
+    console.log("✅ About page created (TR & EN)!");
+  }
+
+  // ========================================
+  // PROCEDURE PAGES - LAZER EPILASYON
+  // ========================================
+
+  // Önce tüm kontrolleri yap
+  const existingLazerPageTR = await prisma.procedurePage.findFirst({
+    where: { slug: "lazer-epilasyon", locale: "tr" },
+  });
+
+  const existingLazerPageEN = await prisma.procedurePage.findFirst({
+    where: { slug: "lazer-epilasyon", locale: "en" },
+  });
+
+  if (!existingLazerPageTR || !existingLazerPageEN) {
+    console.log("🔄 Seeding lazer epilasyon page...");
+
+    // TR Page
+    if (!existingLazerPageTR) {
+      await prisma.procedurePage.create({
+        data: {
+          slug: "lazer-epilasyon",
+          locale: "tr",
+          heroTitle: "Kalıcı Tüy Dönemi",
+          heroTitleHighlight: "Alma Soprano Ice Platinum ile",
+          heroDescription:
+            "En son teknoloji Alma Soprano Ice Platinum cihazı ile ağrısız, güvenli ve etkili lazer epilasyon deneyimi. Tüm cilt tiplerine uygun, FDA onaylı sistem.",
+          heroButtonReviews: "Google Yorumlarımız",
+          heroButtonPhone: "Hemen Ara",
+          heroImage: "/images/alma-soprano.webp",
+          heroImageAlt: "Alma Soprano Ice Platinum Lazer Epilasyon Cihazı",
+          deviceTitle: "Alma Soprano Ice Platinum",
+          deviceDescription:
+            "Dünya çapında en çok tercih edilen lazer epilasyon teknolojisi. Ice Platinum ile hem etkili hem de konforlu bir uygulama sunuyoruz.",
+          deviceFeaturesTitle: "Teknolojik Özellikler",
+          deviceAdvantagesTitle: "Avantajları",
+          pricingTitle: "Lazer Epilasyon Fiyatları",
+          pricingDescription:
+            "Size özel paketlerimiz için bizimle iletişime geçin. Taksit imkanlarımız mevcuttur.",
+          pricingCallText: "Fiyat için arayın",
+          whyUsTitle: "Neden Bizi Tercih Etmelisiniz?",
+          faqTitle: "Sıkça Sorulan Sorular",
+          ctaTitle: "Ücretsiz Danışmanlık İçin Hemen İletişime Geçin",
+          ctaDescription:
+            "Uzman ekibimiz size en uygun tedavi planını oluşturmak için hazır. Randevunuz için bizi arayın.",
+          ctaButtonPhone: "Hemen Ara",
+          ctaButtonWhatsApp: "WhatsApp",
+          active: true,
+        },
+      });
+    }
+
+    // EN Page
+    if (!existingLazerPageEN) {
+      await prisma.procedurePage.create({
+        data: {
+          slug: "lazer-epilasyon",
+          locale: "en",
+          heroTitle: "Permanent Hair Removal",
+          heroTitleHighlight: "with Alma Soprano Ice Platinum",
+          heroDescription:
+            "Experience painless, safe and effective laser hair removal with the latest Alma Soprano Ice Platinum technology. FDA approved system suitable for all skin types.",
+          heroButtonReviews: "Our Google Reviews",
+          heroButtonPhone: "Call Now",
+          heroImage: "/images/alma-soprano.webp",
+          heroImageAlt: "Alma Soprano Ice Platinum Laser Hair Removal Device",
+          deviceTitle: "Alma Soprano Ice Platinum",
+          deviceDescription:
+            "The world's most preferred laser hair removal technology. With Ice Platinum, we offer both effective and comfortable application.",
+          deviceFeaturesTitle: "Technical Features",
+          deviceAdvantagesTitle: "Advantages",
+          pricingTitle: "Laser Hair Removal Prices",
+          pricingDescription:
+            "Contact us for our special packages. Installment options available.",
+          pricingCallText: "Call for price",
+          whyUsTitle: "Why Choose Us?",
+          faqTitle: "Frequently Asked Questions",
+          ctaTitle: "Contact Us Now for Free Consultation",
+          ctaDescription:
+            "Our expert team is ready to create the most suitable treatment plan for you. Call us for your appointment.",
+          ctaButtonPhone: "Call Now",
+          ctaButtonWhatsApp: "WhatsApp",
+          active: true,
+        },
+      });
+    }
+
+    // Features kontrolü
+    const existingFeatures = await prisma.procedureFeature.count({
+      where: { pageSlug: "lazer-epilasyon" },
+    });
+
+    if (existingFeatures === 0) {
+      // TR Features
+      await prisma.procedureFeature.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "zap",
+            title: "Son Teknoloji",
+            description:
+              "Alma Soprano Ice Platinum ile yeni nesil lazer epilasyon teknolojisi",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "users",
+            title: "Uzman Kadro",
+            description: "Alanında deneyimli ve sertifikalı terapistler",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "check-circle",
+            title: "FDA Onaylı",
+            description: "Güvenli ve etkili, klinik olarak test edilmiş sistem",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Features
+      await prisma.procedureFeature.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "zap",
+            title: "Latest Technology",
+            description:
+              "Next generation laser hair removal technology with Alma Soprano Ice Platinum",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "users",
+            title: "Expert Team",
+            description: "Experienced and certified therapists in their field",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "check-circle",
+            title: "FDA Approved",
+            description: "Safe and effective, clinically tested system",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Device Items kontrolü
+    const existingDeviceItems = await prisma.procedureDeviceItem.count({
+      where: { pageSlug: "lazer-epilasyon" },
+    });
+
+    if (existingDeviceItems === 0) {
+      // TR Device Features
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "feature",
+            text: "3 farklı dalga boyu (755nm, 810nm, 1064nm)",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "feature",
+            text: "Ice Platinum soğutma teknolojisi",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "feature",
+            text: "Tüm cilt tiplerine uygun (I-VI)",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "feature",
+            text: "FDA ve CE onaylı",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // TR Device Advantages
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "advantage",
+            text: "Ağrısız ve konforlu uygulama",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "advantage",
+            text: "Hızlı işlem süresi",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "advantage",
+            text: "Kalıcı sonuçlar",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            type: "advantage",
+            text: "Yan etki riski minimum",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Device Features
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "feature",
+            text: "3 different wavelengths (755nm, 810nm, 1064nm)",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "feature",
+            text: "Ice Platinum cooling technology",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "feature",
+            text: "Suitable for all skin types (I-VI)",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "feature",
+            text: "FDA and CE approved",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Device Advantages
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "advantage",
+            text: "Painless and comfortable application",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "advantage",
+            text: "Fast treatment time",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "advantage",
+            text: "Permanent results",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            type: "advantage",
+            text: "Minimal side effect risk",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Treatment Areas kontrolü
+    const existingAreas = await prisma.procedureTreatmentArea.count({
+      where: { pageSlug: "lazer-epilasyon" },
+    });
+
+    if (existingAreas === 0) {
+      // TR Treatment Areas
+      await prisma.procedureTreatmentArea.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Yüz Bölgesi",
+            description: "Üst dudak, çene, yanaklar",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Vücut",
+            description: "Kol, bacak, sırt, göğüs",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Bikini Bölgesi",
+            description: "Klasik, brazilian, hollywood",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Koltuk Altı",
+            description: "Hızlı ve etkili uygulama",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Karın Bölgesi",
+            description: "Alt karın ve göbek çevresi",
+            order: 5,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Tam Vücut",
+            description: "Tüm bölgeler için özel paketler",
+            order: 6,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Treatment Areas
+      await prisma.procedureTreatmentArea.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Face Area",
+            description: "Upper lip, chin, cheeks",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Body",
+            description: "Arms, legs, back, chest",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Bikini Area",
+            description: "Classic, brazilian, hollywood",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Underarms",
+            description: "Fast and effective application",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Abdominal Area",
+            description: "Lower abdomen and belly area",
+            order: 5,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Full Body",
+            description: "Special packages for all areas",
+            order: 6,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Pricing kontrolü
+    const existingPricing = await prisma.procedurePricing.count({
+      where: { pageSlug: "lazer-epilasyon" },
+    });
+
+    if (existingPricing === 0) {
+      // TR Pricing
+      await prisma.procedurePricing.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Tüm Vücut",
+            description: "Yüz dahil tüm bölgeler",
+            priceText: "Fiyat için arayın",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Yarım Vücut",
+            description: "Üst veya alt beden",
+            priceText: "Fiyat için arayın",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            title: "Bölgesel",
+            description: "Tek bölge uygulaması",
+            priceText: "Fiyat için arayın",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Pricing
+      await prisma.procedurePricing.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Full Body",
+            description: "All areas including face",
+            priceText: "Call for price",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Half Body",
+            description: "Upper or lower body",
+            priceText: "Call for price",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            title: "Single Area",
+            description: "Single area application",
+            priceText: "Call for price",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Why Us kontrolü
+    const existingWhyUs = await prisma.procedureWhyUs.count({
+      where: { pageSlug: "lazer-epilasyon" },
+    });
+
+    if (existingWhyUs === 0) {
+      // TR Why Us
+      await prisma.procedureWhyUs.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "lightning",
+            title: "Hızlı İşlem",
+            description: "En son teknoloji ile kısa sürede etkili sonuçlar",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "users",
+            title: "Deneyimli Ekip",
+            description: "Alanında uzman ve sertifikalı terapistler",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "dollar",
+            title: "Uygun Fiyat",
+            description: "Kaliteli hizmeti uygun fiyatlarla sunuyoruz",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            icon: "heart",
+            title: "Müşteri Memnuniyeti",
+            description: "Binlerce mutlu müşterimiz var",
+            colorScheme: "destructive",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Why Us
+      await prisma.procedureWhyUs.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "lightning",
+            title: "Fast Treatment",
+            description:
+              "Effective results in short time with latest technology",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "users",
+            title: "Experienced Team",
+            description: "Expert and certified therapists in their field",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "dollar",
+            title: "Affordable Price",
+            description: "We offer quality service at affordable prices",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            icon: "heart",
+            title: "Customer Satisfaction",
+            description: "Thousands of happy customers",
+            colorScheme: "destructive",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // FAQ kontrolü
+    const existingFAQs = await prisma.procedureFAQ.count({
+      where: { pageSlug: "lazer-epilasyon" },
+    });
+
+    if (existingFAQs === 0) {
+      // TR FAQs
+      await prisma.procedureFAQ.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            question: "Lazer epilasyon ağrılı mı?",
+            answer:
+              "Alma Soprano Ice Platinum'un Ice Platinum soğutma teknolojisi sayesinde işlem neredeyse ağrısızdır. Hafif bir ısınma hissi dışında rahatsızlık yaşamazsınız.",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            question: "Kaç seans gerekir?",
+            answer:
+              "Genellikle 6-8 seans önerilir. Ancak kişinin cilt tipi, tüy yapısı ve hormon dengesi gibi faktörlere göre bu sayı değişebilir.",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            question: "Yan etkisi var mı?",
+            answer:
+              "FDA onaylı cihazımız ile uygulanan lazer epilasyonun ciddi bir yan etkisi yoktur. Geçici kızarıklık veya hassasiyet yaşanabilir ancak bunlar kısa sürede geçer.",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            question: "Tüm cilt tiplerine uygun mu?",
+            answer:
+              "Evet, Alma Soprano Ice Platinum 3 farklı dalga boyu ile tüm cilt tiplerine (Fitzpatrick I-VI) güvenle uygulanabilir.",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            question: "İşlem ne kadar sürer?",
+            answer:
+              "Bölgeye göre değişir. Örneğin koltuk altı 10-15 dakika, tam bacak 30-40 dakika sürebilir.",
+            order: 5,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "tr",
+            question: "Seanslar arası ne kadar süre olmalı?",
+            answer:
+              "Yüz bölgesi için 4-6 hafta, vücut için 6-8 hafta aralarla seanslar planlanır.",
+            order: 6,
+            active: true,
+          },
+        ],
+      });
+
+      // EN FAQs
+      await prisma.procedureFAQ.createMany({
+        data: [
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            question: "Is laser hair removal painful?",
+            answer:
+              "Thanks to the Ice Platinum cooling technology of Alma Soprano Ice Platinum, the procedure is almost painless. You won't experience any discomfort except a slight warming sensation.",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            question: "How many sessions are needed?",
+            answer:
+              "Usually 6-8 sessions are recommended. However, this number may vary depending on factors such as skin type, hair structure and hormonal balance.",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            question: "Are there any side effects?",
+            answer:
+              "Laser hair removal performed with our FDA-approved device has no serious side effects. Temporary redness or sensitivity may occur but these pass quickly.",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            question: "Is it suitable for all skin types?",
+            answer:
+              "Yes, Alma Soprano Ice Platinum can be safely applied to all skin types (Fitzpatrick I-VI) with 3 different wavelengths.",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            question: "How long does the procedure take?",
+            answer:
+              "It varies by area. For example, underarms take 10-15 minutes, full legs take 30-40 minutes.",
+            order: 5,
+            active: true,
+          },
+          {
+            pageSlug: "lazer-epilasyon",
+            locale: "en",
+            question: "How long should be between sessions?",
+            answer:
+              "Sessions are planned 4-6 weeks apart for face area, 6-8 weeks apart for body.",
+            order: 6,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    console.log("✅ Lazer epilasyon page created (TR & EN)!");
+  }
+
   console.log("\n🎉 Seeding completed successfully!");
 }
 

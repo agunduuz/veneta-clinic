@@ -1,4 +1,4 @@
-// app/%28routes%29/layout.tsx
+// app/(routes)/layout.tsx
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
