@@ -1,4 +1,4 @@
-// app/(routes)/lazer-epilasyon/page.tsx
+// app/(routes)/en/laser-hair-removal/page.tsx
 import LazerHero from "@/components/LazerEpilasyon/LazerHero";
 import LazerFeatures from "@/components/LazerEpilasyon/LazerFeatures";
 import LazerDeviceInfo from "@/components/LazerEpilasyon/LazerDeviceInfo";

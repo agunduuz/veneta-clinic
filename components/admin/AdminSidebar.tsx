@@ -105,8 +105,8 @@ const menuItems = [
     ),
   },
   {
-    name: "Mesajlar",
-    href: "/admin/messages",
+    name: "Hakkımızda",
+    href: "/admin/about",
     icon: (
       <svg
         className="h-5 w-5"
@@ -118,11 +118,29 @@ const menuItems = [
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       </svg>
     ),
-    badge: "Yakında",
+  },
+  {
+    name: "Lazer Epilasyon",
+    href: "/admin/procedures/lazer-epilasyon",
+    icon: (
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M13 10V3L4 14h7v7l9-11h-7z"
+        />
+      </svg>
+    ),
   },
   {
     name: "Ayarlar",

@@ -329,3 +329,225 @@ model ContactSubmission {
   @@map("contact_submissions")
 }
 
+// ========================================
+// ABOUT PAGE MODELS
+// ========================================
+
+model AboutPage {
+  id       String   @id @default(cuid())
+  locale   String   @unique
+  
+  // Header Section
+  headerTitle           String   @db.Text
+  headerTitleHighlight  String
+  headerSubtitle        String   @db.Text
+  headerDescription     String   @db.Text
+  headerButtonServices  String
+  headerButtonContact   String
+  headerImage           String
+  headerExperienceYears String
+  headerExperienceText  String
+  
+  // Features Section
+  featuresTitle          String   @db.Text
+  featuresTitleHighlight String
+  featuresSubtitle       String   @db.Text
+  
+  // Mission Section
+  missionDoctorImage  String
+  missionQuote        String   @db.Text
+  missionTitle        String   @db.Text
+  missionSubtitle     String   @db.Text
+  missionDescription1 String   @db.Text
+  missionDescription2 String   @db.Text
+  
+  // Statistics
+  stat1Value String
+  stat1Label String
+  stat2Value String
+  stat2Label String
+  stat3Value String
+  stat3Label String
+  stat4Value String
+  stat4Label String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("about_page")
+}
+
+model AboutFeature {
+  id          String   @id @default(cuid())
+  locale      String
+  featureId   String
+  title       String
+  description String   @db.Text
+  image       String
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([locale, active, order])
+  @@map("about_features")
+}
+
+// ========================================
+// PROCEDURE PAGE MODELS (Template için)
+// ========================================
+
+// Ana sayfa bilgileri
+model ProcedurePage {
+  id     String @id @default(cuid())
+  slug   String // "lazer-epilasyon", "sac-ekimi"
+  locale String // "tr" | "en"
+  
+  // Hero Section
+  heroTitle           String @db.Text
+  heroTitleHighlight  String
+  heroDescription     String @db.Text
+  heroButtonReviews   String
+  heroButtonPhone     String
+  heroImage           String
+  heroImageAlt        String
+  
+  // Device Info
+  deviceTitle         String @db.Text
+  deviceDescription   String @db.Text
+  deviceFeaturesTitle String
+  deviceAdvantagesTitle String
+  
+  // Pricing Section
+  pricingTitle       String @db.Text
+  pricingDescription String @db.Text
+  pricingCallText    String // "Fiyat için arayın"
+  
+  // Why Us Section
+  whyUsTitle String @db.Text
+  
+  // FAQ Section
+  faqTitle String @db.Text
+  
+  // CTA Section
+  ctaTitle        String @db.Text
+  ctaDescription  String @db.Text
+  ctaButtonPhone  String
+  ctaButtonWhatsApp String
+  
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([slug, locale])
+  @@index([slug, locale, active])
+  @@map("procedure_pages")
+}
+
+// Hero Features (3 adet)
+model ProcedureFeature {
+  id          String @id @default(cuid())
+  pageSlug    String // "lazer-epilasyon"
+  locale      String
+  icon        String // "zap", "users", "check-circle"
+  title       String
+  description String @db.Text
+  order       Int    @default(0)
+  active      Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_features")
+}
+
+// Device Features & Advantages
+model ProcedureDeviceItem {
+  id       String @id @default(cuid())
+  pageSlug String
+  locale   String
+  type     String // "feature" | "advantage"
+  text     String @db.Text
+  order    Int    @default(0)
+  active   Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageSlug, locale, type, active, order])
+  @@map("procedure_device_items")
+}
+
+// Treatment Areas
+model ProcedureTreatmentArea {
+  id          String @id @default(cuid())
+  pageSlug    String
+  locale      String
+  title       String
+  description String @db.Text
+  order       Int    @default(0)
+  active      Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_treatment_areas")
+}
+
+// Pricing Options
+model ProcedurePricing {
+  id          String @id @default(cuid())
+  pageSlug    String
+  locale      String
+  title       String
+  description String @db.Text
+  priceText   String // "Fiyat için arayın" veya gerçek fiyat
+  colorScheme String // "primary", "secondary", "accent"
+  order       Int    @default(0)
+  active      Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_pricing")
+}
+
+// Why Us Reasons
+model ProcedureWhyUs {
+  id          String @id @default(cuid())
+  pageSlug    String
+  locale      String
+  icon        String // "lightning", "users", "dollar", "heart"
+  title       String
+  description String @db.Text
+  colorScheme String // "primary", "secondary", "accent", "destructive"
+  order       Int    @default(0)
+  active      Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_why_us")
+}
+
+// FAQ Items
+model ProcedureFAQ {
+  id       String @id @default(cuid())
+  pageSlug String
+  locale   String
+  question String @db.Text
+  answer   String @db.Text
+  order    Int    @default(0)
+  active   Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_faqs")
+}

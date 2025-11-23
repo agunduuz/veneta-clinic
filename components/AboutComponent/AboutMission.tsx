@@ -1,15 +1,78 @@
 // components/AboutComponent/AboutMission.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
-import { useEffect } from "react";
+import { useLocale } from "@/lib/i18n/context";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface AboutMissionData {
+  missionDoctorImage: string;
+  missionQuote: string;
+  missionTitle: string;
+  missionSubtitle: string;
+  missionDescription1: string;
+  missionDescription2: string;
+  stats: Stat[];
+}
+
 const AboutMission = () => {
-  const { t } = useTranslation();
+  const { locale } = useLocale();
+  const [data, setData] = useState<AboutMissionData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/about?locale=${locale}`);
+        if (res.ok) {
+          const aboutData = await res.json();
+          setData({
+            missionDoctorImage: aboutData.missionDoctorImage,
+            missionQuote: aboutData.missionQuote,
+            missionTitle: aboutData.missionTitle,
+            missionSubtitle: aboutData.missionSubtitle,
+            missionDescription1: aboutData.missionDescription1,
+            missionDescription2: aboutData.missionDescription2,
+            stats: [
+              {
+                value: aboutData.stat1Value,
+                label: aboutData.stat1Label,
+              },
+              {
+                value: aboutData.stat2Value,
+                label: aboutData.stat2Label,
+              },
+              {
+                value: aboutData.stat3Value,
+                label: aboutData.stat3Label,
+              },
+              {
+                value: aboutData.stat4Value,
+                label: aboutData.stat4Label,
+              },
+            ],
+          });
+        }
+      } catch (error) {
+        console.error("About mission fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [locale]);
+
+  useEffect(() => {
+    if (!data) return;
+
     const counters = document.querySelectorAll(".stat-number");
 
     const animateCounter = (counter: HTMLElement) => {
@@ -51,7 +114,27 @@ const AboutMission = () => {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [data]);
+
+  if (loading || !data) {
+    return (
+      <section className="w-full max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="animate-pulse">
+          <div className="w-48 h-48 bg-gray-200 rounded-full mx-auto mb-8"></div>
+          <div className="h-24 bg-gray-200 rounded mb-6"></div>
+        </div>
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+          <div className="h-6 bg-gray-200 rounded w-full"></div>
+          <div className="h-32 bg-gray-200 rounded"></div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="h-24 bg-gray-200 rounded"></div>
+            <div className="h-24 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -70,11 +153,11 @@ const AboutMission = () => {
           className="relative w-48 h-48 mb-8 rounded-full overflow-hidden"
         >
           <Image
-            src="/images/doctors-team.jpg"
-            alt={t("about.mission.doctorImageAlt")}
+            src={data.missionDoctorImage}
+            alt="Doctor"
             fill
             className="object-cover hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 100vw, 192px"
+            sizes="192px"
           />
         </motion.div>
         <motion.div
@@ -85,25 +168,11 @@ const AboutMission = () => {
           className="relative z-10"
         >
           <blockquote className="text-xl md:text-2xl italic text-foreground mb-6">
-            &ldquo;{t("about.mission.quote")}&rdquo;
+            &ldquo;{data.missionQuote}&rdquo;
           </blockquote>
-          {/* <div className="flex flex-col">
-            <cite className="text-lg font-semibold text-foreground not-italic">
-              {t("about.mission.doctorName")}
-            </cite>
-            <span className="text-sm text-muted-foreground mb-2">
-              {t("about.mission.doctorTitle")}
-            </span>
-            <div className="text-xs text-muted-foreground space-y-1">
-              <p>{t("about.mission.doctorInfo1")}</p>
-              <p>{t("about.mission.doctorInfo2")}</p>
-              <p>{t("about.mission.doctorInfo3")}</p>
-              <p>{t("about.mission.doctorInfo4")}</p>
-              <p>{t("about.mission.doctorInfo5")}</p>
-            </div>
-          </div> */}
         </motion.div>
       </motion.div>
+
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -119,16 +188,16 @@ const AboutMission = () => {
           className="space-y-4"
         >
           <h2 className="text-3xl md:text-4xl font-bold font-playfair text-foreground">
-            {t("about.mission.title")}
+            {data.missionTitle}
           </h2>
           <p className="text-lg text-muted-foreground mb-4">
-            {t("about.mission.subtitle")}
+            {data.missionSubtitle}
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-            {t("about.mission.description1")}
+            {data.missionDescription1}
           </p>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-            {t("about.mission.description2")}
+            {data.missionDescription2}
           </p>
         </motion.div>
 
@@ -139,50 +208,19 @@ const AboutMission = () => {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="grid grid-cols-2 gap-8"
         >
-          <div className="stat-item">
-            <span
-              className="stat-number text-4xl md:text-5xl font-bold text-primary"
-              data-value={t("about.mission.stat1Value")}
-            >
-              0
-            </span>
-            <p className="text-sm md:text-base text-muted-foreground">
-              {t("about.mission.stat1Label")}
-            </p>
-          </div>
-          <div className="stat-item">
-            <span
-              className="stat-number text-4xl md:text-5xl font-bold text-primary"
-              data-value={t("about.mission.stat2Value")}
-            >
-              0
-            </span>
-            <p className="text-sm md:text-base text-muted-foreground">
-              {t("about.mission.stat2Label")}
-            </p>
-          </div>
-          <div className="stat-item">
-            <span
-              className="stat-number text-4xl md:text-5xl font-bold text-primary"
-              data-value={t("about.mission.stat3Value")}
-            >
-              0
-            </span>
-            <p className="text-sm md:text-base text-muted-foreground">
-              {t("about.mission.stat3Label")}
-            </p>
-          </div>
-          <div className="stat-item">
-            <span
-              className="stat-number text-4xl md:text-5xl font-bold text-primary"
-              data-value={t("about.mission.stat4Value")}
-            >
-              0
-            </span>
-            <p className="text-sm md:text-base text-muted-foreground">
-              {t("about.mission.stat4Label")}
-            </p>
-          </div>
+          {data.stats.map((stat, index) => (
+            <div key={index} className="stat-item">
+              <span
+                className="stat-number text-4xl md:text-5xl font-bold text-primary"
+                data-value={stat.value}
+              >
+                0
+              </span>
+              <p className="text-sm md:text-base text-muted-foreground">
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </motion.div>
       </motion.div>
     </section>
