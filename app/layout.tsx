@@ -93,6 +93,9 @@ export const metadata: Metadata = {
       "İstanbul'da estetik ve plastik cerrahi alanında uzmanlaşmış Veneta Clinic.",
     images: ["/images/veneta-clinic-og.jpg"],
   },
+  verification: {
+    google: "2fWravjTYZWg5oYbC1-8JoEh3kv_zBHEz_-ZoVNzdKc",
+  },
   robots: {
     index: true,
     follow: true,
