@@ -14,35 +14,17 @@ export default function SacEkimiPage() {
   return (
     <>
       <main className="container py-12">
-        {/* Hero Section */}
-        <Hero />
-
-        {/* Main Features */}
-        <Features />
-
-        {/* Detailed Content */}
+        <Hero locale="tr" />
+        <Features locale="tr" />
         <section className="max-w-6xl mx-auto space-y-12">
-          {/* FUE Technique */}
-          <FueSection />
-
-          {/* How It's Done */}
-          <Process />
-
-          {/* Post-Operative Care */}
-          <Aftercare />
-
-          {/* Why Choose Us */}
-          <WhyUs />
-
-          {/* FAQ */}
-          <FAQ />
-
-          {/* CTA */}
-          <CTA />
+          <FueSection locale="tr" />
+          <Process locale="tr" />
+          <Aftercare locale="tr" />
+          <WhyUs locale="tr" />
+          <FAQ locale="tr" />
+          <CTA locale="tr" />
         </section>
       </main>
-
-      {/* Floating Buttons */}
       <PhoneButton />
       <WhatsAppButton />
     </>

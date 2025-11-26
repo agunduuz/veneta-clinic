@@ -1,62 +1,97 @@
 // components/HairTransplant/FueSection.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
+import { useEffect, useState } from "react";
 
-export default function FueSection() {
-  const { t } = useTranslation();
+interface DeviceItem {
+  id: string;
+  type: string;
+  text: string;
+  order: number;
+}
 
-  const advantages = [
-    "hairTransplant.fueSection.advantage1",
-    "hairTransplant.fueSection.advantage2",
-    "hairTransplant.fueSection.advantage3",
-    "hairTransplant.fueSection.advantage4",
-  ];
+interface FueSectionData {
+  deviceTitle: string;
+  deviceDescription: string;
+  deviceFeaturesTitle: string;
+  deviceAdvantagesTitle: string;
+  deviceFeatures: DeviceItem[];
+  deviceAdvantages: DeviceItem[];
+}
 
-  const applications = [
-    "hairTransplant.fueSection.application1",
-    "hairTransplant.fueSection.application2",
-    "hairTransplant.fueSection.application3",
-    "hairTransplant.fueSection.application4",
-  ];
+interface FueSectionProps {
+  locale: string;
+}
+
+export default function FueSection({ locale }: FueSectionProps) {
+  const [data, setData] = useState<FueSectionData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/procedures/sac-ekimi?locale=${locale}`);
+        if (res.ok) {
+          const result = await res.json();
+          setData({
+            deviceTitle: result.deviceTitle,
+            deviceDescription: result.deviceDescription,
+            deviceFeaturesTitle: result.deviceFeaturesTitle,
+            deviceAdvantagesTitle: result.deviceAdvantagesTitle,
+            deviceFeatures: result.deviceFeatures || [],
+            deviceAdvantages: result.deviceAdvantages || [],
+          });
+        }
+      } catch (error) {
+        console.error("FueSection fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [locale]);
+
+  if (loading || !data) {
+    return (
+      <div className="animate-pulse">
+        <div className="h-96 bg-gray-200 rounded-2xl"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-card rounded-2xl p-8 shadow-lg border border-border animate-fade-in">
-      {/* Title */}
-      <h2 className="mb-6">{t("hairTransplant.fueSection.title")}</h2>
+      <h2 className="mb-6">{data.deviceTitle}</h2>
+      <p className="text-muted-foreground mb-8">{data.deviceDescription}</p>
 
-      {/* Description */}
-      <p className="text-muted-foreground mb-8">
-        {t("hairTransplant.fueSection.description")}
-      </p>
-
-      {/* Two columns: Advantages + Applications */}
       <div className="grid md:grid-cols-2 gap-8">
-        {/* Left: Advantages */}
+        {/* Features */}
         <div className="bg-gradient-to-br from-primary/5 to-primary/10 p-6 rounded-xl border border-primary/20">
           <h4 className="font-semibold text-lg mb-4 text-foreground">
-            {t("hairTransplant.fueSection.advantagesTitle")}
+            {data.deviceFeaturesTitle}
           </h4>
           <ul className="space-y-3 text-muted-foreground">
-            {advantages.map((key, index) => (
-              <li key={index} className="flex items-center gap-2">
+            {data.deviceFeatures.map((item) => (
+              <li key={item.id} className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-primary rounded-full"></span>
-                {t(key)}
+                {item.text}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Right: Applications */}
+        {/* Advantages */}
         <div className="bg-gradient-to-br from-secondary/5 to-secondary/10 p-6 rounded-xl border border-secondary/20">
           <h4 className="font-semibold text-lg mb-4 text-foreground">
-            {t("hairTransplant.fueSection.applicationsTitle")}
+            {data.deviceAdvantagesTitle}
           </h4>
           <ul className="space-y-3 text-muted-foreground">
-            {applications.map((key, index) => (
-              <li key={index} className="flex items-center gap-2">
+            {data.deviceAdvantages.map((item) => (
+              <li key={item.id} className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-secondary rounded-full"></span>
-                {t(key)}
+                {item.text}
               </li>
             ))}
           </ul>

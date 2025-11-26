@@ -2274,6 +2274,714 @@ async function main() {
     console.log("✅ Lazer epilasyon page created (TR & EN)!");
   }
 
+  // ========================================
+  // PROCEDURE PAGES - SAÇ EKİMİ
+  // ========================================
+
+  const existingSacEkimiPageTR = await prisma.procedurePage.findFirst({
+    where: { slug: "sac-ekimi", locale: "tr" },
+  });
+
+  const existingSacEkimiPageEN = await prisma.procedurePage.findFirst({
+    where: { slug: "sac-ekimi", locale: "en" },
+  });
+
+  if (!existingSacEkimiPageTR || !existingSacEkimiPageEN) {
+    console.log("🔄 Seeding sac ekimi page...");
+
+    // TR Page
+    if (!existingSacEkimiPageTR) {
+      await prisma.procedurePage.create({
+        data: {
+          slug: "sac-ekimi",
+          locale: "tr",
+          heroTitle: "Doğal Saçlarınıza",
+          heroTitleHighlight: "Kavuşun - FUE Tekniği ile",
+          heroDescription:
+            "En son FUE (Follicular Unit Extraction) tekniği ile doğal görünümlü, kalıcı saç ekimi. Uzman ekibimiz ve ileri teknolojimizle size en iyi sonuçları sunuyoruz.",
+          heroButtonReviews: "Google Yorumlarımız",
+          heroButtonPhone: "Hemen Ara",
+          heroImage: "/images/hair-transplant.jpg",
+          heroImageAlt: "FUE Saç Ekimi",
+          deviceTitle: "FUE Tekniği",
+          deviceDescription:
+            "Follicular Unit Extraction (FUE), saç köklerinin tek tek alınarak nakledildiği modern saç ekimi yöntemidir. İz bırakmaz ve doğal sonuçlar verir.",
+          deviceFeaturesTitle: "Teknik Özellikler",
+          deviceAdvantagesTitle: "Avantajlar",
+          pricingTitle: "Saç Ekimi Paketleri",
+          pricingDescription:
+            "Size özel paketlerimiz için bizimle iletişime geçin. Taksit imkanlarımız mevcuttur.",
+          pricingCallText: "Fiyat için arayın",
+          whyUsTitle: "Neden Bizi Tercih Etmelisiniz?",
+          faqTitle: "Sıkça Sorulan Sorular",
+          ctaTitle: "Ücretsiz Saç Analizi İçin Hemen İletişime Geçin",
+          ctaDescription:
+            "Uzman ekibimiz size en uygun saç ekimi planını oluşturmak için hazır. Randevunuz için bizi arayın.",
+          ctaButtonPhone: "Hemen Ara",
+          ctaButtonWhatsApp: "WhatsApp",
+          active: true,
+        },
+      });
+    }
+
+    // EN Page
+    if (!existingSacEkimiPageEN) {
+      await prisma.procedurePage.create({
+        data: {
+          slug: "sac-ekimi",
+          locale: "en",
+          heroTitle: "Get Your",
+          heroTitleHighlight: "Natural Hair Back - FUE Technique",
+          heroDescription:
+            "Natural-looking, permanent hair transplant with the latest FUE (Follicular Unit Extraction) technique. We offer you the best results with our expert team and advanced technology.",
+          heroButtonReviews: "Our Google Reviews",
+          heroButtonPhone: "Call Now",
+          heroImage: "/images/hair-transplant.jpg",
+          heroImageAlt: "FUE Hair Transplant",
+          deviceTitle: "FUE Technique",
+          deviceDescription:
+            "Follicular Unit Extraction (FUE) is a modern hair transplant method where hair follicles are extracted and transplanted individually. It leaves no scars and gives natural results.",
+          deviceFeaturesTitle: "Technical Features",
+          deviceAdvantagesTitle: "Advantages",
+          pricingTitle: "Hair Transplant Packages",
+          pricingDescription:
+            "Contact us for our special packages. Installment options available.",
+          pricingCallText: "Call for price",
+          whyUsTitle: "Why Choose Us?",
+          faqTitle: "Frequently Asked Questions",
+          ctaTitle: "Contact Us Now for Free Hair Analysis",
+          ctaDescription:
+            "Our expert team is ready to create the most suitable hair transplant plan for you. Call us for your appointment.",
+          ctaButtonPhone: "Call Now",
+          ctaButtonWhatsApp: "WhatsApp",
+          active: true,
+        },
+      });
+    }
+
+    // Features kontrolü
+    const existingFeatures = await prisma.procedureFeature.count({
+      where: { pageSlug: "sac-ekimi" },
+    });
+
+    if (existingFeatures === 0) {
+      // TR Features
+      await prisma.procedureFeature.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "scissors",
+            title: "FUE Tekniği",
+            description: "İz bırakmayan modern saç ekimi yöntemi",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "users",
+            title: "Uzman Kadro",
+            description: "Deneyimli doktorlar ve sertifikalı ekip",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "check-circle",
+            title: "Doğal Sonuç",
+            description: "Kalıcı ve doğal görünümlü saçlar",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Features
+      await prisma.procedureFeature.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "scissors",
+            title: "FUE Technique",
+            description: "Modern hair transplant method with no scars",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "users",
+            title: "Expert Team",
+            description: "Experienced doctors and certified team",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "check-circle",
+            title: "Natural Results",
+            description: "Permanent and natural-looking hair",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Device Items kontrolü
+    const existingDeviceItems = await prisma.procedureDeviceItem.count({
+      where: { pageSlug: "sac-ekimi" },
+    });
+
+    if (existingDeviceItems === 0) {
+      // TR Device Features
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "feature",
+            text: "Mikromotor tekniği ile hassas ekstraksiyon",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "feature",
+            text: "0.6-0.8mm punch çapı ile minimal travma",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "feature",
+            text: "Lokal anestezi ile ağrısız işlem",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "feature",
+            text: "Doğal saç çıkış açısı ve yönü korunur",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // TR Device Advantages
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "advantage",
+            text: "İz ve skar bırakmaz",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "advantage",
+            text: "Hızlı iyileşme süresi (7-10 gün)",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "advantage",
+            text: "%95-98 tutunma oranı",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            type: "advantage",
+            text: "Doğal ve kalıcı sonuçlar",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Device Features
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "feature",
+            text: "Precise extraction with micromotor technique",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "feature",
+            text: "Minimal trauma with 0.6-0.8mm punch diameter",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "feature",
+            text: "Painless procedure with local anesthesia",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "feature",
+            text: "Natural hair angle and direction preserved",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Device Advantages
+      await prisma.procedureDeviceItem.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "advantage",
+            text: "No scars or marks",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "advantage",
+            text: "Fast recovery time (7-10 days)",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "advantage",
+            text: "95-98% graft survival rate",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            type: "advantage",
+            text: "Natural and permanent results",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Treatment Areas kontrolü
+    const existingAreas = await prisma.procedureTreatmentArea.count({
+      where: { pageSlug: "sac-ekimi" },
+    });
+
+    if (existingAreas === 0) {
+      // TR Treatment Areas
+      await prisma.procedureTreatmentArea.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "Saç Çizgisi",
+            description: "Ön saç hattı düzenleme ve dolgu",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "Tepe Bölgesi",
+            description: "Vertex bölge yoğunlaştırma",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "Sakal Ekimi",
+            description: "Sakal ve bıyık bölgesi",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "Kaş Ekimi",
+            description: "Kaş yoğunlaştırma ve şekillendirme",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Treatment Areas
+      await prisma.procedureTreatmentArea.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "Hairline",
+            description: "Front hairline design and filling",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "Crown Area",
+            description: "Vertex area densification",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "Beard Transplant",
+            description: "Beard and mustache area",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "Eyebrow Transplant",
+            description: "Eyebrow densification and shaping",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Pricing kontrolü
+    const existingPricing = await prisma.procedurePricing.count({
+      where: { pageSlug: "sac-ekimi" },
+    });
+
+    if (existingPricing === 0) {
+      // TR Pricing
+      await prisma.procedurePricing.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "Standart Paket",
+            description: "2000-3000 greft",
+            priceText: "Fiyat için arayın",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "Premium Paket",
+            description: "3000-4000 greft",
+            priceText: "Fiyat için arayın",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            title: "VIP Paket",
+            description: "4000+ greft",
+            priceText: "Fiyat için arayın",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Pricing
+      await prisma.procedurePricing.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "Standard Package",
+            description: "2000-3000 grafts",
+            priceText: "Call for price",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "Premium Package",
+            description: "3000-4000 grafts",
+            priceText: "Call for price",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            title: "VIP Package",
+            description: "4000+ grafts",
+            priceText: "Call for price",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Why Us kontrolü
+    const existingWhyUs = await prisma.procedureWhyUs.count({
+      where: { pageSlug: "sac-ekimi" },
+    });
+
+    if (existingWhyUs === 0) {
+      // TR Why Us
+      await prisma.procedureWhyUs.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "heart",
+            title: "Müşteri Memnuniyeti",
+            description: "Binlerce mutlu hastamız",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "scissors",
+            title: "FUE Uzmanı",
+            description: "10+ yıl FUE deneyimi",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "shield",
+            title: "Garanti",
+            description: "Tutunma garantisi",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            icon: "clock",
+            title: "7/24 Destek",
+            description: "Operasyon sonrası takip",
+            colorScheme: "destructive",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Why Us
+      await prisma.procedureWhyUs.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "heart",
+            title: "Customer Satisfaction",
+            description: "Thousands of happy patients",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "scissors",
+            title: "FUE Expert",
+            description: "10+ years FUE experience",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "shield",
+            title: "Guarantee",
+            description: "Graft survival guarantee",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            icon: "clock",
+            title: "24/7 Support",
+            description: "Post-operative follow-up",
+            colorScheme: "destructive",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // FAQ kontrolü
+    const existingFAQs = await prisma.procedureFAQ.count({
+      where: { pageSlug: "sac-ekimi" },
+    });
+
+    if (existingFAQs === 0) {
+      // TR FAQs
+      await prisma.procedureFAQ.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            question: "Saç ekimi ağrılı mı?",
+            answer:
+              "Lokal anestezi ile yapıldığı için işlem ağrısızdır. Sadece anestezi sırasında hafif bir batma hissi yaşanır.",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            question: "Ne kadar sürer?",
+            answer:
+              "Ekilecek greft sayısına göre 6-8 saat arasında değişir. İşlem tek seansta tamamlanır.",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            question: "İyileşme süreci nasıl?",
+            answer:
+              "İlk 7-10 gün kabuklanma olur. 3. aydan itibaren saçlar çıkmaya başlar, 12. ayda nihai sonuç alınır.",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            question: "FUE kalıcı mı?",
+            answer:
+              "Evet, nakledilen saçlar ömür boyu kalıcıdır. Donör bölgeden alınan saçlar dökülmeye dirençlidir.",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            question: "Kimler yaptırabilir?",
+            answer:
+              "18 yaş üstü, yeterli donör bölgesi olan ve sağlık durumu uygun herkes yaptırabilir.",
+            order: 5,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "tr",
+            question: "İz kalır mı?",
+            answer:
+              "FUE tekniğinde iz kalmaz. Sadece çok küçük nokta şeklinde izler olur ve saç uzadığında görünmez.",
+            order: 6,
+            active: true,
+          },
+        ],
+      });
+
+      // EN FAQs
+      await prisma.procedureFAQ.createMany({
+        data: [
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            question: "Is hair transplant painful?",
+            answer:
+              "The procedure is painless as it is performed under local anesthesia. Only a slight stinging sensation is felt during anesthesia.",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            question: "How long does it take?",
+            answer:
+              "It varies between 6-8 hours depending on the number of grafts to be transplanted. The procedure is completed in one session.",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            question: "What is the recovery process like?",
+            answer:
+              "Crusting occurs in the first 7-10 days. Hair starts growing from the 3rd month, final result is obtained in 12 months.",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            question: "Is FUE permanent?",
+            answer:
+              "Yes, transplanted hair is permanent for life. Hair taken from the donor area is resistant to shedding.",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            question: "Who can get it?",
+            answer:
+              "Anyone over 18 years old with sufficient donor area and suitable health condition can get it.",
+            order: 5,
+            active: true,
+          },
+          {
+            pageSlug: "sac-ekimi",
+            locale: "en",
+            question: "Will there be scars?",
+            answer:
+              "There are no scars with FUE technique. Only very small dot-shaped marks remain and are invisible when hair grows.",
+            order: 6,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    console.log("✅ Sac ekimi page created (TR & EN)!");
+  }
+
   console.log("\n🎉 Seeding completed successfully!");
 }
 
