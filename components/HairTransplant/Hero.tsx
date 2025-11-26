@@ -1,33 +1,87 @@
 // components/HairTransplant/Hero.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function Hero() {
-  const { t } = useTranslation();
+interface HeroData {
+  heroTitle: string;
+  heroTitleHighlight: string;
+  heroDescription: string;
+  heroButtonReviews: string;
+  heroButtonPhone: string;
+  heroImage: string;
+  heroImageAlt: string;
+}
+
+interface HeroProps {
+  locale: string;
+}
+
+export default function Hero({ locale }: HeroProps) {
+  const [data, setData] = useState<HeroData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`/api/procedures/sac-ekimi?locale=${locale}`);
+        if (res.ok) {
+          const result = await res.json();
+          setData({
+            heroTitle: result.heroTitle,
+            heroTitleHighlight: result.heroTitleHighlight,
+            heroDescription: result.heroDescription,
+            heroButtonReviews: result.heroButtonReviews,
+            heroButtonPhone: result.heroButtonPhone,
+            heroImage: result.heroImage,
+            heroImageAlt: result.heroImageAlt,
+          });
+        }
+      } catch (error) {
+        console.error("Hero fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [locale]);
+
+  if (loading || !data) {
+    return (
+      <section className="flex flex-col-reverse md:flex-row items-center gap-12 mb-16">
+        <div className="flex-1 space-y-6 animate-pulse">
+          <div className="h-12 bg-gray-200 rounded w-3/4"></div>
+          <div className="h-8 bg-gray-200 rounded w-full"></div>
+          <div className="h-24 bg-gray-200 rounded w-full"></div>
+          <div className="flex gap-4">
+            <div className="h-12 bg-gray-200 rounded w-32"></div>
+            <div className="h-12 bg-gray-200 rounded w-32"></div>
+          </div>
+        </div>
+        <div className="flex-1 aspect-[4/3] bg-gray-200 rounded-2xl"></div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col-reverse md:flex-row items-center gap-12 mb-16">
-      {/* Left: Text Content */}
       <div className="flex-1 space-y-6">
         <h1
           className="animate-title-slide-up"
-          style={
-            {
-              "--animation-delay": "200ms",
-            } as React.CSSProperties
-          }
+          style={{ "--animation-delay": "200ms" } as React.CSSProperties}
         >
-          {t("hairTransplant.hero.title")}
+          {data.heroTitle}
           <span className="block text-primary mt-2">
-            {t("hairTransplant.hero.subtitle")}
+            {data.heroTitleHighlight}
           </span>
         </h1>
         <p className="text-lg text-muted-foreground animate-fade-up">
-          {t("hairTransplant.hero.description")}
+          {data.heroDescription}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 animate-fade-up">
           <Link
@@ -36,7 +90,7 @@ export default function Hero() {
             className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold 
                    shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
-            {t("hairTransplant.hero.ctaReviews")}
+            {data.heroButtonReviews}
           </Link>
           <Link
             href="tel:+902125612322"
@@ -44,16 +98,14 @@ export default function Hero() {
                    shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             <Phone className="w-6 h-6" />
-            {t("hairTransplant.hero.ctaPhone")}
+            {data.heroButtonPhone}
           </Link>
         </div>
       </div>
-
-      {/* Right: Image */}
       <div className="flex-1 flex justify-center animate-float">
         <Image
-          src="/images/hair-transplant.jpg"
-          alt={t("hairTransplant.hero.imageAlt")}
+          src={data.heroImage}
+          alt={data.heroImageAlt}
           width={500}
           height={350}
           className="rounded-2xl shadow-2xl object-cover"

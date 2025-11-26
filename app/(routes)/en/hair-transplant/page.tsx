@@ -14,35 +14,17 @@ export default function HairTransplantPage() {
   return (
     <>
       <main className="container py-12">
-        {/* Hero Section */}
-        <Hero />
-
-        {/* Main Features */}
-        <Features />
-
-        {/* Detailed Content */}
+        <Hero locale="en" />
+        <Features locale="en" />
         <section className="max-w-6xl mx-auto space-y-12">
-          {/* FUE Technique */}
-          <FueSection />
-
-          {/* How It's Done */}
-          <Process />
-
-          {/* Post-Operative Care */}
-          <Aftercare />
-
-          {/* Why Choose Us */}
-          <WhyUs />
-
-          {/* FAQ */}
-          <FAQ />
-
-          {/* CTA */}
-          <CTA />
+          <FueSection locale="en" />
+          <Process locale="en" />
+          <Aftercare locale="en" />
+          <WhyUs locale="en" />
+          <FAQ locale="en" />
+          <CTA locale="en" />
         </section>
       </main>
-
-      {/* Floating Buttons */}
       <PhoneButton />
       <WhatsAppButton />
     </>

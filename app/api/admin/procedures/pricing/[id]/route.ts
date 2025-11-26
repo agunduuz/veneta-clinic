@@ -1,4 +1,4 @@
-// app/api/admin/procedures/[slug]/pricing/[id]/route.ts
+// app/api/admin/procedures/pricing/[id]/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";
