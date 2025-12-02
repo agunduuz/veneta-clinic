@@ -2982,6 +2982,673 @@ async function main() {
     console.log("✅ Sac ekimi page created (TR & EN)!");
   }
 
+  // ========================================
+  // PROCEDURE PAGES - AMELİYATLI ESTETİK
+  // ========================================
+
+  const existingAmeliyatliPageTR = await prisma.procedurePage.findFirst({
+    where: { slug: "ameliyatli-estetik", locale: "tr" },
+  });
+
+  const existingAmeliyatliPageEN = await prisma.procedurePage.findFirst({
+    where: { slug: "ameliyatli-estetik", locale: "en" },
+  });
+
+  if (!existingAmeliyatliPageTR || !existingAmeliyatliPageEN) {
+    console.log("🔄 Seeding ameliyatli estetik page...");
+
+    // TR Page
+    if (!existingAmeliyatliPageTR) {
+      await prisma.procedurePage.create({
+        data: {
+          slug: "ameliyatli-estetik",
+          locale: "tr",
+
+          // Hero Section
+          heroTitle: "Güzelliğinizi",
+          heroTitleHighlight: "Yeniden Keşfedin",
+          heroDescription:
+            "Modern cerrahi teknikler ve uzman doktorlarımız ile hayalinizdeki görünüme kavuşun. Güvenli, etkili ve doğal sonuçlar için buradayız.",
+          heroButtonReviews: "Müşteri Yorumları",
+          heroButtonPhone: "Hemen Ara",
+          heroImage: "/images/surgical-hero.jpg",
+          heroImageAlt: "Ameliyatlı Estetik Operasyonları",
+
+          // Categories Intro
+          categoriesIntroTitle: "Ameliyatlı Estetik Kategorilerimiz",
+          categoriesIntroDescription:
+            "Yüzünüzden vücudunuza kadar tüm estetik ihtiyaçlarınız için uzman ekibimiz ve ileri teknolojimizle yanınızdayız.",
+
+          // Device Section (genel bilgi)
+          deviceTitle: "Uzman Ekip ve Modern Ameliyathane",
+          deviceDescription:
+            "15 yılı aşkın deneyime sahip plastik cerrahlarımız, son teknoloji ekipmanlarla donatılmış ameliyathanelerimizde size hizmet vermektedir.",
+          deviceFeaturesTitle: "Ameliyathane Standartları",
+          deviceAdvantagesTitle: "Avantajlarımız",
+
+          // Pricing
+          pricingTitle: "Ameliyatlı Estetik Fiyatları",
+          pricingDescription:
+            "Her operasyon için özel fiyatlandırma yapılmaktadır. Detaylı bilgi ve randevu için bizimle iletişime geçin.",
+          pricingCallText: "Fiyat için arayın",
+
+          // Why Us
+          whyUsTitle: "Neden Veneta Clinic?",
+
+          // FAQ
+          faqTitle: "Sıkça Sorulan Sorular",
+
+          // CTA
+          ctaTitle: "Ücretsiz Konsültasyon İçin Hemen İletişime Geçin",
+          ctaDescription:
+            "Uzman doktorlarımız size en uygun tedavi planını oluşturmak için hazır. Randevunuz için bizi arayın.",
+          ctaButtonPhone: "Hemen Ara",
+          ctaButtonWhatsApp: "WhatsApp İle Ulaş",
+
+          active: true,
+        },
+      });
+    }
+
+    // EN Page
+    if (!existingAmeliyatliPageEN) {
+      await prisma.procedurePage.create({
+        data: {
+          slug: "ameliyatli-estetik",
+          locale: "en",
+
+          // Hero Section
+          heroTitle: "Rediscover",
+          heroTitleHighlight: "Your Beauty",
+          heroDescription:
+            "Achieve your dream appearance with modern surgical techniques and our expert doctors. We are here for safe, effective and natural results.",
+          heroButtonReviews: "Customer Reviews",
+          heroButtonPhone: "Call Now",
+          heroImage: "/images/surgical-hero.jpg",
+          heroImageAlt: "Surgical Aesthetic Operations",
+
+          // Categories Intro
+          categoriesIntroTitle: "Our Surgical Aesthetic Categories",
+          categoriesIntroDescription:
+            "We are with you for all your aesthetic needs from face to body with our expert team and advanced technology.",
+
+          // Device Section
+          deviceTitle: "Expert Team and Modern Operating Room",
+          deviceDescription:
+            "Our plastic surgeons with over 15 years of experience serve you in our operating rooms equipped with state-of-the-art equipment.",
+          deviceFeaturesTitle: "Operating Room Standards",
+          deviceAdvantagesTitle: "Our Advantages",
+
+          // Pricing
+          pricingTitle: "Surgical Aesthetic Prices",
+          pricingDescription:
+            "Special pricing is made for each operation. Contact us for detailed information and appointment.",
+          pricingCallText: "Call for price",
+
+          // Why Us
+          whyUsTitle: "Why Veneta Clinic?",
+
+          // FAQ
+          faqTitle: "Frequently Asked Questions",
+
+          // CTA
+          ctaTitle: "Contact Us Now for Free Consultation",
+          ctaDescription:
+            "Our expert doctors are ready to create the most suitable treatment plan for you. Call us for your appointment.",
+          ctaButtonPhone: "Call Now",
+          ctaButtonWhatsApp: "Contact via WhatsApp",
+
+          active: true,
+        },
+      });
+    }
+
+    // Features kontrolü
+    const existingFeatures = await prisma.procedureFeature.count({
+      where: { pageSlug: "ameliyatli-estetik" },
+    });
+
+    if (existingFeatures === 0) {
+      // TR Features
+      await prisma.procedureFeature.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "user-check",
+            title: "Uzman Cerrahlar",
+            description: "15+ yıl deneyimli plastik cerrahlar",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "shield-check",
+            title: "Güvenli Operasyonlar",
+            description: "JCI akreditasyonlu hastane standartları",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "heart",
+            title: "Doğal Sonuçlar",
+            description: "Yüz anatomisine uygun, doğal görünüm",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Features
+      await prisma.procedureFeature.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "user-check",
+            title: "Expert Surgeons",
+            description: "Plastic surgeons with 15+ years experience",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "shield-check",
+            title: "Safe Operations",
+            description: "JCI accredited hospital standards",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "heart",
+            title: "Natural Results",
+            description: "Natural appearance suitable for facial anatomy",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // About Section kontrolü
+    const existingAboutSection = await prisma.procedureAboutSection.count({
+      where: { pageSlug: "ameliyatli-estetik" },
+    });
+
+    if (existingAboutSection === 0) {
+      // TR About Section
+      await prisma.procedureAboutSection.create({
+        data: {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          title: "Ameliyatlı Estetik Hakkında",
+          description:
+            "Ameliyatlı estetik operasyonlar, yüz ve vücut hatlarınızı yeniden şekillendirerek size daha genç, dinç ve özgüvenli bir görünüm kazandırır. Uzman cerrahlarımız, modern teknikler ve ileri teknoloji kullanarak doğal ve kalıcı sonuçlar elde etmenizi sağlar.",
+          areasTitle: "Uygulama Alanları",
+          advantagesTitle: "Avantajlar",
+        },
+      });
+
+      // EN About Section
+      await prisma.procedureAboutSection.create({
+        data: {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          title: "About Surgical Aesthetics",
+          description:
+            "Surgical aesthetic operations reshape your face and body lines, giving you a younger, more vibrant and confident appearance. Our expert surgeons help you achieve natural and permanent results using modern techniques and advanced technology.",
+          areasTitle: "Application Areas",
+          advantagesTitle: "Advantages",
+        },
+      });
+
+      // TR About Areas
+      await prisma.procedureAboutArea.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Yüz Estetiği (Burun, Göz Kapağı, Yüz Germe)",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Vücut Estetiği (Karın Germe, Liposuction)",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Meme Estetiği (Büyütme, Küçültme, Dikleştirme)",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Kalça ve Bacak Estetiği",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN About Areas
+      await prisma.procedureAboutArea.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Facial Aesthetics (Nose, Eyelid, Face Lift)",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Body Aesthetics (Tummy Tuck, Liposuction)",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Breast Aesthetics (Augmentation, Reduction, Lift)",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Hip and Leg Aesthetics",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // TR About Advantages
+      await prisma.procedureAboutAdvantage.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Kalıcı ve doğal sonuçlar",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Deneyimli ve uzman cerrahlar",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Modern ameliyathane ve teknoloji",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            text: "Kapsamlı ameliyat sonrası takip",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN About Advantages
+      await prisma.procedureAboutAdvantage.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Permanent and natural results",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Experienced and expert surgeons",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Modern operating room and technology",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            text: "Comprehensive post-operative follow-up",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Process Steps kontrolü
+    const existingProcess = await prisma.procedureProcess.count({
+      where: { pageSlug: "ameliyatli-estetik" },
+    });
+
+    if (existingProcess === 0) {
+      // TR Process Steps
+      await prisma.procedureProcess.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            number: "1",
+            title: "Konsültasyon",
+            description:
+              "İlk görüşmemizde beklentilerinizi dinliyor, size özel tedavi planı oluşturuyoruz. Tüm sorularınızı yanıtlıyor ve süreci detaylı olarak anlatıyoruz.",
+            bgColor: "bg-primary/20",
+            textColor: "text-primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            number: "2",
+            title: "Operasyon",
+            description:
+              "Deneyimli cerrahlarımız, modern ameliyathanelerimizde son teknoloji ekipmanlarla operasyonunuzu gerçekleştirir. Güvenliğiniz bizim önceliğimizdir.",
+            bgColor: "bg-secondary/20",
+            textColor: "text-secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            number: "3",
+            title: "İyileşme",
+            description:
+              "Operasyon sonrası iyileşme sürecinizde yanınızdayız. Düzenli kontroller ve 7/24 destek ekibimizle size rehberlik ediyoruz.",
+            bgColor: "bg-accent/20",
+            textColor: "text-accent",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Process Steps
+      await prisma.procedureProcess.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            number: "1",
+            title: "Consultation",
+            description:
+              "In our first meeting, we listen to your expectations and create a treatment plan specific to you. We answer all your questions and explain the process in detail.",
+            bgColor: "bg-primary/20",
+            textColor: "text-primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            number: "2",
+            title: "Operation",
+            description:
+              "Our experienced surgeons perform your operation with state-of-the-art equipment in our modern operating rooms. Your safety is our priority.",
+            bgColor: "bg-secondary/20",
+            textColor: "text-secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            number: "3",
+            title: "Recovery",
+            description:
+              "We are with you during your post-operative recovery process. We guide you with regular checks and our 24/7 support team.",
+            bgColor: "bg-accent/20",
+            textColor: "text-accent",
+            order: 3,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // Why Us kontrolü
+    const existingWhyUs = await prisma.procedureWhyUs.count({
+      where: { pageSlug: "ameliyatli-estetik" },
+    });
+
+    if (existingWhyUs === 0) {
+      // TR Why Us
+      await prisma.procedureWhyUs.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "user-check",
+            title: "Uzman Kadro",
+            description:
+              "15+ yıl deneyimli plastik cerrahlar ve anestezi uzmanları",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "shield-check",
+            title: "Güvenli Ortam",
+            description: "JCI akreditasyonlu ameliyathane standartları",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "heart",
+            title: "Doğal Sonuç",
+            description: "Kişiye özel, doğal ve estetik sonuçlar",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            icon: "headphones",
+            title: "7/24 Destek",
+            description: "Ameliyat öncesi ve sonrası kesintisiz destek",
+            colorScheme: "destructive",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+
+      // EN Why Us
+      await prisma.procedureWhyUs.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "user-check",
+            title: "Expert Team",
+            description:
+              "Plastic surgeons and anesthesiologists with 15+ years experience",
+            colorScheme: "primary",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "shield-check",
+            title: "Safe Environment",
+            description: "JCI accredited operating room standards",
+            colorScheme: "secondary",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "heart",
+            title: "Natural Results",
+            description: "Personalized, natural and aesthetic results",
+            colorScheme: "accent",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            icon: "headphones",
+            title: "24/7 Support",
+            description: "Uninterrupted support before and after surgery",
+            colorScheme: "destructive",
+            order: 4,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    // FAQ kontrolü
+    const existingFAQs = await prisma.procedureFAQ.count({
+      where: { pageSlug: "ameliyatli-estetik" },
+    });
+
+    if (existingFAQs === 0) {
+      // TR FAQs
+      await prisma.procedureFAQ.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            question: "Ameliyatlı estetik operasyonlar güvenli mi?",
+            answer:
+              "Evet, deneyimli cerrahlarımız ve modern ameliyathane standartlarımızla tüm operasyonlar güvenli bir şekilde gerçekleştirilir. JCI akreditasyonlu hastane standartlarına uygun çalışıyoruz.",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            question: "İyileşme süreci ne kadar sürer?",
+            answer:
+              "Operasyon türüne göre değişir. Genellikle 1-2 hafta içinde günlük aktivitelere dönebilirsiniz. Tam iyileşme 3-6 ay içinde tamamlanır.",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            question: "Sonuçlar kalıcı mı?",
+            answer:
+              "Evet, ameliyatlı estetik operasyonların sonuçları kalıcıdır. Ancak doğal yaşlanma süreci devam eder. Sağlıklı yaşam tarzı ile sonuçlarınızı uzun yıllar koruyabilirsiniz.",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            question: "Hangi yaşta yaptırılabilir?",
+            answer:
+              "Genellikle 18 yaş ve üzeri kişiler yaptırabilir. Ancak her operasyon için özel değerlendirme yapılır ve uygunluk kontrolü gerçekleştirilir.",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "tr",
+            question: "Ameliyat sonrası takip nasıl olur?",
+            answer:
+              "Düzenli kontroller ve 7/24 destek hattımızla tüm süreç boyunca yanınızdayız. İlk kontrol 1 hafta sonra, sonraki kontroller doktorunuzun önerisi doğrultusunda yapılır.",
+            order: 5,
+            active: true,
+          },
+        ],
+      });
+
+      // EN FAQs
+      await prisma.procedureFAQ.createMany({
+        data: [
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            question: "Are surgical aesthetic operations safe?",
+            answer:
+              "Yes, all operations are performed safely with our experienced surgeons and modern operating room standards. We work in accordance with JCI accredited hospital standards.",
+            order: 1,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            question: "How long does the recovery process take?",
+            answer:
+              "It varies depending on the type of operation. Usually you can return to daily activities within 1-2 weeks. Full recovery is completed within 3-6 months.",
+            order: 2,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            question: "Are the results permanent?",
+            answer:
+              "Yes, the results of surgical aesthetic operations are permanent. However, the natural aging process continues. You can maintain your results for many years with a healthy lifestyle.",
+            order: 3,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            question: "At what age can it be done?",
+            answer:
+              "Usually people aged 18 and over can have it done. However, special evaluation is made for each operation and suitability check is performed.",
+            order: 4,
+            active: true,
+          },
+          {
+            pageSlug: "ameliyatli-estetik",
+            locale: "en",
+            question: "What is the post-operative follow-up like?",
+            answer:
+              "We are with you throughout the process with regular checks and our 24/7 support line. First check is after 1 week, subsequent checks are made according to your doctor's recommendation.",
+            order: 5,
+            active: true,
+          },
+        ],
+      });
+    }
+
+    console.log("✅ Ameliyatlı estetik page created (TR & EN)!");
+  }
+
   console.log("\n🎉 Seeding completed successfully!");
 }
 

@@ -1,44 +1,25 @@
 // components/SurgicalAesthetics/Process.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
+import type { ProcessStep } from "@/types/surgical-aesthetics";
 
-export default function Process() {
-  const { t } = useTranslation();
+interface ProcessProps {
+  steps: ProcessStep[];
+}
 
-  const steps = [
-    {
-      number: "1",
-      titleKey: "surgicalAesthetics.process.step1Title",
-      descriptionKey: "surgicalAesthetics.process.step1Description",
-      bgColor: "bg-primary/20",
-      textColor: "text-primary",
-    },
-    {
-      number: "2",
-      titleKey: "surgicalAesthetics.process.step2Title",
-      descriptionKey: "surgicalAesthetics.process.step2Description",
-      bgColor: "bg-secondary/20",
-      textColor: "text-secondary-foreground",
-    },
-    {
-      number: "3",
-      titleKey: "surgicalAesthetics.process.step3Title",
-      descriptionKey: "surgicalAesthetics.process.step3Description",
-      bgColor: "bg-accent/20",
-      textColor: "text-accent-foreground",
-    },
-  ];
+export default function Process({ steps }: ProcessProps) {
+  // Filter active and sort
+  const activeSteps = steps
+    .filter((s) => s.active)
+    .sort((a, b) => a.order - b.order);
 
   return (
     <div className="bg-card rounded-2xl p-8 shadow-lg border border-border animate-fade-in">
-      <h2 className="mb-8 text-center">
-        {t("surgicalAesthetics.process.title")}
-      </h2>
+      <h2 className="mb-8 text-center">Ameliyat Süreci</h2>
 
       <div className="grid md:grid-cols-3 gap-8">
-        {steps.map((step, index) => (
-          <div key={index} className="text-center">
+        {activeSteps.map((step) => (
+          <div key={step.id} className="text-center">
             {/* Number Circle */}
             <div
               className={`w-20 h-20 ${step.bgColor} rounded-full flex items-center justify-center mx-auto mb-6`}
@@ -49,12 +30,10 @@ export default function Process() {
             </div>
 
             {/* Title */}
-            <h4 className="font-semibold mb-4 text-foreground">
-              {t(step.titleKey)}
-            </h4>
+            <h4 className="font-semibold mb-4 text-foreground">{step.title}</h4>
 
             {/* Description */}
-            <p className="text-muted-foreground">{t(step.descriptionKey)}</p>
+            <p className="text-muted-foreground">{step.description}</p>
           </div>
         ))}
       </div>

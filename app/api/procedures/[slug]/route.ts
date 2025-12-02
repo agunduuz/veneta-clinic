@@ -31,58 +31,103 @@ export async function GET(
       );
     }
 
-    // Get all related data
-    const [features, deviceItems, treatmentAreas, pricing, whyUs, faqs] =
-      await Promise.all([
-        prisma.procedureFeature.findMany({
-          where: {
+    // Get all related data (including NEW about/process models)
+    const [
+      features,
+      deviceItems,
+      treatmentAreas,
+      pricing,
+      whyUs,
+      faqs,
+      aboutSection,
+      aboutAreas,
+      aboutAdvantages,
+      processSteps,
+    ] = await Promise.all([
+      // ✅ EXISTING MODELS
+      prisma.procedureFeature.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedureDeviceItem.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedureTreatmentArea.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedurePricing.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedureWhyUs.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedureFAQ.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+
+      // ✅ NEW MODELS (Ameliyatlı Estetik)
+      prisma.procedureAboutSection.findUnique({
+        where: {
+          pageSlug_locale: {
             pageSlug: slug,
             locale,
-            active: true,
           },
-          orderBy: { order: "asc" },
-        }),
-        prisma.procedureDeviceItem.findMany({
-          where: {
-            pageSlug: slug,
-            locale,
-            active: true,
-          },
-          orderBy: { order: "asc" },
-        }),
-        prisma.procedureTreatmentArea.findMany({
-          where: {
-            pageSlug: slug,
-            locale,
-            active: true,
-          },
-          orderBy: { order: "asc" },
-        }),
-        prisma.procedurePricing.findMany({
-          where: {
-            pageSlug: slug,
-            locale,
-            active: true,
-          },
-          orderBy: { order: "asc" },
-        }),
-        prisma.procedureWhyUs.findMany({
-          where: {
-            pageSlug: slug,
-            locale,
-            active: true,
-          },
-          orderBy: { order: "asc" },
-        }),
-        prisma.procedureFAQ.findMany({
-          where: {
-            pageSlug: slug,
-            locale,
-            active: true,
-          },
-          orderBy: { order: "asc" },
-        }),
-      ]);
+        },
+      }),
+      prisma.procedureAboutArea.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedureAboutAdvantage.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+      prisma.procedureProcess.findMany({
+        where: {
+          pageSlug: slug,
+          locale,
+          active: true,
+        },
+        orderBy: { order: "asc" },
+      }),
+    ]);
 
     // Group device items by type
     const deviceFeatures = deviceItems.filter(
@@ -92,7 +137,8 @@ export async function GET(
       (item) => item.type === "advantage"
     );
 
-    return NextResponse.json({
+    // ✅ BASE RESPONSE (her zaman mevcut)
+    const baseResponse = {
       ...page,
       features,
       deviceFeatures,
@@ -101,6 +147,19 @@ export async function GET(
       pricing,
       whyUs,
       faqs,
+    };
+
+    // ✅ CONDITIONAL FIELDS (sadece varsa ekle)
+    const conditionalFields = {
+      ...(aboutSection && { aboutSection }),
+      ...(aboutAreas.length > 0 && { aboutAreas }),
+      ...(aboutAdvantages.length > 0 && { aboutAdvantages }),
+      ...(processSteps.length > 0 && { processSteps }),
+    };
+
+    return NextResponse.json({
+      ...baseResponse,
+      ...conditionalFields,
     });
   } catch (error) {
     console.error("Procedure page GET error:", error);

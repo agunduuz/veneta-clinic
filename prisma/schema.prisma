@@ -435,6 +435,10 @@ model ProcedurePage {
   ctaDescription  String @db.Text
   ctaButtonPhone  String
   ctaButtonWhatsApp String
+
+  // ✅ YENİ: Categories Intro (Ana sayfa için)
+  categoriesIntroTitle       String? @db.Text
+  categoriesIntroDescription String? @db.Text
   
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -550,4 +554,78 @@ model ProcedureFAQ {
 
   @@index([pageSlug, locale, active, order])
   @@map("procedure_faqs")
+}
+
+// ============================================
+// ABOUT SECTION MODELS
+// ============================================
+
+model ProcedureAboutSection {
+  id              String @id @default(cuid())
+  pageSlug        String // "ameliyatli-estetik", "burun-estetigi"
+  locale          String // "tr" | "en"
+  title           String
+  description     String @db.Text
+  areasTitle      String
+  advantagesTitle String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([pageSlug, locale])
+  @@index([pageSlug, locale])
+  @@map("procedure_about_sections")
+}
+
+model ProcedureAboutArea {
+  id       String  @id @default(cuid())
+  pageSlug String
+  locale   String
+  text     String
+  order    Int     @default(0)
+  active   Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_about_areas")
+}
+
+model ProcedureAboutAdvantage {
+  id       String  @id @default(cuid())
+  pageSlug String
+  locale   String
+  text     String
+  order    Int     @default(0)
+  active   Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_about_advantages")
+}
+
+// ============================================
+// PROCESS STEPS MODEL
+// ============================================
+
+model ProcedureProcess {
+  id          String  @id @default(cuid())
+  pageSlug    String
+  locale      String
+  number      String   // "1", "2", "3"
+  title       String
+  description String   @db.Text
+  bgColor     String   @default("bg-primary/20")
+  textColor   String   @default("text-primary")
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([pageSlug, locale, active, order])
+  @@map("procedure_processes")
 }
