@@ -161,6 +161,44 @@ const menuItems = [
       </svg>
     ),
   },
+  // ✅ YENİ: Ameliyatlı Estetik (Dropdown)
+  {
+    name: "Ameliyatlı Estetik",
+    href: "/admin/procedures/ameliyatli-estetik",
+    icon: (
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        />
+      </svg>
+    ),
+    hasDropdown: true,
+    subItems: [
+      {
+        name: "Burun Estetiği",
+        href: "/admin/procedures/burun-estetigi",
+        badge: "Yakında",
+      },
+      {
+        name: "Göğüs Estetiği",
+        href: "/admin/procedures/gogus-estetigi",
+        badge: "Yakında",
+      },
+      {
+        name: "Karın Germe",
+        href: "/admin/procedures/karin-germe",
+        badge: "Yakında",
+      },
+    ],
+  },
   {
     name: "Ayarlar",
     href: "/admin/settings",
@@ -192,6 +230,9 @@ const menuItems = [
 export default function AdminSidebar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState<string[]>([
+    "Ameliyatlı Estetik", // Default açık
+  ]);
 
   const handleLogout = async () => {
     await signOut({ redirectTo: "/admin/login" });
@@ -201,9 +242,17 @@ export default function AdminSidebar() {
     setIsMobileMenuOpen(false);
   };
 
+  const toggleDropdown = (itemName: string) => {
+    setOpenDropdowns((prev) =>
+      prev.includes(itemName)
+        ? prev.filter((name) => name !== itemName)
+        : [...prev, itemName]
+    );
+  };
+
   return (
     <ProtectedPage>
-      {/* Mobile Menu Button - Sadece mobilde görünür */}
+      {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg border border-gray-200"
@@ -240,7 +289,7 @@ export default function AdminSidebar() {
         )}
       </button>
 
-      {/* Overlay - Mobilde menü açıkken arka planı karartır */}
+      {/* Overlay */}
       {isMobileMenuOpen && (
         <div
           className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
@@ -258,7 +307,7 @@ export default function AdminSidebar() {
           w-64 flex flex-col h-full bg-white border-r border-gray-200
         `}
       >
-        {/* Logo / Header */}
+        {/* Logo */}
         <div className="flex items-center justify-center gap-3 px-6 py-5 border-b border-gray-200">
           <Image
             src="/veneta-logo.svg"
@@ -273,39 +322,125 @@ export default function AdminSidebar() {
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
             const isActive = pathname === item.href;
-            const isDisabled = item.badge === "Yakında";
+            const isDisabled = item.badge === "Yakında" && !item.hasDropdown;
+            const isDropdownOpen = openDropdowns.includes(item.name);
+            const hasActiveSubItem = item.subItems?.some(
+              (sub) => pathname === sub.href
+            );
 
             return (
-              <Link
-                key={item.name}
-                href={isDisabled ? "#" : item.href}
-                onClick={() => {
-                  if (isDisabled) return;
-                  closeMobileMenu();
-                }}
-                className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 group ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#b2d6a1] to-[#68947c] text-white shadow-md"
-                    : isDisabled
-                    ? "text-gray-400 cursor-not-allowed"
-                    : "text-gray-700 hover:bg-[#f0f9ed]"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  {item.icon}
-                  <span className="font-medium">{item.name}</span>
-                </div>
-                {item.badge && (
-                  <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded-full">
-                    {item.badge}
-                  </span>
+              <div key={item.name}>
+                {/* Main Item */}
+                {/* Main Item */}
+                {item.hasDropdown ? (
+                  <div className="flex items-center gap-1">
+                    {/* Link kısmı (ana sayfa) */}
+                    <Link
+                      href={item.href}
+                      onClick={closeMobileMenu}
+                      className={`flex-1 flex items-center gap-1 px-4 py-3 pr-1 rounded-l-lg transition-all duration-200 group ${
+                        isActive || hasActiveSubItem
+                          ? "bg-[#68947c] text-white shadow-md"
+                          : "text-gray-700 hover:bg-[#f0f9ed]"
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="font-medium">{item.name}</span>
+                    </Link>
+
+                    {/* Dropdown toggle button */}
+                    <button
+                      onClick={() => toggleDropdown(item.name)}
+                      className={`px-1 py-3 rounded-r-lg transition-all duration-200 ${
+                        isActive || hasActiveSubItem
+                          ? "bg-[#68947c] text-white"
+                          : "text-gray-700 hover:bg-[#f0f9ed]"
+                      }`}
+                    >
+                      <svg
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          isDropdownOpen ? "rotate-180" : ""
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href={isDisabled ? "#" : item.href}
+                    onClick={() => {
+                      if (isDisabled) return;
+                      closeMobileMenu();
+                    }}
+                    className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 group ${
+                      isActive
+                        ? "bg-gradient-to-r from-[#b2d6a1] to-[#68947c] text-white shadow-md"
+                        : isDisabled
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-gray-700 hover:bg-[#f0f9ed]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1">
+                      {item.icon}
+                      <span className="font-medium">{item.name}</span>
+                    </div>
+                    {item.badge && (
+                      <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded-full">
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
                 )}
-              </Link>
+
+                {/* Dropdown Sub Items */}
+                {item.hasDropdown && isDropdownOpen && (
+                  <div className="ml-4 mt-1 space-y-1 border-l-2 border-gray-200 pl-4">
+                    {item.subItems?.map((subItem) => {
+                      const isSubActive = pathname === subItem.href;
+                      const isSubDisabled = subItem.badge === "Yakında";
+
+                      return (
+                        <Link
+                          key={subItem.name}
+                          href={isSubDisabled ? "#" : subItem.href}
+                          onClick={() => {
+                            if (isSubDisabled) return;
+                            closeMobileMenu();
+                          }}
+                          className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                            isSubActive
+                              ? "bg-[#68947c] text-white"
+                              : isSubDisabled
+                              ? "text-gray-400 cursor-not-allowed"
+                              : "text-gray-600 hover:bg-[#f0f9ed]"
+                          }`}
+                        >
+                          <span>{subItem.name}</span>
+                          {subItem.badge && (
+                            <span className="text-xs px-2 py-0.5 bg-gray-200 text-gray-600 rounded-full">
+                              {subItem.badge}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
         </nav>
 
-        {/* Footer / Logout */}
+        {/* Logout */}
         <div className="px-4 py-4 border-t border-gray-200">
           <button
             onClick={handleLogout}

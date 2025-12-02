@@ -62,14 +62,14 @@ export default async function SurgicalAestheticsPage() {
   }
 
   const {
-    features,
-    aboutSection,
-    aboutAreas,
-    aboutAdvantages,
-    processSteps,
-    whyUs,
-    faqs,
-    ...page // ← Geri kalan her şey page objesi
+    features = [],
+    aboutSection = null,
+    aboutAreas = [],
+    aboutAdvantages = [],
+    processSteps = [],
+    whyUs = [],
+    faqs = [],
+    ...page
   } = data;
 
   return (
