@@ -64,14 +64,14 @@ export default async function AmeliyatliEstetikPage() {
 
   // ✅ DEĞİŞİKLİK BURASI
   const {
-    features,
-    aboutSection,
-    aboutAreas,
-    aboutAdvantages,
-    processSteps,
-    whyUs,
-    faqs,
-    ...page // ← Geri kalan her şey page objesi
+    features = [], // ← Default empty array
+    aboutSection = null, // ← Default null
+    aboutAreas = [], // ← Default empty array
+    aboutAdvantages = [], // ← Default empty array
+    processSteps = [], // ← Default empty array
+    whyUs = [], // ← Default empty array
+    faqs = [], // ← Default empty array
+    ...page
   } = data;
 
   return (
