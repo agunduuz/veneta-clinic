@@ -1,60 +1,86 @@
 // components/SurgicalAesthetics/Features.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
-import { Users, Award, CheckCircle } from "lucide-react";
+import {
+  Users,
+  Award,
+  CheckCircle,
+  Shield,
+  Heart,
+  Star,
+  Clock,
+  Headphones,
+  ThumbsUp,
+} from "lucide-react";
+import type { Feature } from "@/types/surgical-aesthetics";
 
-export default function Features() {
-  const { t } = useTranslation();
+interface FeaturesProps {
+  features: Feature[];
+}
 
-  const features = [
-    {
-      icon: Users,
-      titleKey: "surgicalAesthetics.features.feature1Title",
-      descriptionKey: "surgicalAesthetics.features.feature1Description",
-      gradient: "from-primary/10 to-primary/5",
-      border: "border-primary/20",
-      iconBg: "bg-primary/20",
-      iconColor: "text-primary",
-    },
-    {
-      icon: Award,
-      titleKey: "surgicalAesthetics.features.feature2Title",
-      descriptionKey: "surgicalAesthetics.features.feature2Description",
-      gradient: "from-secondary/10 to-secondary/5",
-      border: "border-secondary/20",
-      iconBg: "bg-secondary/20",
-      iconColor: "text-secondary-foreground",
-    },
-    {
-      icon: CheckCircle,
-      titleKey: "surgicalAesthetics.features.feature3Title",
-      descriptionKey: "surgicalAesthetics.features.feature3Description",
-      gradient: "from-accent/10 to-accent/5",
-      border: "border-accent/20",
-      iconBg: "bg-accent/20",
-      iconColor: "text-accent-foreground",
-    },
-  ];
+// Icon mapping
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  "user-check": Users,
+  users: Users,
+  award: Award,
+  "check-circle": CheckCircle,
+  "shield-check": Shield,
+  shield: Shield,
+  heart: Heart,
+  star: Star,
+  clock: Clock,
+  headphones: Headphones,
+  "thumbs-up": ThumbsUp,
+};
+
+// Color schemes (matching admin panel)
+const colorSchemes = [
+  {
+    gradient: "from-primary/10 to-primary/5",
+    border: "border-primary/20",
+    iconBg: "bg-primary/20",
+    iconColor: "text-primary",
+  },
+  {
+    gradient: "from-secondary/10 to-secondary/5",
+    border: "border-secondary/20",
+    iconBg: "bg-secondary/20",
+    iconColor: "text-secondary-foreground",
+  },
+  {
+    gradient: "from-accent/10 to-accent/5",
+    border: "border-accent/20",
+    iconBg: "bg-accent/20",
+    iconColor: "text-accent-foreground",
+  },
+];
+
+export default function Features({ features }: FeaturesProps) {
+  // Filter only active features and sort by order
+  const activeFeatures = features
+    .filter((f) => f.active)
+    .sort((a, b) => a.order - b.order);
 
   return (
     <section className="grid md:grid-cols-3 gap-8 mb-16">
-      {features.map((feature, index) => {
-        const Icon = feature.icon;
+      {activeFeatures.map((feature, index) => {
+        const Icon = iconMap[feature.icon] || CheckCircle;
+        const colorScheme = colorSchemes[index % colorSchemes.length];
+
         return (
           <div
-            key={index}
-            className={`feature-card bg-gradient-to-br ${feature.gradient} p-8 rounded-xl border ${feature.border}`}
+            key={feature.id}
+            className={`feature-card bg-gradient-to-br ${colorScheme.gradient} p-8 rounded-xl border ${colorScheme.border}`}
           >
             <div
-              className={`icon-container w-16 h-16 ${feature.iconBg} rounded-full flex items-center justify-center mb-4 transition-transform duration-300`}
+              className={`icon-container w-16 h-16 ${colorScheme.iconBg} rounded-full flex items-center justify-center mb-4 transition-transform duration-300`}
             >
-              <Icon className={`w-8 h-8 ${feature.iconColor}`} />
+              <Icon className={`w-8 h-8 ${colorScheme.iconColor}`} />
             </div>
             <h3 className="text-xl font-bold mb-3 text-foreground">
-              {t(feature.titleKey)}
+              {feature.title}
             </h3>
-            <p className="text-muted-foreground">{t(feature.descriptionKey)}</p>
+            <p className="text-muted-foreground">{feature.description}</p>
           </div>
         );
       })}

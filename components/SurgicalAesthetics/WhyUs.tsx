@@ -1,69 +1,82 @@
 // components/SurgicalAesthetics/WhyUs.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
-import { Clock, Users, Shield, Heart } from "lucide-react";
+import {
+  Clock,
+  Users,
+  Shield,
+  Heart,
+  Award,
+  Star,
+  CheckCircle,
+  Headphones,
+} from "lucide-react";
+import type { WhyUsReason } from "@/types/surgical-aesthetics";
 
-export default function WhyUs() {
-  const { t } = useTranslation();
+interface WhyUsProps {
+  reasons: WhyUsReason[];
+  title: string;
+}
 
-  const reasons = [
-    {
-      icon: Clock,
-      titleKey: "surgicalAesthetics.whyUs.reason1Title",
-      descriptionKey: "surgicalAesthetics.whyUs.reason1Description",
-      bgColor: "bg-primary/20",
-      iconColor: "text-primary",
-    },
-    {
-      icon: Users,
-      titleKey: "surgicalAesthetics.whyUs.reason2Title",
-      descriptionKey: "surgicalAesthetics.whyUs.reason2Description",
-      bgColor: "bg-secondary/20",
-      iconColor: "text-secondary-foreground",
-    },
-    {
-      icon: Shield,
-      titleKey: "surgicalAesthetics.whyUs.reason3Title",
-      descriptionKey: "surgicalAesthetics.whyUs.reason3Description",
-      bgColor: "bg-accent/20",
-      iconColor: "text-accent-foreground",
-    },
-    {
-      icon: Heart,
-      titleKey: "surgicalAesthetics.whyUs.reason4Title",
-      descriptionKey: "surgicalAesthetics.whyUs.reason4Description",
-      bgColor: "bg-destructive/20",
-      iconColor: "text-destructive",
-    },
-  ];
+// Icon mapping
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  clock: Clock,
+  users: Users,
+  "user-check": Users,
+  shield: Shield,
+  "shield-check": Shield,
+  heart: Heart,
+  award: Award,
+  star: Star,
+  "check-circle": CheckCircle,
+  headphones: Headphones,
+  "thumbs-up": Heart,
+};
+
+// Color scheme mapping
+const colorSchemeMap: Record<string, { bgColor: string; iconColor: string }> = {
+  primary: { bgColor: "bg-primary/20", iconColor: "text-primary" },
+  secondary: {
+    bgColor: "bg-secondary/20",
+    iconColor: "text-secondary-foreground",
+  },
+  accent: { bgColor: "bg-accent/20", iconColor: "text-accent-foreground" },
+  destructive: { bgColor: "bg-destructive/20", iconColor: "text-destructive" },
+};
+
+export default function WhyUs({ reasons, title }: WhyUsProps) {
+  // Filter active and sort
+  const activeReasons = reasons
+    .filter((r) => r.active)
+    .sort((a, b) => a.order - b.order);
 
   return (
     <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-8 border border-primary/20 animate-fade-in">
-      <h2 className="mb-8 text-center">
-        {t("surgicalAesthetics.whyUs.title")}
-      </h2>
+      <h2 className="mb-8 text-center">{title}</h2>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {reasons.map((reason, index) => {
-          const Icon = reason.icon;
+        {activeReasons.map((reason) => {
+          const Icon = iconMap[reason.icon] || Heart;
+          const colors =
+            colorSchemeMap[reason.colorScheme] || colorSchemeMap.primary;
+
           return (
-            <div key={index} className="text-center">
+            <div key={reason.id} className="text-center">
               {/* Icon Circle */}
               <div
-                className={`w-16 h-16 ${reason.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}
+                className={`w-16 h-16 ${colors.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}
               >
-                <Icon className={`w-8 h-8 ${reason.iconColor}`} />
+                <Icon className={`w-8 h-8 ${colors.iconColor}`} />
               </div>
 
               {/* Title */}
               <h4 className="font-semibold mb-2 text-foreground">
-                {t(reason.titleKey)}
+                {reason.title}
               </h4>
 
               {/* Description */}
               <p className="text-muted-foreground text-sm">
-                {t(reason.descriptionKey)}
+                {reason.description}
               </p>
             </div>
           );

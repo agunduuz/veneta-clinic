@@ -1,14 +1,16 @@
 // components/SurgicalAesthetics/Hero.tsx
 "use client";
 
-import { useTranslation } from "@/lib/i18n/context";
 import Image from "next/image";
 import Link from "next/link";
 import { Phone } from "lucide-react";
+import type { PageData } from "@/types/surgical-aesthetics";
 
-export default function Hero() {
-  const { t } = useTranslation();
+interface HeroProps {
+  data: PageData;
+}
 
+export default function Hero({ data }: HeroProps) {
   return (
     <section className="flex flex-col-reverse md:flex-row items-center gap-12 mb-16">
       {/* Left: Text Content */}
@@ -21,13 +23,13 @@ export default function Hero() {
             } as React.CSSProperties
           }
         >
-          {t("surgicalAesthetics.hero.title")}
+          {data.heroTitle}
           <span className="block text-primary mt-2">
-            {t("surgicalAesthetics.hero.subtitle")}
+            {data.heroTitleHighlight}
           </span>
         </h1>
         <p className="text-lg text-muted-foreground animate-fade-up">
-          {t("surgicalAesthetics.hero.description")}
+          {data.heroDescription}
         </p>
         <div className="flex flex-col sm:flex-row gap-4 animate-fade-up">
           <Link
@@ -36,7 +38,7 @@ export default function Hero() {
             className="bg-primary text-primary-foreground px-8 py-4 rounded-lg font-semibold 
                    shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
-            {t("surgicalAesthetics.hero.ctaReviews")}
+            {data.heroButtonReviews}
           </Link>
           <Link
             href="tel:+902125612322"
@@ -44,7 +46,7 @@ export default function Hero() {
                    shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             <Phone className="w-6 h-6" />
-            {t("surgicalAesthetics.hero.ctaPhone")}
+            {data.heroButtonPhone}
           </Link>
         </div>
       </div>
@@ -52,8 +54,8 @@ export default function Hero() {
       {/* Right: Image */}
       <div className="flex-1 flex justify-center animate-float">
         <Image
-          src="/images/doctors-team.jpg"
-          alt={t("surgicalAesthetics.hero.imageAlt")}
+          src={data.heroImage || "/images/doctors-team.jpg"}
+          alt={data.heroImageAlt}
           width={500}
           height={350}
           className="rounded-2xl shadow-2xl object-cover"

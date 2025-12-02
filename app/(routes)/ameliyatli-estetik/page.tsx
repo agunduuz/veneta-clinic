@@ -9,39 +9,109 @@ import Process from "@/components/SurgicalAesthetics/Process";
 import WhyUs from "@/components/SurgicalAesthetics/WhyUs";
 import FAQ from "@/components/SurgicalAesthetics/FAQ";
 import CTA from "@/components/SurgicalAesthetics/CTA";
+import type { SurgicalAestheticsData } from "@/types/surgical-aesthetics";
 
-export default function AmeliyatliEstetikPage() {
+// Fetch data from API
+async function getSurgicalAestheticsData(
+  locale: string = "tr"
+): Promise<SurgicalAestheticsData | null> {
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      }/api/procedures/ameliyatli-estetik?locale=${locale}`,
+      {
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      }
+    );
+
+    if (!response.ok) {
+      console.error(
+        "Failed to fetch surgical aesthetics data:",
+        response.status
+      );
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching surgical aesthetics data:", error);
+    return null;
+  }
+}
+
+export default async function AmeliyatliEstetikPage() {
+  // Fetch data (Server Component)
+  const data = await getSurgicalAestheticsData("tr");
+
+  // Fallback if data is null
+  if (!data) {
+    return (
+      <main className="container py-12">
+        <div className="text-center py-20">
+          <h1 className="text-3xl font-bold text-destructive mb-4">
+            Veri Yüklenemedi
+          </h1>
+          <p className="text-muted-foreground">
+            Lütfen daha sonra tekrar deneyiniz veya yönetici ile iletişime
+            geçiniz.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  // ✅ DEĞİŞİKLİK BURASI
+  const {
+    features,
+    aboutSection,
+    aboutAreas,
+    aboutAdvantages,
+    processSteps,
+    whyUs,
+    faqs,
+    ...page // ← Geri kalan her şey page objesi
+  } = data;
+
   return (
     <>
       <main className="container py-12">
         {/* Hero Section */}
-        <Hero />
+        <Hero data={page} />
 
         {/* Main Features */}
-        <Features />
+        <Features features={features} />
 
-        {/* Category Cards */}
+        {/* Category Cards Intro */}
         <section id="categories" className="mb-16">
-          <CategoriesIntro />
-          {/* <CategoryList categories={categories} /> */}
+          <CategoriesIntro data={page} />
         </section>
 
         {/* Detailed Content */}
         <section className="max-w-6xl mx-auto space-y-12">
           {/* About Surgical Aesthetics */}
-          <About />
+          {aboutSection && (
+            <About
+              aboutSection={aboutSection}
+              areas={aboutAreas}
+              advantages={aboutAdvantages}
+            />
+          )}
 
           {/* How It Works */}
-          <Process />
+          {processSteps.length > 0 && <Process steps={processSteps} />}
 
           {/* Why Choose Us */}
-          <WhyUs />
+          {whyUs.length > 0 && (
+            <WhyUs reasons={whyUs} title={page.whyUsTitle} />
+          )}
 
           {/* FAQ */}
-          <FAQ />
+          {faqs.length > 0 && <FAQ faqs={faqs} title={page.faqTitle} />}
 
           {/* CTA */}
-          <CTA />
+          <CTA data={page} />
         </section>
       </main>
 
@@ -50,4 +120,16 @@ export default function AmeliyatliEstetikPage() {
       <WhatsAppButton />
     </>
   );
+}
+
+// Optional: Generate metadata dynamically
+export async function generateMetadata() {
+  const data = await getSurgicalAestheticsData("tr");
+
+  return {
+    title: data?.heroTitle || "Ameliyatlı Estetik - Veneta Clinic",
+    description:
+      data?.heroDescription ||
+      "Uzman cerrahlarımızla güvenli ameliyatlı estetik işlemler",
+  };
 }
