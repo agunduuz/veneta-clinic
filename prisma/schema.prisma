@@ -7,111 +7,99 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model for admin authentication
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String   // Hash'lenmiş şifre (bcrypt)
+  password  String
   name      String?
-  role      String   @default("admin") // admin, editor, viewer
+  role      String   @default("admin")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
 }
 
-// ========================================
-// HOMEPAGE MODELS (FAZ 3B) - WITH LOCALE SUPPORT
-// ========================================
-
-// Hero Section (En üst bölüm)
 model HeroSection {
   id          String   @id @default(cuid())
-  locale      String   @default("tr") // "tr" veya "en"
-  title       String   // "Özel Tıbbi Bakım Hizmetleri"
-  description String   @db.Text
-  stat1Number String   // "1500+"
-  stat1Text   String   // "Mutlu Hasta"
-  stat2Number String   // "15"
-  stat2Text   String   // "Yıl Tecrübe"
-  button1Text String   // "Randevu Alın"
+  title       String
+  description String
+  stat1Number String
+  stat1Text   String
+  stat2Number String
+  stat2Text   String
+  button1Text String
   button1Link String
-  button2Text String   // "Hakkımızda"
+  button2Text String
   button2Link String
   imageUrl    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  locale      String   @unique @default("tr")
 
-  @@unique([locale])
   @@map("hero_section")
 }
 
-// About Section (Hakkımızda bölümü)
 model AboutSection {
   id          String   @id @default(cuid())
-  locale      String   @default("tr") // "tr" veya "en"
-  title       String   // "Veneta Klinik Hakkında"
-  description String   @db.Text
-  buttonText  String   // "Devamını Oku"
+  title       String
+  description String
+  buttonText  String
   buttonLink  String
   imageUrl    String
   rating      Float    @default(4.88)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  locale      String   @unique @default("tr")
 
-  @@unique([locale])
   @@map("about_section")
 }
 
-// Features (Özellikler - 4 kart) - Icon kaldırıldı
 model Feature {
   id          String   @id @default(cuid())
-  locale      String   @default("tr") // "tr" veya "en"
-  title       String   // "Uzman Kadro"
+  title       String
   description String
-  order       Int      // Sıralama (1-4)
+  order       Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  locale      String   @default("tr")
 
   @@index([locale])
   @@map("features")
 }
 
-// Testimonials (Hasta Yorumları)
 model Testimonial {
   id        String   @id @default(cuid())
-  locale    String   @default("tr") // "tr" veya "en"
-  name      String   // "Ayşe Yılmaz"
-  procedure String   // "Burun Estetiği", "Lazer Epilasyon"
-  comment   String   @db.Text
-  rating    Int      @default(5) // 1-5
-  imageUrl  String?  // Opsiyonel hasta fotoğrafı
-  active    Boolean  @default(true) // Admin aktif/pasif yapar
+  name      String
+  rating    Int      @default(5)
+  comment   String
   order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  active    Boolean  @default(true)
+  imageUrl  String?
+  locale    String   @default("tr")
+  procedure String
 
   @@index([locale])
   @@index([active])
   @@map("testimonials")
 }
 
-// Blog Posts (Blog Yazıları)
 model BlogPost {
-  id          String   @id @default(cuid())
-  locale      String   @default("tr") // "tr" veya "en"
-  title       String
-  slug        String
-  excerpt     String   // Kısa özet (anasayfa için)
-  content     String?  @db.Text // Tam içerik (detay sayfası için)
-  imageUrl    String
-  category    String?  // "surgical", "non-surgical", "general"
-  author      String?  // "Dr. Ahmet Yılmaz"
-  readTime    String?  // "5 dakika"
-  published   Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  slug      String
+  excerpt   String
+  imageUrl  String
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    String?
+  category  String?
+  content   String?
+  locale    String   @default("tr")
+  readTime  String?
 
   @@unique([locale, slug])
   @@index([locale])
@@ -119,38 +107,35 @@ model BlogPost {
   @@map("blog_posts")
 }
 
-// CTA Section (Call-to-Action - En alt bölüm)
 model CTASection {
   id          String   @id @default(cuid())
-  locale      String   @default("tr") // "tr" veya "en"
-  title       String   // "Dönüşümü Yolculuğunuza..."
+  title       String
   description String
-  button1Text String   // "Randevunuzu Alın"
+  button1Text String
   button1Link String
-  button2Text String   // "İletişime Geç"
+  button2Text String
   button2Link String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  locale      String   @unique @default("tr")
 
-  @@unique([locale])
   @@map("cta_section")
 }
 
-// Procedures (Prosedürler)
 model Procedure {
   id          String   @id @default(cuid())
-  locale      String   @default("tr") // "tr" veya "en"
-  title       String   // "Burun Estetiği"
-  slug        String   // "burun-estetigi"
-  description String   @db.Text
-  category    String   // "surgical", "non-surgical"
+  title       String
+  slug        String
+  description String
+  category    String
   imageUrl    String
-  badge       String?  // "Popüler", "Yeni" (opsiyonel)
+  badge       String?
   detailLink  String?
   order       Int      @default(0)
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  locale      String   @default("tr")
 
   @@unique([locale, slug])
   @@index([locale, published])
@@ -158,157 +143,112 @@ model Procedure {
   @@map("procedures")
 }
 
-// ========================================
-// FOOTER MODELS - DYNAMIC STRUCTURE
-// ========================================
-
-// Footer Ana İçerik (İletişim, Sosyal Medya, Copyright)
 model FooterContent {
-  id              String   @id @default(cuid())
-  locale          String   @unique // "tr" | "en"
-  
-  // İletişim Bilgileri
-  phone           String   // "+90 212 561 23 22"
-  phoneSecondary  String?  // İkinci telefon (opsiyonel)
-  email           String   // "info@venetaclinic.com"
-  address         String   // "İstanbul, Türkiye"
-  mapLink         String?  // Google Maps embed link (opsiyonel)
-  
-  // Sosyal Medya
-  facebookUrl     String?
-  instagramUrl    String?
-  twitterUrl      String?
-  linkedinUrl     String?
-  youtubeUrl      String?
-  
-  // Copyright
-  copyrightText   String   // "© 2024 Veneta Clinic. Tüm hakları saklıdır."
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String   @id @default(cuid())
+  locale         String   @unique
+  phone          String
+  phoneSecondary String?
+  email          String
+  address        String
+  mapLink        String?
+  facebookUrl    String?
+  instagramUrl   String?
+  twitterUrl     String?
+  linkedinUrl    String?
+  youtubeUrl     String?
+  copyrightText  String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("footer_content")
 }
 
-// Footer Link Grupları (Kurumsal, Hizmetler, Yasal, vb.)
 model FooterLinkGroup {
-  id        String   @id @default(cuid())
-  locale    String   // "tr" | "en"
-  title     String   // "Kurumsal", "Hizmetler", "Yasal"
-  slug      String   // "corporate", "services", "legal"
-  order     Int      @default(0) // Sıralama (1, 2, 3...)
-  active    Boolean  @default(true) // Aktif/Pasif
-  
-  links     FooterLink[] // İlişki: Bu gruba ait linkler
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String       @id @default(cuid())
+  locale    String
+  title     String
+  slug      String
+  order     Int          @default(0)
+  active    Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  links     FooterLink[]
 
   @@unique([locale, slug])
   @@index([locale, active, order])
   @@map("footer_link_groups")
 }
 
-// Footer Linkleri
 model FooterLink {
-  id      String   @id @default(cuid())
-  groupId String   // Hangi gruba ait (FooterLinkGroup.id)
-  
-  title   String   // "Hakkımızda", "About Us"
-  href    String   // "/hakkimizda", "/en/about"
-  order   Int      @default(0) // Grup içinde sıralama
-  active  Boolean  @default(true) // Aktif/Pasif
-  
-  group   FooterLinkGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String          @id @default(cuid())
+  groupId   String
+  title     String
+  href      String
+  order     Int             @default(0)
+  active    Boolean         @default(true)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  group     FooterLinkGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   @@index([groupId, active, order])
   @@map("footer_links")
 }
 
-// ========================================
-// HEADER MODELS - NAVIGATION
-// ========================================
-
 model HeaderNavItem {
-  id           String   @id @default(cuid())
-  locale       String   // "tr" | "en"
-  title        String   // "Anasayfa", "Home"
-  href         String   // "/", "/en/"
-  parentId     String?  // Alt menü için parent ID
-  order        Int      @default(0) // Sıralama
-  active       Boolean  @default(true) // Aktif/Pasif
-  openInNewTab Boolean  @default(false) // Yeni sekmede aç
-  
-  // Self-referencing relation
+  id           String          @id @default(cuid())
+  locale       String
+  title        String
+  href         String
+  parentId     String?
+  order        Int             @default(0)
+  active       Boolean         @default(true)
+  openInNewTab Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   parent       HeaderNavItem?  @relation("NavItemChildren", fields: [parentId], references: [id], onDelete: Cascade)
   children     HeaderNavItem[] @relation("NavItemChildren")
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@index([locale, active, order])
   @@index([parentId])
   @@map("header_nav_items")
 }
 
-// ========================================
-// CONTACT PAGE MODELS
-// ========================================
-
 model ContactPage {
-  id          String   @id @default(cuid())
-  locale      String   @unique
-  
-  // Header Section
-  headerTitle       String   @db.Text
-  headerDescription String   @db.Text
-  headerButtonText  String
-  headerImage       String
-  
-  // Form Section
-  formTitle           String
-  formDescription     String   @db.Text
-  happyCustomersText  String
-  
-  // Google Reviews
-  reviewsRating       String
-  reviewsText         String
-  reviewsLink         String   @db.Text
-  
-  // Contact Cards
-  addressLabel  String
-  addressText   String   @db.Text
-  addressLink   String   @db.Text
-  
-  phoneLabel    String
-  phoneText     String
-  phoneLink     String
-  
-  hoursLabel    String
-  hoursText     String   @db.Text
-  
-  // Form Fields & Messages
-  formTitleBox          String
-  formSubtitle          String   @db.Text
-  firstNamePlaceholder  String
-  lastNamePlaceholder   String
-  emailPlaceholder      String
-  phonePlaceholder      String
-  messagePlaceholder    String
-  submitButtonText      String
-  submittingButtonText  String
-  successMessage        String   @db.Text
-  errorMessage          String   @db.Text
-  
-  // Email settings
-  emailRecipient  String
-  emailSubject    String
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  locale               String   @unique
+  headerTitle          String
+  headerDescription    String
+  headerButtonText     String
+  headerImage          String
+  formTitle            String
+  formDescription      String
+  happyCustomersText   String
+  reviewsRating        String
+  reviewsText          String
+  reviewsLink          String
+  addressLabel         String
+  addressText          String
+  addressLink          String
+  phoneLabel           String
+  phoneText            String
+  phoneLink            String
+  hoursLabel           String
+  hoursText            String
+  formTitleBox         String
+  formSubtitle         String
+  firstNamePlaceholder String
+  lastNamePlaceholder  String
+  emailPlaceholder     String
+  phonePlaceholder     String
+  messagePlaceholder   String
+  submitButtonText     String
+  submittingButtonText String
+  successMessage       String
+  errorMessage         String
+  emailRecipient       String
+  emailSubject         String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   @@map("contact_page")
 }
@@ -319,7 +259,7 @@ model ContactSubmission {
   lastName  String
   email     String
   phone     String
-  message   String   @db.Text
+  message   String
   locale    String
   status    String   @default("new")
   createdAt DateTime @default(now())
@@ -329,50 +269,37 @@ model ContactSubmission {
   @@map("contact_submissions")
 }
 
-// ========================================
-// ABOUT PAGE MODELS
-// ========================================
-
 model AboutPage {
-  id       String   @id @default(cuid())
-  locale   String   @unique
-  
-  // Header Section
-  headerTitle           String   @db.Text
-  headerTitleHighlight  String
-  headerSubtitle        String   @db.Text
-  headerDescription     String   @db.Text
-  headerButtonServices  String
-  headerButtonContact   String
-  headerImage           String
-  headerExperienceYears String
-  headerExperienceText  String
-  
-  // Features Section
-  featuresTitle          String   @db.Text
+  id                     String   @id @default(cuid())
+  locale                 String   @unique
+  headerTitle            String
+  headerTitleHighlight   String
+  headerSubtitle         String
+  headerDescription      String
+  headerButtonServices   String
+  headerButtonContact    String
+  headerImage            String
+  headerExperienceYears  String
+  headerExperienceText   String
+  featuresTitle          String
   featuresTitleHighlight String
-  featuresSubtitle       String   @db.Text
-  
-  // Mission Section
-  missionDoctorImage  String
-  missionQuote        String   @db.Text
-  missionTitle        String   @db.Text
-  missionSubtitle     String   @db.Text
-  missionDescription1 String   @db.Text
-  missionDescription2 String   @db.Text
-  
-  // Statistics
-  stat1Value String
-  stat1Label String
-  stat2Value String
-  stat2Label String
-  stat3Value String
-  stat3Label String
-  stat4Value String
-  stat4Label String
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  featuresSubtitle       String
+  missionDoctorImage     String
+  missionQuote           String
+  missionTitle           String
+  missionSubtitle        String
+  missionDescription1    String
+  missionDescription2    String
+  stat1Value             String
+  stat1Label             String
+  stat2Value             String
+  stat2Label             String
+  stat3Value             String
+  stat3Label             String
+  stat4Value             String
+  stat4Label             String
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   @@map("about_page")
 }
@@ -382,101 +309,87 @@ model AboutFeature {
   locale      String
   featureId   String
   title       String
-  description String   @db.Text
+  description String
   image       String
   order       Int      @default(0)
   active      Boolean  @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([locale, active, order])
   @@map("about_features")
 }
 
-// ========================================
-// PROCEDURE PAGE MODELS (Template için)
-// ========================================
-
-// Ana sayfa bilgileri
 model ProcedurePage {
-  id     String @id @default(cuid())
-  slug   String // "lazer-epilasyon", "sac-ekimi"
-  locale String // "tr" | "en"
-  
-  // Hero Section
-  heroTitle           String @db.Text
-  heroTitleHighlight  String
-  heroDescription     String @db.Text
-  heroButtonReviews   String
-  heroButtonPhone     String
-  heroImage           String
-  heroImageAlt        String
-  
-  // Device Info
-  deviceTitle         String @db.Text
-  deviceDescription   String @db.Text
-  deviceFeaturesTitle String
-  deviceAdvantagesTitle String
-  
-  // Pricing Section
-  pricingTitle       String @db.Text
-  pricingDescription String @db.Text
-  pricingCallText    String // "Fiyat için arayın"
-  
-  // Why Us Section
-  whyUsTitle String @db.Text
-  
-  // FAQ Section
-  faqTitle String @db.Text
-  
-  // CTA Section
-  ctaTitle        String @db.Text
-  ctaDescription  String @db.Text
-  ctaButtonPhone  String
-  ctaButtonWhatsApp String
-
-  // ✅ YENİ: Categories Intro (Ana sayfa için)
-  categoriesIntroTitle       String? @db.Text
-  categoriesIntroDescription String? @db.Text
-  
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                         String   @id @default(cuid())
+  slug                       String
+  locale                     String
+  heroTitle                  String
+  heroTitleHighlight         String
+  heroDescription            String
+  heroButtonReviews          String
+  heroButtonPhone            String
+  heroImage                  String
+  heroImageAlt               String
+  deviceTitle                String
+  deviceDescription          String
+  deviceFeaturesTitle        String
+  deviceAdvantagesTitle      String
+  pricingTitle               String
+  pricingDescription         String
+  pricingCallText            String
+  whyUsTitle                 String
+  faqTitle                   String
+  ctaTitle                   String
+  ctaDescription             String
+  ctaButtonPhone             String
+  ctaButtonWhatsApp          String
+  active                     Boolean  @default(true)
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+  categoriesIntroDescription String?
+  categoriesIntroTitle       String?
+  advantages                 Json?
+  customFaqs                 Json?
+  gallery                    Json?
+  order                      Int      @default(0)
+  parentSlug                 String?
+  processSteps               Json?
+  seoContent                 String?
+  categorySlugTR             String?
+  categorySlugEN             String?
 
   @@unique([slug, locale])
   @@index([slug, locale, active])
+  @@index([categorySlugTR, categorySlugEN])
+  @@index([parentSlug, locale, active])
   @@map("procedure_pages")
 }
 
-// Hero Features (3 adet)
 model ProcedureFeature {
-  id          String @id @default(cuid())
-  pageSlug    String // "lazer-epilasyon"
+  id          String   @id @default(cuid())
+  pageSlug    String
   locale      String
-  icon        String // "zap", "users", "check-circle"
+  icon        String
   title       String
-  description String @db.Text
-  order       Int    @default(0)
-  active      Boolean @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  description String
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([pageSlug, locale, active, order])
   @@map("procedure_features")
 }
 
-// Device Features & Advantages
 model ProcedureDeviceItem {
-  id       String @id @default(cuid())
-  pageSlug String
-  locale   String
-  type     String // "feature" | "advantage"
-  text     String @db.Text
-  order    Int    @default(0)
-  active   Boolean @default(true)
-  
+  id        String   @id @default(cuid())
+  pageSlug  String
+  locale    String
+  type      String
+  text      String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -484,71 +397,63 @@ model ProcedureDeviceItem {
   @@map("procedure_device_items")
 }
 
-// Treatment Areas
 model ProcedureTreatmentArea {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   pageSlug    String
   locale      String
   title       String
-  description String @db.Text
-  order       Int    @default(0)
-  active      Boolean @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  description String
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([pageSlug, locale, active, order])
   @@map("procedure_treatment_areas")
 }
 
-// Pricing Options
 model ProcedurePricing {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   pageSlug    String
   locale      String
   title       String
-  description String @db.Text
-  priceText   String // "Fiyat için arayın" veya gerçek fiyat
-  colorScheme String // "primary", "secondary", "accent"
-  order       Int    @default(0)
-  active      Boolean @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  description String
+  priceText   String
+  colorScheme String
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([pageSlug, locale, active, order])
   @@map("procedure_pricing")
 }
 
-// Why Us Reasons
 model ProcedureWhyUs {
-  id          String @id @default(cuid())
+  id          String   @id @default(cuid())
   pageSlug    String
   locale      String
-  icon        String // "lightning", "users", "dollar", "heart"
+  icon        String
   title       String
-  description String @db.Text
-  colorScheme String // "primary", "secondary", "accent", "destructive"
-  order       Int    @default(0)
-  active      Boolean @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  description String
+  colorScheme String
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([pageSlug, locale, active, order])
   @@map("procedure_why_us")
 }
 
-// FAQ Items
 model ProcedureFAQ {
-  id       String @id @default(cuid())
-  pageSlug String
-  locale   String
-  question String @db.Text
-  answer   String @db.Text
-  order    Int    @default(0)
-  active   Boolean @default(true)
-  
+  id        String   @id @default(cuid())
+  pageSlug  String
+  locale    String
+  question  String
+  answer    String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -556,76 +461,159 @@ model ProcedureFAQ {
   @@map("procedure_faqs")
 }
 
-// ============================================
-// ABOUT SECTION MODELS
-// ============================================
-
 model ProcedureAboutSection {
-  id              String @id @default(cuid())
-  pageSlug        String // "ameliyatli-estetik", "burun-estetigi"
-  locale          String // "tr" | "en"
+  id              String   @id @default(cuid())
+  pageSlug        String
+  locale          String
   title           String
-  description     String @db.Text
+  description     String
   areasTitle      String
   advantagesTitle String
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
   @@unique([pageSlug, locale])
   @@index([pageSlug, locale])
   @@map("procedure_about_sections")
 }
 
 model ProcedureAboutArea {
-  id       String  @id @default(cuid())
-  pageSlug String
-  locale   String
-  text     String
-  order    Int     @default(0)
-  active   Boolean @default(true)
-  
+  id        String   @id @default(cuid())
+  pageSlug  String
+  locale    String
+  text      String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([pageSlug, locale, active, order])
   @@map("procedure_about_areas")
 }
 
 model ProcedureAboutAdvantage {
-  id       String  @id @default(cuid())
-  pageSlug String
-  locale   String
-  text     String
-  order    Int     @default(0)
-  active   Boolean @default(true)
-  
+  id        String   @id @default(cuid())
+  pageSlug  String
+  locale    String
+  text      String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([pageSlug, locale, active, order])
   @@map("procedure_about_advantages")
 }
 
-// ============================================
-// PROCESS STEPS MODEL
-// ============================================
-
 model ProcedureProcess {
-  id          String  @id @default(cuid())
+  id          String   @id @default(cuid())
   pageSlug    String
   locale      String
-  number      String   // "1", "2", "3"
+  number      String
   title       String
-  description String   @db.Text
+  description String
   bgColor     String   @default("bg-primary/20")
   textColor   String   @default("text-primary")
   order       Int      @default(0)
   active      Boolean  @default(true)
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
   @@index([pageSlug, locale, active, order])
   @@map("procedure_processes")
+}
+
+model SurgicalCategory {
+  id              String   @id @default(cuid())
+  locale          String
+  slug            String
+  title           String
+  description     String?  @db.Text
+  heroImage       String?
+  clinicImage     String?
+  patientsCount   String   @default("15,000+")
+  experienceYears String   @default("15+")
+  rating          String   @default("4.9/5")
+  galleryImages   String[] @default([])
+  seoContent       String?  @db.Text
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+  published       Boolean  @default(false)
+  order           Int      @default(0)
+  active          Boolean  @default(true)
+  
+  advantages      SurgicalAdvantage[]
+  processSteps    SurgicalProcessStep[]
+  faqs            SurgicalFAQ[]
+  features        SurgicalFeature[]
+  whyChooseItems   SurgicalWhyChooseItem[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([slug, locale])
+  @@index([locale, published, active])
+}
+
+model SurgicalFeature {
+  id          String            @id @default(cuid())
+  categoryId  String
+  category    SurgicalCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  title       String
+  description String            @db.Text
+  icon        String?           // İkon adı (örn: "Zap", "Heart")
+  order       Int               @default(0)
+  active      Boolean           @default(true)
+
+  @@map("surgical_features")
+}
+
+
+model SurgicalAdvantage {
+  id          String   @id @default(cuid())
+  categoryId  String
+  category    SurgicalCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  title       String
+  description String?  @db.Text
+  icon        String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  
+  @@index([categoryId, order])
+}
+
+model SurgicalProcessStep {
+  id          String   @id @default(cuid())
+  categoryId  String
+  category    SurgicalCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  step        String
+  description String   @db.Text
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  
+  @@index([categoryId, order])
+}
+
+model SurgicalFAQ {
+  id          String   @id @default(cuid())
+  categoryId  String
+  category    SurgicalCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  question    String   @db.Text
+  answer      String   @db.Text
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  
+  @@index([categoryId, order])
+}
+
+model SurgicalWhyChooseItem {
+  id          String            @id @default(cuid())
+  categoryId  String
+  category    SurgicalCategory  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  text        String
+  order       Int               @default(0)
+  active      Boolean           @default(true)
+
+  @@map("surgical_why_choose_items")
 }

@@ -51,26 +51,37 @@
   --radius-xl: calc(var(--radius) + 4px);
 
   /* Light Theme Colors */
-  --background: #ffffff; /* Temiz ve steril bir his için saf beyaz */
-  --foreground: #2d3436; /* Kolay okunabilir koyu gri */
+  --background: #ffffff;
+  --foreground: #1a1f1e; /* Daha koyu - yüksek kontrast için */
 
-  /* Ana Renkler */
-  --primary: #b2d6a1; /* Kurumsal yeşil renk */
-  --primary-foreground: #ffffff;
-  --secondary: #f0f9ed; /* Açık yeşil ton */
-  --secondary-foreground: #2d3436;
+  /* Ana Renkler - Logo rengi korundu, ama metin üzerinde kullanılmayacak */
+  --primary: #b2d6a1; /* Logo rengi */
+  --primary-foreground: #1a3a1f; /* Koyu yeşil - yüksek kontrast */
+
+  /* Butonlar ve interaktif elementler için daha koyu alternatif */
+  --primary-dark: #5a8f4a; /* Primary üzerinde beyaz metin için */
+
+  --secondary: #f8faf7; /* Çok hafif yeşil ton */
+  --secondary-foreground: #1a1f1e;
 
   /* Yardımcı Renkler */
-  --muted: #f7faf5; /* Çok açık yeşil */
-  --muted-foreground: #68947c; /* Orta ton yeşil */
-  --accent: #e8f5e2; /* Vurgu için açık yeşil */
-  --accent-foreground: #2d3436;
+  --muted: #f3f6f1; /* Hafif gri-yeşil */
+  --muted-foreground: #4a5f52; /* Orta ton yeşil - yeterli kontrast */
+  --accent: #e8f3e4;
+  --accent-foreground: #1a3a1f; /* Koyu yeşil */
 
   /* Fonksiyonel Renkler */
-  --destructive: #e74c3c; /* Uyarılar için */
-  --border: #dcebd5; /* Yeşil tonlu border */
-  --input: #f5f9f3; /* Form alanları için açık ton */
-  --ring: #b2d6a1; /* Odaklanma halkası için kurumsal renk */
+  --destructive: #d32f2f; /* Daha koyu kırmızı - daha iyi kontrast */
+  --destructive-foreground: #ffffff;
+  --border: #d8e5d3;
+  --input: #f8faf7;
+  --ring: #5a8f4a; /* Focus için daha koyu ton */
+
+  /* Card elementleri */
+  --card: #ffffff;
+  --card-foreground: #1a1f1e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1f1e;
 
   /* Font Ailesi Değişkenleri */
   --font-playfair: var(--font-playfair), serif;
@@ -78,26 +89,50 @@
 }
 
 .dark {
-  --background: #1a1f1d; /* Koyu yeşile çalan arka plan */
-  --foreground: #e5e5e5;
+  --background: #0f1410; /* Daha koyu yeşil-siyah */
+  --foreground: #f0f4f1; /* Daha açık - yüksek kontrast */
 
   /* Ana Renkler */
-  --primary: #b2d6a1; /* Kurumsal rengi koruyoruz */
-  --primary-foreground: #1a1f1d;
-  --secondary: #2a332d;
-  --secondary-foreground: #e5e5e5;
+  --primary: #b2d6a1; /* Logo rengi korundu */
+  --primary-foreground: #0f1410;
+  --primary-dark: #7fb36d; /* Dark modda daha parlak alternatif */
+
+  --secondary: #1a2621;
+  --secondary-foreground: #f0f4f1;
 
   /* Yardımcı Renkler */
-  --muted: #2a332d;
-  --muted-foreground: #9db5a3;
-  --accent: #304134;
-  --accent-foreground: #e5e5e5;
+  --muted: #1f2d25;
+  --muted-foreground: #a8bfb2; /* Daha açık - daha iyi kontrast */
+  --accent: #263d30;
+  --accent-foreground: #e8f3e4;
 
   /* Fonksiyonel Renkler */
-  --destructive: #cf6679;
-  --border: rgba(178, 214, 161, 0.2); /* Kurumsal rengin transparan hali */
-  --input: rgba(178, 214, 161, 0.1);
-  --ring: #b2d6a1;
+  --destructive: #ef5350; /* Dark modda daha parlak */
+  --destructive-foreground: #ffffff;
+  --border: #2a4233;
+  --input: #1f2d25;
+  --ring: #7fb36d;
+
+  /* Card elementleri */
+  --card: #151f1a;
+  --card-foreground: #f0f4f1;
+  --popover: #1a2621;
+  --popover-foreground: #f0f4f1;
+}
+
+/* Yardımcı sınıflar - Erişebilirlik için */
+.text-on-primary {
+  color: var(--primary-foreground);
+}
+
+.bg-primary-interactive {
+  background-color: var(--primary-dark);
+  color: #ffffff;
+}
+
+.dark .bg-primary-interactive {
+  background-color: var(--primary-dark);
+  color: var(--background);
 }
 
 /* Base Styles */

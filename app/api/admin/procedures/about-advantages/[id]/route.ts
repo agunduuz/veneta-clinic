@@ -1,3 +1,4 @@
+// app/api/admin/procedures/about-advantages/[id]/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { auth } from "@/auth";

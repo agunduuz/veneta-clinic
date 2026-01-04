@@ -1,3 +1,4 @@
+// lib/homepage.ts
 // Utility to fetch homepage data from API
 export async function getHomepageData(locale: "tr" | "en" = "tr") {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";

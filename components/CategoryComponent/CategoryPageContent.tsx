@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import GallerySlider from "@/components/CategoryComponent/GallerySlider";
 
-// Motion variants
+// Motion variants (ESKİ - AYNEN KORUYORUZ)
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -134,66 +134,154 @@ const buttonVariants = {
   },
 };
 
-interface OperationInfo {
-  title?: string;
-  description?: string;
-  advantages?: string[];
-  process?: Array<{
-    step: string;
-    description: string;
-  }>;
-  faqs?: Array<{
-    question: string;
-    answer: string;
-  }>;
-  image?: string;
-  images?: string[];
+// ✅ Database types
+interface Advantage {
+  id: string;
+  title: string;
+  description?: string | null;
+  icon?: string | null;
+  order: number;
+  active: boolean;
 }
 
-// ✅ FIXED: Removed SubMenu interface requirement
+interface ProcessStep {
+  id: string;
+  step: string;
+  description: string;
+  order: number;
+  active: boolean;
+}
+
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+  order: number;
+  active: boolean;
+}
+
+interface Feature {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string | null;
+  order: number;
+  active: boolean;
+}
+
+interface WhyChooseItem {
+  id: string;
+  text: string;
+  order: number;
+  active: boolean;
+}
+
+interface CategoryData {
+  id: string;
+  locale: string;
+  slug: string;
+  title: string;
+  description?: string | null;
+  heroImage?: string | null;
+  clinicImage?: string | null;
+  patientsCount: string;
+  experienceYears: string;
+  rating: string;
+  galleryImages: string[];
+  metaTitle?: string | null;
+  seoContent?: string | null;
+  metaDescription?: string | null;
+  metaKeywords?: string | null;
+  published: boolean;
+  order: number;
+  advantages: Advantage[];
+  processSteps: ProcessStep[];
+  faqs: FAQ[];
+  features: Feature[];
+  whyChooseItems: WhyChooseItem[];
+}
+
 interface CategoryPageContentProps {
-  operationInfo: OperationInfo | undefined;
+  categoryData: CategoryData;
 }
 
 export default function CategoryPageContent({
-  operationInfo,
+  categoryData,
 }: CategoryPageContentProps) {
+  // ✅ Database'den gelen veriler
+  const {
+    title,
+    description,
+    heroImage,
+    clinicImage,
+    patientsCount,
+    experienceYears,
+    rating,
+    galleryImages,
+    seoContent,
+    advantages,
+    processSteps,
+    faqs,
+    features,
+    whyChooseItems,
+  } = categoryData;
+
+  // ✅ Stats - Database'den dinamik
   const stats = [
-    { icon: Users, value: "15,000+", label: "Mutlu Hasta" },
-    { icon: Award, value: "15+", label: "Yıllık Deneyim" },
-    { icon: Star, value: "4.9/5", label: "Hasta Puanı" },
+    { icon: Users, value: patientsCount, label: "Mutlu Hasta" },
+    { icon: Award, value: experienceYears, label: "Yıllık Deneyim" },
+    { icon: Star, value: rating, label: "Hasta Puanı" },
     { icon: Shield, value: "100%", label: "Güvenlik" },
   ];
 
-  const features = [
-    {
-      icon: Zap,
-      title: "Modern Teknoloji",
-      description: "En son teknolojik cihazlar ve yöntemler",
-    },
-    {
-      icon: Heart,
-      title: "Hasta Odaklı",
-      description: "Her hastanın özel ihtiyaçlarına göre planlama",
-    },
-    {
-      icon: Clock,
-      title: "Hızlı İyileşme",
-      description: "Minimal invaziv yöntemlerle hızlı toparlanma",
-    },
-    {
-      icon: TrendingUp,
-      title: "Kanıtlanmış Sonuçlar",
-      description: "Bilimsel araştırmalarla desteklenen yöntemler",
-    },
-  ];
+  // ✅ Features - Static (isterseniz database'e de ekleyebiliriz)
+  const iconMap: Record<string, any> = {
+    Zap,
+    Heart,
+    Clock,
+    TrendingUp,
+    Shield,
+    Award,
+    Star,
+    CheckCircle,
+  };
 
-  // ✅ FIXED: Use operationInfo.title directly
-  const pageTitle = operationInfo?.title || "Estetik Operasyon";
+  const displayFeatures =
+    features?.length > 0
+      ? features.map((feature) => ({
+          icon: iconMap[feature.icon || "Zap"] || Zap,
+          title: feature.title,
+          description: feature.description,
+        }))
+      : [
+          // Fallback (eğer db'de yoksa)
+          {
+            icon: Zap,
+            title: "Modern Teknoloji",
+            description: "En son teknolojik cihazlar ve yöntemler",
+          },
+          {
+            icon: Heart,
+            title: "Hasta Odaklı",
+            description: "Her hastanın özel ihtiyaçlarına göre planlama",
+          },
+          {
+            icon: Clock,
+            title: "Hızlı İyileşme",
+            description: "Minimal invaziv yöntemlerle hızlı toparlanma",
+          },
+          {
+            icon: TrendingUp,
+            title: "Kanıtlanmış Sonuçlar",
+            description: "Bilimsel araştırmalarla desteklenen yöntemler",
+          },
+        ];
+
+  const defaultHeroImage = "/images/doctors-team.jpg";
 
   return (
     <>
-      {/* Hero Section */}
+      {/* Hero Section - ESKİ TASARIM */}
       <section className="relative bg-gradient-to-br from-primary/10 via-background to-secondary/10 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="container py-16 md:py-24 relative z-10">
@@ -216,7 +304,7 @@ export default function CategoryPageContent({
                 className="text-4xl md:text-6xl font-bold leading-tight"
                 variants={itemVariants}
               >
-                {pageTitle}
+                {title}
                 <span className="block text-primary">Uzman Doktorlar</span>
               </motion.h1>
 
@@ -224,10 +312,8 @@ export default function CategoryPageContent({
                 className="text-xl text-muted-foreground leading-relaxed"
                 variants={itemVariants}
               >
-                15+ yıllık deneyimimiz ve modern teknolojimizle{" "}
-                {pageTitle.toLowerCase()} konusunda Türkiye&apos;nin lider
-                kliniği olarak hizmet veriyoruz. Güvenli, etkili ve doğal
-                sonuçlar için uzman ekibimizle tanışın.
+                {description ||
+                  `15+ yıllık deneyimimiz ve modern teknolojimizle ${title.toLowerCase()} konusunda Türkiye'nin lider kliniği olarak hizmet veriyoruz. Güvenli, etkili ve doğal sonuçlar için uzman ekibimizle tanışın.`}
               </motion.p>
 
               <motion.div
@@ -271,8 +357,8 @@ export default function CategoryPageContent({
             >
               <div className="relative">
                 <Image
-                  src={operationInfo?.image || "/images/doctors-team.jpg"}
-                  alt={`${pageTitle} - Veneta Clinic Uzman Doktorları`}
+                  src={heroImage || defaultHeroImage}
+                  alt={`${title} - Veneta Clinic Uzman Doktorları`}
                   width={500}
                   height={400}
                   className="rounded-2xl shadow-2xl object-cover"
@@ -289,7 +375,7 @@ export default function CategoryPageContent({
                       <Star className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <p className="font-bold text-lg">4.9/5</p>
+                      <p className="font-bold text-lg">{rating}</p>
                       <p className="text-sm text-muted-foreground">
                         Hasta Puanı
                       </p>
@@ -302,7 +388,7 @@ export default function CategoryPageContent({
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats Section - ESKİ TASARIM + DİNAMİK VERİ */}
       <section className="py-16 bg-muted/30">
         <div className="container">
           <motion.div
@@ -331,7 +417,7 @@ export default function CategoryPageContent({
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section - ESKİ TASARIM */}
       <section className="py-16">
         <div className="container">
           <motion.div
@@ -357,9 +443,9 @@ export default function CategoryPageContent({
             whileInView="visible"
             viewport={{ once: true }}
           >
-            {features.map((feature) => (
+            {displayFeatures.map((feature, index) => (
               <motion.div
-                key={feature.title}
+                key={index}
                 className="feature-card bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
                 variants={featureVariants}
                 whileHover={{ y: -5 }}
@@ -375,8 +461,8 @@ export default function CategoryPageContent({
         </div>
       </section>
 
-      {/* Gallery Section */}
-      {operationInfo?.images && operationInfo.images.length > 0 && (
+      {/* Gallery Section - ESKİ TASARIM + DİNAMİK VERİ */}
+      {galleryImages && galleryImages.length > 0 && (
         <section className="py-16 bg-muted/30">
           <div className="container">
             <motion.div
@@ -387,10 +473,10 @@ export default function CategoryPageContent({
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                {pageTitle} Galeri
+                {title} Galeri
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                {pageTitle} operasyonlarımızdan örnekler ve sonuçlar
+                {title} operasyonlarımızdan örnekler ve sonuçlar
               </p>
             </motion.div>
 
@@ -401,15 +487,15 @@ export default function CategoryPageContent({
               transition={{ duration: 0.8 }}
             >
               <GallerySlider
-                images={operationInfo.images}
-                alt={`${pageTitle} - Veneta Clinic Galeri`}
+                images={galleryImages}
+                alt={`${title} - Veneta Clinic Galeri`}
               />
             </motion.div>
           </div>
         </section>
       )}
 
-      {/* Why Choose Us Section */}
+      {/* Why Choose Us Section - ESKİ TASARIM */}
       <section className="py-16 bg-gradient-to-r from-primary/5 to-secondary/5">
         <div className="container">
           <motion.div
@@ -421,7 +507,7 @@ export default function CategoryPageContent({
           >
             <motion.div className="space-y-6" variants={whyChooseVariants}>
               <h2 className="text-3xl md:text-4xl font-bold">
-                {pageTitle} Konusunda Neden Bizi Seçmelisiniz?
+                {title} Konusunda Neden Bizi Seçmelisiniz?
               </h2>
               <p className="text-lg text-muted-foreground">
                 Uzman doktorlarımız, modern teknolojimiz ve hasta odaklı
@@ -430,21 +516,24 @@ export default function CategoryPageContent({
               </p>
 
               <motion.div className="space-y-4" variants={containerVariants}>
-                {[
-                  "Uzman ve deneyimli doktor kadrosu",
-                  "Modern ve güvenli teknoloji",
-                  "Kişiselleştirilmiş tedavi planları",
-                  "Hızlı iyileşme süreçleri",
-                  "Sürekli hasta takibi",
-                  "Uygun fiyat garantisi",
-                ].map((item) => (
+                {(whyChooseItems?.length > 0
+                  ? whyChooseItems
+                  : [
+                      { text: "Uzman ve deneyimli doktor kadrosu" },
+                      { text: "Modern ve güvenli teknoloji" },
+                      { text: "Kişiselleştirilmiş tedavi planları" },
+                      { text: "Hızlı iyileşme süreçleri" },
+                      { text: "Sürekli hasta takibi" },
+                      { text: "Uygun fiyat garantisi" },
+                    ]
+                ).map((item) => (
                   <motion.div
-                    key={item}
+                    key={item.text}
                     className="flex items-center gap-3"
                     variants={itemVariants}
                   >
                     <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{item}</span>
+                    <span className="text-foreground">{item.text}</span>
                   </motion.div>
                 ))}
               </motion.div>
@@ -452,7 +541,7 @@ export default function CategoryPageContent({
 
             <motion.div className="relative" variants={whyChooseImageVariants}>
               <Image
-                src="/images/klinik-resimleri.jpeg"
+                src={clinicImage || "/images/klinik-resimleri.jpeg"}
                 alt="Veneta Clinic Modern Klinik Ortamı"
                 width={600}
                 height={400}
@@ -480,7 +569,7 @@ export default function CategoryPageContent({
         </div>
       </section>
 
-      {/* SEO Content Section */}
+      {/* SEO Content Section - ESKİ TASARIM + DİNAMİK VERİ */}
       <section className="py-16 bg-gradient-to-r from-primary/5 to-secondary/5">
         <div className="container">
           <motion.div
@@ -491,106 +580,77 @@ export default function CategoryPageContent({
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">
-              {pageTitle} - Türkiye&apos;nin En İyi Estetik Kliniği
+              {title} - Türkiye&apos;nin En İyi Estetik Kliniği
             </h1>
 
             <div className="prose prose-lg max-w-none">
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {pageTitle} Nedir?
+                {title} Nedir?
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                {operationInfo?.description ||
-                  `${pageTitle}, modern tıbbi teknolojiler ve uzman doktor kadromuzla gerçekleştirilen 
-                güvenli ve etkili estetik cerrahi işlemlerinden biridir. 15+ yıllık deneyimimizle, 
-                her hastanın özel ihtiyaçlarına göre kişiselleştirilmiş tedavi planları hazırlıyoruz.`}
+                {description ||
+                  `${title}, modern tıbbi teknolojiler ve uzman doktor kadromuzla gerçekleştirilen güvenli ve etkili estetik cerrahi işlemlerinden biridir.`}
               </p>
 
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {pageTitle} Avantajları
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {operationInfo?.advantages?.map((advantage: string) => (
-                  <div
-                    key={advantage}
-                    className="bg-white rounded-xl p-6 shadow-lg"
-                  >
-                    <h3 className="text-xl font-semibold mb-3 text-foreground">
-                      {advantage}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {pageTitle} ile elde edilen önemli faydalardan biridir.
-                    </p>
-                  </div>
-                )) || [
-                  <div key="1" className="bg-white rounded-xl p-6 shadow-lg">
-                    <h3 className="text-xl font-semibold mb-3 text-foreground">
-                      Güvenli Teknoloji
-                    </h3>
-                    <p className="text-muted-foreground">
-                      En son teknolojik cihazlar ve minimal invaziv yöntemlerle
-                      güvenli operasyonlar.
-                    </p>
-                  </div>,
-                  <div key="2" className="bg-white rounded-xl p-6 shadow-lg">
-                    <h3 className="text-xl font-semibold mb-3 text-foreground">
-                      Uzman Doktorlar
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Alanında uzman ve deneyimli cerrahlarımızla profesyonel
-                      hizmet.
-                    </p>
-                  </div>,
-                ]}
-              </div>
-
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {pageTitle} Süreci
-              </h2>
-              <div className="space-y-6 mb-8">
-                {operationInfo?.process?.map(
-                  (
-                    step: { step: string; description: string },
-                    index: number
-                  ) => (
-                    <div key={step.step} className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                        {index + 1}
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2">
-                          {step.step}
+              {/* Advantages - DİNAMİK */}
+              {advantages && advantages.length > 0 && (
+                <>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
+                    {title} Avantajları
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    {advantages.map((advantage) => (
+                      <div
+                        key={advantage.id}
+                        className="bg-white rounded-xl p-6 shadow-lg"
+                      >
+                        <h3 className="text-xl font-semibold mb-3 text-foreground">
+                          {advantage.title}
                         </h3>
-                        <p className="text-muted-foreground">
-                          {step.description}
-                        </p>
+                        {advantage.description && (
+                          <p className="text-muted-foreground">
+                            {advantage.description}
+                          </p>
+                        )}
                       </div>
-                    </div>
-                  )
-                ) || [
-                  <div key="1" className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">
-                      1
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-2">
-                        İlk Konsültasyon
-                      </h3>
-                      <p className="text-muted-foreground">
-                        Uzman doktorumuzla detaylı görüşme ve kişiselleştirilmiş
-                        tedavi planı hazırlama.
-                      </p>
-                    </div>
-                  </div>,
-                ]}
-              </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Process Steps - DİNAMİK */}
+              {processSteps && processSteps.length > 0 && (
+                <>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
+                    {title} Süreci
+                  </h2>
+                  <div className="space-y-6 mb-8">
+                    {processSteps.map((step, index) => (
+                      <div key={step.id} className="flex items-start gap-4">
+                        <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0 mt-1">
+                          {index + 1}
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-semibold mb-2">
+                            {step.step}
+                          </h3>
+                          <p className="text-muted-foreground">
+                            {step.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
               <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {pageTitle} Fiyatları
+                {title} Fiyatları
               </h2>
               <p className="text-lg text-muted-foreground mb-6">
-                {pageTitle} fiyatları, hastanın özel durumuna ve işlemin
-                kapsamına göre değişiklik gösterebilir. Detaylı bilgi ve fiyat
-                teklifi için ücretsiz konsültasyon randevusu alabilirsiniz.
+                {title} fiyatları, hastanın özel durumuna ve işlemin kapsamına
+                göre değişiklik gösterebilir. Detaylı bilgi ve fiyat teklifi
+                için ücretsiz konsültasyon randevusu alabilirsiniz.
               </p>
 
               <div className="bg-primary/10 rounded-xl p-6 mb-8">
@@ -617,35 +677,38 @@ export default function CategoryPageContent({
                 </ul>
               </div>
 
-              <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
-                {pageTitle} Hakkında Sık Sorulan Sorular
-              </h2>
-              <div className="space-y-4 mb-8">
-                {operationInfo?.faqs?.map(
-                  (faq: { question: string; answer: string }) => (
-                    <div
-                      key={faq.question}
-                      className="bg-white rounded-xl p-6 shadow-lg"
-                    >
-                      <h3 className="text-xl font-semibold mb-2 text-foreground">
-                        {faq.question}
-                      </h3>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </div>
-                  )
-                ) || [
-                  <div key="1" className="bg-white rounded-xl p-6 shadow-lg">
-                    <h3 className="text-xl font-semibold mb-2 text-foreground">
-                      {pageTitle} ne kadar sürer?
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Operasyon süresi hastanın durumuna göre 1-3 saat arasında
-                      değişmektedir.
-                    </p>
-                  </div>,
-                ]}
-              </div>
+              {/* FAQs - DİNAMİK */}
+              {faqs && faqs.length > 0 && (
+                <>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
+                    {title} Hakkında Sık Sorulan Sorular
+                  </h2>
+                  <div className="space-y-4 mb-8">
+                    {faqs.map((faq) => (
+                      <div
+                        key={faq.id}
+                        className="bg-white rounded-xl p-6 shadow-lg"
+                      >
+                        <h3 className="text-xl font-semibold mb-2 text-foreground">
+                          {faq.question}
+                        </h3>
+                        <p className="text-muted-foreground">{faq.answer}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
 
+              {/* ✅ YENİ: SEO Content Section */}
+              {seoContent && (
+                <div className="bg-gray-50 rounded-xl p-8 mb-8 border border-gray-200">
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    {seoContent}
+                  </p>
+                </div>
+              )}
+
+              {/* CTA */}
               <motion.div
                 className="text-center bg-primary text-primary-foreground rounded-2xl p-8"
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -654,7 +717,7 @@ export default function CategoryPageContent({
                 transition={{ duration: 0.6 }}
               >
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                  {pageTitle} İçin Hemen İletişime Geçin
+                  {title} İçin Hemen İletişime Geçin
                 </h2>
                 <p className="text-lg mb-6 opacity-90">
                   Uzman doktorlarımızla ücretsiz konsültasyon için hemen arayın
