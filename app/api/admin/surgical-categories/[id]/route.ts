@@ -69,12 +69,13 @@ export async function PUT(
     const body = await request.json();
 
     // ✅ DÜZELTME: Nested relations'ları ayır
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
-      advantages: _advantages,
-      processSteps: _processSteps,
-      faqs: _faqs,
-      features: _features,
-      whyChooseItems: _whyChooseItems,
+      advantages,
+      processSteps,
+      faqs,
+      features,
+      whyChooseItems,
       ...categoryData
     } = body;
 
