@@ -70,11 +70,11 @@ export async function PUT(
 
     // ✅ DÜZELTME: Nested relations'ları ayır
     const {
-      advantages,
-      processSteps,
-      faqs,
-      features,
-      whyChooseItems, // ✅ YENİ
+      advantages: _advantages,
+      processSteps: _processSteps,
+      faqs: _faqs,
+      features: _features,
+      whyChooseItems: _whyChooseItems,
       ...categoryData
     } = body;
 

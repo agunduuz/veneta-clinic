@@ -1,7 +1,7 @@
 // app/admin/surgical-categories/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ProtectedPage from "@/components/admin/ProtectedPage";
 import AdminHeader from "@/components/admin/AdminHeader";
 import MultipleImageUpload from "@/components/admin/MultipleImageUpload";
@@ -108,11 +108,7 @@ export default function SurgicalCategoriesPage() {
     order: 0,
   });
 
-  useEffect(() => {
-    fetchCategories();
-  }, [locale]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(
@@ -127,7 +123,11 @@ export default function SurgicalCategoriesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [locale]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const handleCreate = () => {
     setIsCreating(true);
@@ -252,7 +252,11 @@ export default function SurgicalCategoriesPage() {
     }
   };
 
-  const updateAdvantage = (id: string, field: string, value: any) => {
+  const updateAdvantage = (
+    id: string,
+    field: string,
+    value: string | number
+  ) => {
     if (!selectedCategory) return;
 
     const updated = {
@@ -341,7 +345,11 @@ export default function SurgicalCategoriesPage() {
     }
   };
 
-  const updateProcessStep = (id: string, field: string, value: any) => {
+  const updateProcessStep = (
+    id: string,
+    field: string,
+    value: string | number
+  ) => {
     if (!selectedCategory) return;
 
     const updated = {
@@ -429,7 +437,7 @@ export default function SurgicalCategoriesPage() {
     }
   };
 
-  const updateFAQ = (id: string, field: string, value: any) => {
+  const updateFAQ = (id: string, field: string, value: string | number) => {
     if (!selectedCategory) return;
 
     const updated = {
@@ -1170,118 +1178,123 @@ export default function SurgicalCategoriesPage() {
                             <div className="space-y-3">
                               {selectedCategory.advantages.map(
                                 (advantage, index) => (
-                                  <div
-                                    key={advantage.id}
-                                    className="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors"
-                                  >
-                                    <div className="flex items-start gap-4">
-                                      <div className="flex-1 space-y-3">
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                                            Başlık
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={advantage.title}
-                                            onChange={(e) =>
-                                              updateAdvantage(
-                                                advantage.id,
-                                                "title",
-                                                e.target.value
-                                              )
-                                            }
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                            placeholder="Güvenli Teknoloji"
-                                          />
-                                        </div>
-
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                                            Açıklama
-                                          </label>
-                                          <textarea
-                                            value={advantage.description || ""}
-                                            onChange={(e) =>
-                                              updateAdvantage(
-                                                advantage.id,
-                                                "description",
-                                                e.target.value
-                                              )
-                                            }
-                                            rows={2}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                            placeholder="En son teknolojik cihazlar..."
-                                          />
-                                        </div>
-
-                                        <div className="flex items-center gap-4">
-                                          <div className="flex-1">
+                                  console.log(index),
+                                  (
+                                    <div
+                                      key={advantage.id}
+                                      className="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors"
+                                    >
+                                      <div className="flex items-start gap-4">
+                                        <div className="flex-1 space-y-3">
+                                          <div>
                                             <label className="block text-xs font-medium text-gray-700 mb-1">
-                                              İkon (opsiyonel)
+                                              Başlık
                                             </label>
                                             <input
                                               type="text"
-                                              value={advantage.icon || ""}
+                                              value={advantage.title}
                                               onChange={(e) =>
                                                 updateAdvantage(
                                                   advantage.id,
-                                                  "icon",
+                                                  "title",
                                                   e.target.value
                                                 )
                                               }
                                               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                              placeholder="Zap"
+                                              placeholder="Güvenli Teknoloji"
                                             />
                                           </div>
 
                                           <div>
                                             <label className="block text-xs font-medium text-gray-700 mb-1">
-                                              Sıra
+                                              Açıklama
                                             </label>
-                                            <input
-                                              type="number"
-                                              value={advantage.order}
+                                            <textarea
+                                              value={
+                                                advantage.description || ""
+                                              }
                                               onChange={(e) =>
                                                 updateAdvantage(
                                                   advantage.id,
-                                                  "order",
-                                                  parseInt(e.target.value)
+                                                  "description",
+                                                  e.target.value
                                                 )
                                               }
-                                              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              rows={2}
+                                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              placeholder="En son teknolojik cihazlar..."
                                             />
                                           </div>
 
-                                          <label className="flex items-center gap-2 mt-5 cursor-pointer">
-                                            <input
-                                              type="checkbox"
-                                              checked={advantage.active}
-                                              onChange={(e) =>
-                                                updateAdvantage(
-                                                  advantage.id,
-                                                  "active",
-                                                  e.target.checked
-                                                )
-                                              }
-                                              className="w-4 h-4 appearance-none border-2 border-gray-300 rounded bg-white checked:bg-primary checked:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 relative checked:after:content-['✓'] checked:after:absolute checked:after:inset-0 checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:text-xs checked:after:font-bold"
-                                            />
-                                            <span className="text-xs text-gray-700">
-                                              Aktif
-                                            </span>
-                                          </label>
-                                        </div>
-                                      </div>
+                                          <div className="flex items-center gap-4">
+                                            <div className="flex-1">
+                                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                                İkon (opsiyonel)
+                                              </label>
+                                              <input
+                                                type="text"
+                                                value={advantage.icon || ""}
+                                                onChange={(e) =>
+                                                  updateAdvantage(
+                                                    advantage.id,
+                                                    "icon",
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                                placeholder="Zap"
+                                              />
+                                            </div>
 
-                                      <button
-                                        onClick={() =>
-                                          deleteAdvantage(advantage.id)
-                                        }
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                      >
-                                        <Trash2 className="w-4 h-4" />
-                                      </button>
+                                            <div>
+                                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                                Sıra
+                                              </label>
+                                              <input
+                                                type="number"
+                                                value={advantage.order}
+                                                onChange={(e) =>
+                                                  updateAdvantage(
+                                                    advantage.id,
+                                                    "order",
+                                                    parseInt(e.target.value)
+                                                  )
+                                                }
+                                                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              />
+                                            </div>
+
+                                            <label className="flex items-center gap-2 mt-5 cursor-pointer">
+                                              <input
+                                                type="checkbox"
+                                                checked={advantage.active}
+                                                onChange={(e) =>
+                                                  updateAdvantage(
+                                                    advantage.id,
+                                                    "active",
+                                                    e.target.checked
+                                                  )
+                                                }
+                                                className="w-4 h-4 appearance-none border-2 border-gray-300 rounded bg-white checked:bg-primary checked:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 relative checked:after:content-['✓'] checked:after:absolute checked:after:inset-0 checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:text-xs checked:after:font-bold"
+                                              />
+                                              <span className="text-xs text-gray-700">
+                                                Aktif
+                                              </span>
+                                            </label>
+                                          </div>
+                                        </div>
+
+                                        <button
+                                          onClick={() =>
+                                            deleteAdvantage(advantage.id)
+                                          }
+                                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
+                                      </div>
                                     </div>
-                                  </div>
+                                  )
                                 )
                               )}
                             </div>
@@ -1495,49 +1508,21 @@ export default function SurgicalCategoriesPage() {
                             <div className="space-y-3">
                               {selectedCategory.whyChooseItems?.map(
                                 (item, index) => (
-                                  <div
-                                    key={item.id}
-                                    className="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors"
-                                  >
-                                    <div className="flex items-start gap-4">
-                                      <div className="flex-1 space-y-3">
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                                            Metin
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={item.text}
-                                            onChange={(e) => {
-                                              const updated = {
-                                                ...selectedCategory,
-                                                whyChooseItems:
-                                                  selectedCategory.whyChooseItems?.map(
-                                                    (i) =>
-                                                      i.id === item.id
-                                                        ? {
-                                                            ...i,
-                                                            text: e.target
-                                                              .value,
-                                                          }
-                                                        : i
-                                                  ),
-                                              };
-                                              setSelectedCategory(updated);
-                                            }}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                            placeholder="Uzman ve deneyimli doktor kadrosu"
-                                          />
-                                        </div>
-
-                                        <div className="flex items-center gap-4">
+                                  console.log(index),
+                                  (
+                                    <div
+                                      key={item.id}
+                                      className="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors"
+                                    >
+                                      <div className="flex items-start gap-4">
+                                        <div className="flex-1 space-y-3">
                                           <div>
                                             <label className="block text-xs font-medium text-gray-700 mb-1">
-                                              Sıra
+                                              Metin
                                             </label>
                                             <input
-                                              type="number"
-                                              value={item.order}
+                                              type="text"
+                                              value={item.text}
                                               onChange={(e) => {
                                                 const updated = {
                                                   ...selectedCategory,
@@ -1547,121 +1532,152 @@ export default function SurgicalCategoriesPage() {
                                                         i.id === item.id
                                                           ? {
                                                               ...i,
-                                                              order: parseInt(
-                                                                e.target.value
-                                                              ),
+                                                              text: e.target
+                                                                .value,
                                                             }
                                                           : i
                                                     ),
                                                 };
                                                 setSelectedCategory(updated);
                                               }}
-                                              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              placeholder="Uzman ve deneyimli doktor kadrosu"
                                             />
                                           </div>
 
-                                          <label className="flex items-center gap-2 mt-5 cursor-pointer">
-                                            <input
-                                              type="checkbox"
-                                              checked={item.active}
-                                              onChange={(e) => {
-                                                const updated = {
-                                                  ...selectedCategory,
-                                                  whyChooseItems:
-                                                    selectedCategory.whyChooseItems?.map(
-                                                      (i) =>
-                                                        i.id === item.id
-                                                          ? {
-                                                              ...i,
-                                                              active:
-                                                                e.target
-                                                                  .checked,
-                                                            }
-                                                          : i
-                                                    ),
-                                                };
-                                                setSelectedCategory(updated);
-                                              }}
-                                              className="w-4 h-4 appearance-none border-2 border-gray-300 rounded bg-white checked:bg-primary checked:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 relative checked:after:content-['✓'] checked:after:absolute checked:after:inset-0 checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:text-xs checked:after:font-bold"
-                                            />
-                                            <span className="text-xs text-gray-700">
-                                              Aktif
-                                            </span>
-                                          </label>
+                                          <div className="flex items-center gap-4">
+                                            <div>
+                                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                                Sıra
+                                              </label>
+                                              <input
+                                                type="number"
+                                                value={item.order}
+                                                onChange={(e) => {
+                                                  const updated = {
+                                                    ...selectedCategory,
+                                                    whyChooseItems:
+                                                      selectedCategory.whyChooseItems?.map(
+                                                        (i) =>
+                                                          i.id === item.id
+                                                            ? {
+                                                                ...i,
+                                                                order: parseInt(
+                                                                  e.target.value
+                                                                ),
+                                                              }
+                                                            : i
+                                                      ),
+                                                  };
+                                                  setSelectedCategory(updated);
+                                                }}
+                                                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              />
+                                            </div>
+
+                                            <label className="flex items-center gap-2 mt-5 cursor-pointer">
+                                              <input
+                                                type="checkbox"
+                                                checked={item.active}
+                                                onChange={(e) => {
+                                                  const updated = {
+                                                    ...selectedCategory,
+                                                    whyChooseItems:
+                                                      selectedCategory.whyChooseItems?.map(
+                                                        (i) =>
+                                                          i.id === item.id
+                                                            ? {
+                                                                ...i,
+                                                                active:
+                                                                  e.target
+                                                                    .checked,
+                                                              }
+                                                            : i
+                                                      ),
+                                                  };
+                                                  setSelectedCategory(updated);
+                                                }}
+                                                className="w-4 h-4 appearance-none border-2 border-gray-300 rounded bg-white checked:bg-primary checked:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 relative checked:after:content-['✓'] checked:after:absolute checked:after:inset-0 checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:text-xs checked:after:font-bold"
+                                              />
+                                              <span className="text-xs text-gray-700">
+                                                Aktif
+                                              </span>
+                                            </label>
+                                          </div>
                                         </div>
+
+                                        <button
+                                          onClick={async () => {
+                                            if (
+                                              !confirm(
+                                                "Bu maddeyi silmek istediğinizden emin misiniz?"
+                                              )
+                                            )
+                                              return;
+
+                                            try {
+                                              const res = await fetch(
+                                                `/api/admin/surgical-categories/${selectedCategory.id}/why-choose-items/${item.id}`,
+                                                { method: "DELETE" }
+                                              );
+
+                                              if (res.ok) {
+                                                await fetchCategories();
+                                                const updated = categories.find(
+                                                  (c) =>
+                                                    c.id === selectedCategory.id
+                                                );
+                                                if (updated)
+                                                  setSelectedCategory(updated);
+                                              }
+                                            } catch (error) {
+                                              console.error(
+                                                "Failed to delete item:",
+                                                error
+                                              );
+                                            }
+                                          }}
+                                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
                                       </div>
 
-                                      <button
-                                        onClick={async () => {
-                                          if (
-                                            !confirm(
-                                              "Bu maddeyi silmek istediğinizden emin misiniz?"
-                                            )
-                                          )
-                                            return;
-
-                                          try {
-                                            const res = await fetch(
-                                              `/api/admin/surgical-categories/${selectedCategory.id}/why-choose-items/${item.id}`,
-                                              { method: "DELETE" }
-                                            );
-
-                                            if (res.ok) {
-                                              await fetchCategories();
-                                              const updated = categories.find(
-                                                (c) =>
-                                                  c.id === selectedCategory.id
+                                      {/* Kaydet Butonu */}
+                                      <div className="mt-3 pt-3 border-t border-gray-200">
+                                        <button
+                                          onClick={async () => {
+                                            try {
+                                              const res = await fetch(
+                                                `/api/admin/surgical-categories/${selectedCategory.id}/why-choose-items/${item.id}`,
+                                                {
+                                                  method: "PUT",
+                                                  headers: {
+                                                    "Content-Type":
+                                                      "application/json",
+                                                  },
+                                                  body: JSON.stringify(item),
+                                                }
                                               );
-                                              if (updated)
-                                                setSelectedCategory(updated);
-                                            }
-                                          } catch (error) {
-                                            console.error(
-                                              "Failed to delete item:",
-                                              error
-                                            );
-                                          }
-                                        }}
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                      >
-                                        <Trash2 className="w-4 h-4" />
-                                      </button>
-                                    </div>
 
-                                    {/* Kaydet Butonu */}
-                                    <div className="mt-3 pt-3 border-t border-gray-200">
-                                      <button
-                                        onClick={async () => {
-                                          try {
-                                            const res = await fetch(
-                                              `/api/admin/surgical-categories/${selectedCategory.id}/why-choose-items/${item.id}`,
-                                              {
-                                                method: "PUT",
-                                                headers: {
-                                                  "Content-Type":
-                                                    "application/json",
-                                                },
-                                                body: JSON.stringify(item),
+                                              if (res.ok) {
+                                                alert("Madde kaydedildi!");
                                               }
-                                            );
-
-                                            if (res.ok) {
-                                              alert("Madde kaydedildi!");
+                                            } catch (error) {
+                                              console.error(
+                                                "Failed to update item:",
+                                                error
+                                              );
+                                              alert("Kaydetme başarısız!");
                                             }
-                                          } catch (error) {
-                                            console.error(
-                                              "Failed to update item:",
-                                              error
-                                            );
-                                            alert("Kaydetme başarısız!");
-                                          }
-                                        }}
-                                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                                      >
-                                        Kaydet
-                                      </button>
+                                          }}
+                                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                                        >
+                                          Kaydet
+                                        </button>
+                                      </div>
                                     </div>
-                                  </div>
+                                  )
                                 )
                               )}
                             </div>
@@ -1691,99 +1707,104 @@ export default function SurgicalCategoriesPage() {
                             </div>
                           ) : (
                             <div className="space-y-3">
-                              {selectedCategory.faqs.map((faq, index) => (
-                                <div
-                                  key={faq.id}
-                                  className="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors"
-                                >
-                                  <div className="flex items-start gap-4">
-                                    <div className="flex-1 space-y-3">
-                                      <div>
-                                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                                          Soru
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={faq.question}
-                                          onChange={(e) =>
-                                            updateFAQ(
-                                              faq.id,
-                                              "question",
-                                              e.target.value
-                                            )
-                                          }
-                                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                          placeholder="İşlem ne kadar sürer?"
-                                        />
-                                      </div>
+                              {selectedCategory.faqs.map(
+                                (faq, index) => (
+                                  console.log(index),
+                                  (
+                                    <div
+                                      key={faq.id}
+                                      className="border border-gray-200 rounded-lg p-4 hover:border-primary transition-colors"
+                                    >
+                                      <div className="flex items-start gap-4">
+                                        <div className="flex-1 space-y-3">
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                                              Soru
+                                            </label>
+                                            <input
+                                              type="text"
+                                              value={faq.question}
+                                              onChange={(e) =>
+                                                updateFAQ(
+                                                  faq.id,
+                                                  "question",
+                                                  e.target.value
+                                                )
+                                              }
+                                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              placeholder="İşlem ne kadar sürer?"
+                                            />
+                                          </div>
 
-                                      <div>
-                                        <label className="block text-xs font-medium text-gray-700 mb-1">
-                                          Cevap
-                                        </label>
-                                        <textarea
-                                          value={faq.answer}
-                                          onChange={(e) =>
-                                            updateFAQ(
-                                              faq.id,
-                                              "answer",
-                                              e.target.value
-                                            )
-                                          }
-                                          rows={3}
-                                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                          placeholder="Operasyon süresi..."
-                                        />
-                                      </div>
+                                          <div>
+                                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                                              Cevap
+                                            </label>
+                                            <textarea
+                                              value={faq.answer}
+                                              onChange={(e) =>
+                                                updateFAQ(
+                                                  faq.id,
+                                                  "answer",
+                                                  e.target.value
+                                                )
+                                              }
+                                              rows={3}
+                                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              placeholder="Operasyon süresi..."
+                                            />
+                                          </div>
 
-                                      <div className="flex items-center gap-4">
-                                        <div>
-                                          <label className="block text-xs font-medium text-gray-700 mb-1">
-                                            Sıra
-                                          </label>
-                                          <input
-                                            type="number"
-                                            value={faq.order}
-                                            onChange={(e) =>
-                                              updateFAQ(
-                                                faq.id,
-                                                "order",
-                                                parseInt(e.target.value)
-                                              )
-                                            }
-                                            className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                          />
+                                          <div className="flex items-center gap-4">
+                                            <div>
+                                              <label className="block text-xs font-medium text-gray-700 mb-1">
+                                                Sıra
+                                              </label>
+                                              <input
+                                                type="number"
+                                                value={faq.order}
+                                                onChange={(e) =>
+                                                  updateFAQ(
+                                                    faq.id,
+                                                    "order",
+                                                    parseInt(e.target.value)
+                                                  )
+                                                }
+                                                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                              />
+                                            </div>
+
+                                            <label className="flex items-center gap-2 mt-5 cursor-pointer">
+                                              <input
+                                                type="checkbox"
+                                                checked={faq.active}
+                                                onChange={(e) =>
+                                                  updateFAQ(
+                                                    faq.id,
+                                                    "active",
+                                                    e.target.checked
+                                                  )
+                                                }
+                                                className="w-4 h-4 appearance-none border-2 border-gray-300 rounded bg-white checked:bg-primary checked:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 relative checked:after:content-['✓'] checked:after:absolute checked:after:inset-0 checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:text-xs checked:after:font-bold"
+                                              />
+                                              <span className="text-xs text-gray-700">
+                                                Aktif
+                                              </span>
+                                            </label>
+                                          </div>
                                         </div>
 
-                                        <label className="flex items-center gap-2 mt-5 cursor-pointer">
-                                          <input
-                                            type="checkbox"
-                                            checked={faq.active}
-                                            onChange={(e) =>
-                                              updateFAQ(
-                                                faq.id,
-                                                "active",
-                                                e.target.checked
-                                              )
-                                            }
-                                            className="w-4 h-4 appearance-none border-2 border-gray-300 rounded bg-white checked:bg-primary checked:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 relative checked:after:content-['✓'] checked:after:absolute checked:after:inset-0 checked:after:flex checked:after:items-center checked:after:justify-center checked:after:text-white checked:after:text-xs checked:after:font-bold"
-                                          />
-                                          <span className="text-xs text-gray-700">
-                                            Aktif
-                                          </span>
-                                        </label>
+                                        <button
+                                          onClick={() => deleteFAQ(faq.id)}
+                                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </button>
                                       </div>
                                     </div>
-
-                                    <button
-                                      onClick={() => deleteFAQ(faq.id)}
-                                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                                    >
-                                      <Trash2 className="w-4 h-4" />
-                                    </button>
-                                  </div>
-                                </div>
-                              ))}
+                                  )
+                                )
+                              )}
                             </div>
                           )}
 
