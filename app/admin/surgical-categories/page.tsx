@@ -24,6 +24,7 @@ interface SurgicalCategory {
   metaTitle?: string;
   metaDescription?: string;
   metaKeywords?: string;
+  seoContent?: string;
   published: boolean;
   order: number;
   advantages: Advantage[];
@@ -256,7 +257,7 @@ export default function SurgicalCategoriesPage() {
   const updateAdvantage = (
     id: string,
     field: string,
-    value: string | number
+    value: string | number | boolean
   ) => {
     if (!selectedCategory) return;
 
@@ -349,7 +350,7 @@ export default function SurgicalCategoriesPage() {
   const updateProcessStep = (
     id: string,
     field: string,
-    value: string | number
+    value: string | number | boolean
   ) => {
     if (!selectedCategory) return;
 
@@ -438,7 +439,11 @@ export default function SurgicalCategoriesPage() {
     }
   };
 
-  const updateFAQ = (id: string, field: string, value: string | number) => {
+  const updateFAQ = (
+    id: string,
+    field: string,
+    value: string | number | boolean
+  ) => {
     if (!selectedCategory) return;
 
     const updated = {
