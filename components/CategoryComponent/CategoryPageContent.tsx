@@ -235,6 +235,7 @@ export default function CategoryPageContent({
   ];
 
   // ✅ Features - Static (isterseniz database'e de ekleyebiliriz)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const iconMap: Record<string, any> = {
     Zap,
     Heart,
