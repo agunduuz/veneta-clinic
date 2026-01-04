@@ -1,3 +1,4 @@
+// app/api/send-email/route.ts
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
 

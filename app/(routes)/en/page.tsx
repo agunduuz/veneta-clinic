@@ -1,4 +1,4 @@
-// app/en/page.tsx
+// app/(routes)/en/page.tsx
 import Hero from "@/components/Home/Hero";
 import About from "@/components/Home/About";
 import Features from "@/components/Home/Features";

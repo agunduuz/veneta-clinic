@@ -1,3 +1,4 @@
+// scripts/test-db.ts
 import { prisma } from "../lib/prisma";
 
 async function testDatabase() {

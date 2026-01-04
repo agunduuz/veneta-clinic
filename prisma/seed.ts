@@ -1,8 +1,387 @@
 // prisma/seed.ts
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { trOperations, enOperations } from "../data/operations";
 
 const prisma = new PrismaClient();
+
+// ========================================
+// SURGICAL CATEGORIES SEED FUNCTION
+// ========================================
+async function seedSurgicalCategories() {
+  console.log("🔄 Seeding surgical categories...");
+
+  // ========================================
+  // SLUG MAPPING - TR to EN
+  // ========================================
+  const slugMapping: Record<string, string> = {
+    yuz: "facial",
+    "burun-estetigi": "rhinoplasty",
+    "yuz-germe": "face-lift",
+    "goz-kapagi-estetigi": "eye-bag-surgery",
+    vucut: "body",
+    "karin-germe": "tummy-tuck",
+    liposuction: "liposuction",
+    meme: "breast",
+    "meme-buyutme": "augmentation",
+    "meme-kucultme": "reduction",
+  };
+
+  // ========================================
+  // TR CATEGORIES
+  // ========================================
+  console.log("📝 Creating Turkish categories...");
+  let order = 1;
+
+  for (const [slug, data] of Object.entries(trOperations)) {
+    console.log(`  ✅ TR: ${data.title} (${slug})`);
+
+    const category = await prisma.surgicalCategory.upsert({
+      where: {
+        slug_locale: {
+          slug: slug,
+          locale: "tr",
+        },
+      },
+      update: {
+        title: data.title,
+        description: data.description,
+        heroImage: data.image,
+        clinicImage: "/images/klinik-resimleri.jpeg",
+        seoContent: `${data.title} konusunda Türkiye'nin en deneyimli estetik cerrahları ile çalışıyoruz. Modern teknolojilerimiz ve hasta odaklı yaklaşımımızla, güvenli ve etkili sonuçlar elde etmenizi sağlıyoruz. Detaylı bilgi ve randevu için hemen iletişime geçin.`,
+        galleryImages: data.images || [],
+        published: true,
+      },
+      create: {
+        locale: "tr",
+        slug: slug,
+        title: data.title,
+        description: data.description,
+        heroImage: data.image,
+        clinicImage: "/images/klinik-resimleri.jpeg",
+        seoContent: `${data.title} konusunda Türkiye'nin en deneyimli estetik cerrahları ile çalışıyoruz. Modern teknolojilerimiz ve hasta odaklı yaklaşımımızla, güvenli ve etkili sonuçlar elde etmenizi sağlıyoruz. Detaylı bilgi ve randevu için hemen iletişime geçin.`,
+        galleryImages: data.images || [],
+        patientsCount: "15,000+",
+        experienceYears: "15+",
+        rating: "4.9/5",
+        metaTitle: `${data.title} İstanbul | Veneta Clinic`,
+        metaDescription: data.description,
+        metaKeywords: data.title.toLowerCase(),
+        published: true,
+        order: order++,
+      },
+    });
+
+    // Advantages
+    await prisma.surgicalAdvantage.deleteMany({
+      where: { categoryId: category.id },
+    });
+    if (data.advantages && data.advantages.length > 0) {
+      await prisma.surgicalAdvantage.createMany({
+        data: data.advantages.map((adv, idx) => ({
+          categoryId: category.id,
+          title: adv,
+          description: adv,
+          order: idx + 1,
+        })),
+      });
+    }
+
+    // Process Steps
+    await prisma.surgicalProcessStep.deleteMany({
+      where: { categoryId: category.id },
+    });
+    if (data.process && data.process.length > 0) {
+      await prisma.surgicalProcessStep.createMany({
+        data: data.process.map((proc, idx) => ({
+          categoryId: category.id,
+          step: proc.step,
+          description: proc.description,
+          order: idx + 1,
+        })),
+      });
+    }
+
+    // FAQs
+    await prisma.surgicalFAQ.deleteMany({
+      where: { categoryId: category.id },
+    });
+    if (data.faqs && data.faqs.length > 0) {
+      await prisma.surgicalFAQ.createMany({
+        data: data.faqs.map((faq, idx) => ({
+          categoryId: category.id,
+          question: faq.question,
+          answer: faq.answer,
+          order: idx + 1,
+        })),
+      });
+    }
+
+    // ✅ YENİ: Features
+    await prisma.surgicalFeature.deleteMany({
+      where: { categoryId: category.id },
+    });
+
+    await prisma.surgicalFeature.createMany({
+      data: [
+        {
+          categoryId: category.id,
+          title: "Modern Teknoloji",
+          description: "En son teknolojik cihazlar ve yöntemler",
+          icon: "Zap",
+          order: 1,
+        },
+        {
+          categoryId: category.id,
+          title: "Hasta Odaklı",
+          description: "Her hastanın özel ihtiyaçlarına göre planlama",
+          icon: "Heart",
+          order: 2,
+        },
+        {
+          categoryId: category.id,
+          title: "Hızlı İyileşme",
+          description: "Minimal invaziv yöntemlerle hızlı toparlanma",
+          icon: "Clock",
+          order: 3,
+        },
+        {
+          categoryId: category.id,
+          title: "Kanıtlanmış Sonuçlar",
+          description: "Bilimsel araştırmalarla desteklenen yöntemler",
+          icon: "TrendingUp",
+          order: 4,
+        },
+      ],
+    });
+
+    await prisma.surgicalWhyChooseItem.deleteMany({
+      where: { categoryId: category.id },
+    });
+
+    await prisma.surgicalWhyChooseItem.createMany({
+      data: [
+        {
+          categoryId: category.id,
+          text: "Uzman ve deneyimli doktor kadrosu",
+          order: 1,
+        },
+        {
+          categoryId: category.id,
+          text: "Modern ve güvenli teknoloji",
+          order: 2,
+        },
+        {
+          categoryId: category.id,
+          text: "Kişiselleştirilmiş tedavi planları",
+          order: 3,
+        },
+        {
+          categoryId: category.id,
+          text: "Hızlı iyileşme süreçleri",
+          order: 4,
+        },
+        {
+          categoryId: category.id,
+          text: "Sürekli hasta takibi",
+          order: 5,
+        },
+        {
+          categoryId: category.id,
+          text: "Uygun fiyat garantisi",
+          order: 6,
+        },
+      ],
+    });
+  }
+
+  // ========================================
+  // EN CATEGORIES - İNGİLİZCE SLUG KULLAN
+  // ========================================
+  console.log("\n📝 Creating English categories...");
+  order = 1;
+
+  for (const [trSlug, trData] of Object.entries(trOperations)) {
+    const enSlug = slugMapping[trSlug];
+
+    if (!enSlug) {
+      console.warn(`  ⚠️ No English slug for: ${trSlug}`);
+      continue;
+    }
+
+    // enOperations object'inden data al
+    const enData = enOperations[enSlug];
+
+    if (!enData) {
+      console.warn(`  ⚠️ No English data for: ${enSlug}`);
+      continue;
+    }
+
+    console.log(`  ✅ EN: ${enData.title} (${enSlug})`);
+
+    const category = await prisma.surgicalCategory.upsert({
+      where: {
+        slug_locale: {
+          slug: enSlug, // ← İNGİLİZCE SLUG
+          locale: "en",
+        },
+      },
+      update: {
+        title: enData.title,
+        description: enData.description,
+        heroImage: enData.image,
+        clinicImage: "/images/klinik-resimleri.jpeg",
+        seoContent: `We work with Turkey's most experienced aesthetic surgeons in ${enData.title}. With our modern technologies and patient-focused approach, we ensure safe and effective results. Contact us now for detailed information and appointments.`,
+        galleryImages: enData.images || [],
+        published: true,
+      },
+      create: {
+        locale: "en",
+        slug: enSlug, // ← İNGİLİZCE SLUG
+        title: enData.title,
+        description: enData.description,
+        heroImage: enData.image,
+        clinicImage: "/images/klinik-resimleri.jpeg",
+        seoContent: `We work with Turkey's most experienced aesthetic surgeons in ${enData.title}. With our modern technologies and patient-focused approach, we ensure safe and effective results. Contact us now for detailed information and appointments.`,
+        galleryImages: enData.images || [],
+        patientsCount: "15,000+",
+        experienceYears: "15+",
+        rating: "4.9/5",
+        metaTitle: `${enData.title} Istanbul | Veneta Clinic`,
+        metaDescription: enData.description,
+        metaKeywords: enData.title.toLowerCase(),
+        published: true,
+        order: order++,
+      },
+    });
+
+    // Advantages
+    await prisma.surgicalAdvantage.deleteMany({
+      where: { categoryId: category.id },
+    });
+    if (enData.advantages && enData.advantages.length > 0) {
+      await prisma.surgicalAdvantage.createMany({
+        data: enData.advantages.map((adv, idx) => ({
+          categoryId: category.id,
+          title: adv,
+          description: adv,
+          order: idx + 1,
+        })),
+      });
+    }
+
+    // Process Steps
+    await prisma.surgicalProcessStep.deleteMany({
+      where: { categoryId: category.id },
+    });
+    if (enData.process && enData.process.length > 0) {
+      await prisma.surgicalProcessStep.createMany({
+        data: enData.process.map((proc, idx) => ({
+          categoryId: category.id,
+          step: proc.step,
+          description: proc.description,
+          order: idx + 1,
+        })),
+      });
+    }
+
+    // FAQs
+    await prisma.surgicalFAQ.deleteMany({
+      where: { categoryId: category.id },
+    });
+    if (enData.faqs && enData.faqs.length > 0) {
+      await prisma.surgicalFAQ.createMany({
+        data: enData.faqs.map((faq, idx) => ({
+          categoryId: category.id,
+          question: faq.question,
+          answer: faq.answer,
+          order: idx + 1,
+        })),
+      });
+    }
+
+    // ✅ YENİ: Features (EN)
+    await prisma.surgicalFeature.deleteMany({
+      where: { categoryId: category.id },
+    });
+
+    await prisma.surgicalFeature.createMany({
+      data: [
+        {
+          categoryId: category.id,
+          title: "Modern Technology",
+          description: "Latest technological devices and methods",
+          icon: "Zap",
+          order: 1,
+        },
+        {
+          categoryId: category.id,
+          title: "Patient Focused",
+          description: "Planning according to each patient's special needs",
+          icon: "Heart",
+          order: 2,
+        },
+        {
+          categoryId: category.id,
+          title: "Quick Recovery",
+          description: "Fast recovery with minimally invasive methods",
+          icon: "Clock",
+          order: 3,
+        },
+        {
+          categoryId: category.id,
+          title: "Proven Results",
+          description: "Methods supported by scientific research",
+          icon: "TrendingUp",
+          order: 4,
+        },
+      ],
+    });
+
+    await prisma.surgicalWhyChooseItem.deleteMany({
+      where: { categoryId: category.id },
+    });
+
+    await prisma.surgicalWhyChooseItem.createMany({
+      data: [
+        {
+          categoryId: category.id,
+          text: "Expert and experienced medical team",
+          order: 1,
+        },
+        {
+          categoryId: category.id,
+          text: "Modern and safe technology",
+          order: 2,
+        },
+        {
+          categoryId: category.id,
+          text: "Personalized treatment plans",
+          order: 3,
+        },
+        {
+          categoryId: category.id,
+          text: "Fast recovery processes",
+          order: 4,
+        },
+        {
+          categoryId: category.id,
+          text: "Continuous patient monitoring",
+          order: 5,
+        },
+        {
+          categoryId: category.id,
+          text: "Affordable price guarantee",
+          order: 6,
+        },
+      ],
+    });
+  }
+
+  console.log("\n✅ Surgical categories seeded successfully!");
+  console.log(`   📊 TR: ${Object.keys(trOperations).length} categories`);
+  console.log(`   📊 EN: ${Object.keys(enOperations).length} categories`);
+}
 
 async function main() {
   console.log("🌱 Seeding database...");
@@ -1530,749 +1909,661 @@ async function main() {
     console.log("✅ About page created (TR & EN)!");
   }
 
-  // ========================================
-  // PROCEDURE PAGES - LAZER EPILASYON
-  // ========================================
-
-  // Önce tüm kontrolleri yap
-  const existingLazerPageTR = await prisma.procedurePage.findFirst({
-    where: { slug: "lazer-epilasyon", locale: "tr" },
+  // Features kontrolü
+  const existingFeaturesLaser = await prisma.procedureFeature.count({
+    where: { pageSlug: "lazer-epilasyon" },
   });
 
-  const existingLazerPageEN = await prisma.procedurePage.findFirst({
-    where: { slug: "lazer-epilasyon", locale: "en" },
-  });
-
-  if (!existingLazerPageTR || !existingLazerPageEN) {
-    console.log("🔄 Seeding lazer epilasyon page...");
-
-    // TR Page
-    if (!existingLazerPageTR) {
-      await prisma.procedurePage.create({
-        data: {
-          slug: "lazer-epilasyon",
+  if (existingFeaturesLaser === 0) {
+    // TR Features
+    await prisma.procedureFeature.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
           locale: "tr",
-          heroTitle: "Kalıcı Tüy Dönemi",
-          heroTitleHighlight: "Alma Soprano Ice Platinum ile",
-          heroDescription:
-            "En son teknoloji Alma Soprano Ice Platinum cihazı ile ağrısız, güvenli ve etkili lazer epilasyon deneyimi. Tüm cilt tiplerine uygun, FDA onaylı sistem.",
-          heroButtonReviews: "Google Yorumlarımız",
-          heroButtonPhone: "Hemen Ara",
-          heroImage: "/images/alma-soprano.webp",
-          heroImageAlt: "Alma Soprano Ice Platinum Lazer Epilasyon Cihazı",
-          deviceTitle: "Alma Soprano Ice Platinum",
-          deviceDescription:
-            "Dünya çapında en çok tercih edilen lazer epilasyon teknolojisi. Ice Platinum ile hem etkili hem de konforlu bir uygulama sunuyoruz.",
-          deviceFeaturesTitle: "Teknolojik Özellikler",
-          deviceAdvantagesTitle: "Avantajları",
-          pricingTitle: "Lazer Epilasyon Fiyatları",
-          pricingDescription:
-            "Size özel paketlerimiz için bizimle iletişime geçin. Taksit imkanlarımız mevcuttur.",
-          pricingCallText: "Fiyat için arayın",
-          whyUsTitle: "Neden Bizi Tercih Etmelisiniz?",
-          faqTitle: "Sıkça Sorulan Sorular",
-          ctaTitle: "Ücretsiz Danışmanlık İçin Hemen İletişime Geçin",
-          ctaDescription:
-            "Uzman ekibimiz size en uygun tedavi planını oluşturmak için hazır. Randevunuz için bizi arayın.",
-          ctaButtonPhone: "Hemen Ara",
-          ctaButtonWhatsApp: "WhatsApp",
+          icon: "zap",
+          title: "Son Teknoloji",
+          description:
+            "Alma Soprano Ice Platinum ile yeni nesil lazer epilasyon teknolojisi",
+          order: 1,
           active: true,
         },
-      });
-    }
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          icon: "users",
+          title: "Uzman Kadro",
+          description: "Alanında deneyimli ve sertifikalı terapistler",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          icon: "check-circle",
+          title: "FDA Onaylı",
+          description: "Güvenli ve etkili, klinik olarak test edilmiş sistem",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
 
-    // EN Page
-    if (!existingLazerPageEN) {
-      await prisma.procedurePage.create({
-        data: {
-          slug: "lazer-epilasyon",
+    // EN Features
+    await prisma.procedureFeature.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
           locale: "en",
-          heroTitle: "Permanent Hair Removal",
-          heroTitleHighlight: "with Alma Soprano Ice Platinum",
-          heroDescription:
-            "Experience painless, safe and effective laser hair removal with the latest Alma Soprano Ice Platinum technology. FDA approved system suitable for all skin types.",
-          heroButtonReviews: "Our Google Reviews",
-          heroButtonPhone: "Call Now",
-          heroImage: "/images/alma-soprano.webp",
-          heroImageAlt: "Alma Soprano Ice Platinum Laser Hair Removal Device",
-          deviceTitle: "Alma Soprano Ice Platinum",
-          deviceDescription:
-            "The world's most preferred laser hair removal technology. With Ice Platinum, we offer both effective and comfortable application.",
-          deviceFeaturesTitle: "Technical Features",
-          deviceAdvantagesTitle: "Advantages",
-          pricingTitle: "Laser Hair Removal Prices",
-          pricingDescription:
-            "Contact us for our special packages. Installment options available.",
-          pricingCallText: "Call for price",
-          whyUsTitle: "Why Choose Us?",
-          faqTitle: "Frequently Asked Questions",
-          ctaTitle: "Contact Us Now for Free Consultation",
-          ctaDescription:
-            "Our expert team is ready to create the most suitable treatment plan for you. Call us for your appointment.",
-          ctaButtonPhone: "Call Now",
-          ctaButtonWhatsApp: "WhatsApp",
+          icon: "zap",
+          title: "Latest Technology",
+          description:
+            "Next generation laser hair removal technology with Alma Soprano Ice Platinum",
+          order: 1,
           active: true,
         },
-      });
-    }
-
-    // Features kontrolü
-    const existingFeatures = await prisma.procedureFeature.count({
-      where: { pageSlug: "lazer-epilasyon" },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          icon: "users",
+          title: "Expert Team",
+          description: "Experienced and certified therapists in their field",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          icon: "check-circle",
+          title: "FDA Approved",
+          description: "Safe and effective, clinically tested system",
+          order: 3,
+          active: true,
+        },
+      ],
     });
-
-    if (existingFeatures === 0) {
-      // TR Features
-      await prisma.procedureFeature.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "zap",
-            title: "Son Teknoloji",
-            description:
-              "Alma Soprano Ice Platinum ile yeni nesil lazer epilasyon teknolojisi",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "users",
-            title: "Uzman Kadro",
-            description: "Alanında deneyimli ve sertifikalı terapistler",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "check-circle",
-            title: "FDA Onaylı",
-            description: "Güvenli ve etkili, klinik olarak test edilmiş sistem",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Features
-      await prisma.procedureFeature.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "zap",
-            title: "Latest Technology",
-            description:
-              "Next generation laser hair removal technology with Alma Soprano Ice Platinum",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "users",
-            title: "Expert Team",
-            description: "Experienced and certified therapists in their field",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "check-circle",
-            title: "FDA Approved",
-            description: "Safe and effective, clinically tested system",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // Device Items kontrolü
-    const existingDeviceItems = await prisma.procedureDeviceItem.count({
-      where: { pageSlug: "lazer-epilasyon" },
-    });
-
-    if (existingDeviceItems === 0) {
-      // TR Device Features
-      await prisma.procedureDeviceItem.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "feature",
-            text: "3 farklı dalga boyu (755nm, 810nm, 1064nm)",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "feature",
-            text: "Ice Platinum soğutma teknolojisi",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "feature",
-            text: "Tüm cilt tiplerine uygun (I-VI)",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "feature",
-            text: "FDA ve CE onaylı",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // TR Device Advantages
-      await prisma.procedureDeviceItem.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "advantage",
-            text: "Ağrısız ve konforlu uygulama",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "advantage",
-            text: "Hızlı işlem süresi",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "advantage",
-            text: "Kalıcı sonuçlar",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            type: "advantage",
-            text: "Yan etki riski minimum",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Device Features
-      await prisma.procedureDeviceItem.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "feature",
-            text: "3 different wavelengths (755nm, 810nm, 1064nm)",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "feature",
-            text: "Ice Platinum cooling technology",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "feature",
-            text: "Suitable for all skin types (I-VI)",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "feature",
-            text: "FDA and CE approved",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Device Advantages
-      await prisma.procedureDeviceItem.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "advantage",
-            text: "Painless and comfortable application",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "advantage",
-            text: "Fast treatment time",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "advantage",
-            text: "Permanent results",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            type: "advantage",
-            text: "Minimal side effect risk",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // Treatment Areas kontrolü
-    const existingAreas = await prisma.procedureTreatmentArea.count({
-      where: { pageSlug: "lazer-epilasyon" },
-    });
-
-    if (existingAreas === 0) {
-      // TR Treatment Areas
-      await prisma.procedureTreatmentArea.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Yüz Bölgesi",
-            description: "Üst dudak, çene, yanaklar",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Vücut",
-            description: "Kol, bacak, sırt, göğüs",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Bikini Bölgesi",
-            description: "Klasik, brazilian, hollywood",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Koltuk Altı",
-            description: "Hızlı ve etkili uygulama",
-            order: 4,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Karın Bölgesi",
-            description: "Alt karın ve göbek çevresi",
-            order: 5,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Tam Vücut",
-            description: "Tüm bölgeler için özel paketler",
-            order: 6,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Treatment Areas
-      await prisma.procedureTreatmentArea.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Face Area",
-            description: "Upper lip, chin, cheeks",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Body",
-            description: "Arms, legs, back, chest",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Bikini Area",
-            description: "Classic, brazilian, hollywood",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Underarms",
-            description: "Fast and effective application",
-            order: 4,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Abdominal Area",
-            description: "Lower abdomen and belly area",
-            order: 5,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Full Body",
-            description: "Special packages for all areas",
-            order: 6,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // Pricing kontrolü
-    const existingPricing = await prisma.procedurePricing.count({
-      where: { pageSlug: "lazer-epilasyon" },
-    });
-
-    if (existingPricing === 0) {
-      // TR Pricing
-      await prisma.procedurePricing.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Tüm Vücut",
-            description: "Yüz dahil tüm bölgeler",
-            priceText: "Fiyat için arayın",
-            colorScheme: "primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Yarım Vücut",
-            description: "Üst veya alt beden",
-            priceText: "Fiyat için arayın",
-            colorScheme: "secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            title: "Bölgesel",
-            description: "Tek bölge uygulaması",
-            priceText: "Fiyat için arayın",
-            colorScheme: "accent",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Pricing
-      await prisma.procedurePricing.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Full Body",
-            description: "All areas including face",
-            priceText: "Call for price",
-            colorScheme: "primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Half Body",
-            description: "Upper or lower body",
-            priceText: "Call for price",
-            colorScheme: "secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            title: "Single Area",
-            description: "Single area application",
-            priceText: "Call for price",
-            colorScheme: "accent",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // Why Us kontrolü
-    const existingWhyUs = await prisma.procedureWhyUs.count({
-      where: { pageSlug: "lazer-epilasyon" },
-    });
-
-    if (existingWhyUs === 0) {
-      // TR Why Us
-      await prisma.procedureWhyUs.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "lightning",
-            title: "Hızlı İşlem",
-            description: "En son teknoloji ile kısa sürede etkili sonuçlar",
-            colorScheme: "primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "users",
-            title: "Deneyimli Ekip",
-            description: "Alanında uzman ve sertifikalı terapistler",
-            colorScheme: "secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "dollar",
-            title: "Uygun Fiyat",
-            description: "Kaliteli hizmeti uygun fiyatlarla sunuyoruz",
-            colorScheme: "accent",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            icon: "heart",
-            title: "Müşteri Memnuniyeti",
-            description: "Binlerce mutlu müşterimiz var",
-            colorScheme: "destructive",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Why Us
-      await prisma.procedureWhyUs.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "lightning",
-            title: "Fast Treatment",
-            description:
-              "Effective results in short time with latest technology",
-            colorScheme: "primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "users",
-            title: "Experienced Team",
-            description: "Expert and certified therapists in their field",
-            colorScheme: "secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "dollar",
-            title: "Affordable Price",
-            description: "We offer quality service at affordable prices",
-            colorScheme: "accent",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            icon: "heart",
-            title: "Customer Satisfaction",
-            description: "Thousands of happy customers",
-            colorScheme: "destructive",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // FAQ kontrolü
-    const existingFAQs = await prisma.procedureFAQ.count({
-      where: { pageSlug: "lazer-epilasyon" },
-    });
-
-    if (existingFAQs === 0) {
-      // TR FAQs
-      await prisma.procedureFAQ.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            question: "Lazer epilasyon ağrılı mı?",
-            answer:
-              "Alma Soprano Ice Platinum'un Ice Platinum soğutma teknolojisi sayesinde işlem neredeyse ağrısızdır. Hafif bir ısınma hissi dışında rahatsızlık yaşamazsınız.",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            question: "Kaç seans gerekir?",
-            answer:
-              "Genellikle 6-8 seans önerilir. Ancak kişinin cilt tipi, tüy yapısı ve hormon dengesi gibi faktörlere göre bu sayı değişebilir.",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            question: "Yan etkisi var mı?",
-            answer:
-              "FDA onaylı cihazımız ile uygulanan lazer epilasyonun ciddi bir yan etkisi yoktur. Geçici kızarıklık veya hassasiyet yaşanabilir ancak bunlar kısa sürede geçer.",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            question: "Tüm cilt tiplerine uygun mu?",
-            answer:
-              "Evet, Alma Soprano Ice Platinum 3 farklı dalga boyu ile tüm cilt tiplerine (Fitzpatrick I-VI) güvenle uygulanabilir.",
-            order: 4,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            question: "İşlem ne kadar sürer?",
-            answer:
-              "Bölgeye göre değişir. Örneğin koltuk altı 10-15 dakika, tam bacak 30-40 dakika sürebilir.",
-            order: 5,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "tr",
-            question: "Seanslar arası ne kadar süre olmalı?",
-            answer:
-              "Yüz bölgesi için 4-6 hafta, vücut için 6-8 hafta aralarla seanslar planlanır.",
-            order: 6,
-            active: true,
-          },
-        ],
-      });
-
-      // EN FAQs
-      await prisma.procedureFAQ.createMany({
-        data: [
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            question: "Is laser hair removal painful?",
-            answer:
-              "Thanks to the Ice Platinum cooling technology of Alma Soprano Ice Platinum, the procedure is almost painless. You won't experience any discomfort except a slight warming sensation.",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            question: "How many sessions are needed?",
-            answer:
-              "Usually 6-8 sessions are recommended. However, this number may vary depending on factors such as skin type, hair structure and hormonal balance.",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            question: "Are there any side effects?",
-            answer:
-              "Laser hair removal performed with our FDA-approved device has no serious side effects. Temporary redness or sensitivity may occur but these pass quickly.",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            question: "Is it suitable for all skin types?",
-            answer:
-              "Yes, Alma Soprano Ice Platinum can be safely applied to all skin types (Fitzpatrick I-VI) with 3 different wavelengths.",
-            order: 4,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            question: "How long does the procedure take?",
-            answer:
-              "It varies by area. For example, underarms take 10-15 minutes, full legs take 30-40 minutes.",
-            order: 5,
-            active: true,
-          },
-          {
-            pageSlug: "lazer-epilasyon",
-            locale: "en",
-            question: "How long should be between sessions?",
-            answer:
-              "Sessions are planned 4-6 weeks apart for face area, 6-8 weeks apart for body.",
-            order: 6,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    console.log("✅ Lazer epilasyon page created (TR & EN)!");
   }
+
+  // Device Items kontrolü
+  const existingDeviceItems = await prisma.procedureDeviceItem.count({
+    where: { pageSlug: "lazer-epilasyon" },
+  });
+
+  if (existingDeviceItems === 0) {
+    // TR Device Features
+    await prisma.procedureDeviceItem.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "feature",
+          text: "3 farklı dalga boyu (755nm, 810nm, 1064nm)",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "feature",
+          text: "Ice Platinum soğutma teknolojisi",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "feature",
+          text: "Tüm cilt tiplerine uygun (I-VI)",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "feature",
+          text: "FDA ve CE onaylı",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+
+    // TR Device Advantages
+    await prisma.procedureDeviceItem.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "advantage",
+          text: "Ağrısız ve konforlu uygulama",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "advantage",
+          text: "Hızlı işlem süresi",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "advantage",
+          text: "Kalıcı sonuçlar",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          type: "advantage",
+          text: "Yan etki riski minimum",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Device Features
+    await prisma.procedureDeviceItem.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "feature",
+          text: "3 different wavelengths (755nm, 810nm, 1064nm)",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "feature",
+          text: "Ice Platinum cooling technology",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "feature",
+          text: "Suitable for all skin types (I-VI)",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "feature",
+          text: "FDA and CE approved",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Device Advantages
+    await prisma.procedureDeviceItem.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "advantage",
+          text: "Painless and comfortable application",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "advantage",
+          text: "Fast treatment time",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "advantage",
+          text: "Permanent results",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          type: "advantage",
+          text: "Minimal side effect risk",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  // Treatment Areas kontrolü
+  const existingAreas = await prisma.procedureTreatmentArea.count({
+    where: { pageSlug: "lazer-epilasyon" },
+  });
+
+  if (existingAreas === 0) {
+    // TR Treatment Areas
+    await prisma.procedureTreatmentArea.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Yüz Bölgesi",
+          description: "Üst dudak, çene, yanaklar",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Vücut",
+          description: "Kol, bacak, sırt, göğüs",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Bikini Bölgesi",
+          description: "Klasik, brazilian, hollywood",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Koltuk Altı",
+          description: "Hızlı ve etkili uygulama",
+          order: 4,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Karın Bölgesi",
+          description: "Alt karın ve göbek çevresi",
+          order: 5,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Tam Vücut",
+          description: "Tüm bölgeler için özel paketler",
+          order: 6,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Treatment Areas
+    await prisma.procedureTreatmentArea.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Face Area",
+          description: "Upper lip, chin, cheeks",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Body",
+          description: "Arms, legs, back, chest",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Bikini Area",
+          description: "Classic, brazilian, hollywood",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Underarms",
+          description: "Fast and effective application",
+          order: 4,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Abdominal Area",
+          description: "Lower abdomen and belly area",
+          order: 5,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Full Body",
+          description: "Special packages for all areas",
+          order: 6,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  // Pricing kontrolü
+  const existingPricing = await prisma.procedurePricing.count({
+    where: { pageSlug: "lazer-epilasyon" },
+  });
+
+  if (existingPricing === 0) {
+    // TR Pricing
+    await prisma.procedurePricing.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Tüm Vücut",
+          description: "Yüz dahil tüm bölgeler",
+          priceText: "Fiyat için arayın",
+          colorScheme: "primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Yarım Vücut",
+          description: "Üst veya alt beden",
+          priceText: "Fiyat için arayın",
+          colorScheme: "secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          title: "Bölgesel",
+          description: "Tek bölge uygulaması",
+          priceText: "Fiyat için arayın",
+          colorScheme: "accent",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Pricing
+    await prisma.procedurePricing.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Full Body",
+          description: "All areas including face",
+          priceText: "Call for price",
+          colorScheme: "primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Half Body",
+          description: "Upper or lower body",
+          priceText: "Call for price",
+          colorScheme: "secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          title: "Single Area",
+          description: "Single area application",
+          priceText: "Call for price",
+          colorScheme: "accent",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  // Why Us kontrolü
+  const existingWhyUs = await prisma.procedureWhyUs.count({
+    where: { pageSlug: "lazer-epilasyon" },
+  });
+
+  if (existingWhyUs === 0) {
+    // TR Why Us
+    await prisma.procedureWhyUs.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          icon: "lightning",
+          title: "Hızlı İşlem",
+          description: "En son teknoloji ile kısa sürede etkili sonuçlar",
+          colorScheme: "primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          icon: "users",
+          title: "Deneyimli Ekip",
+          description: "Alanında uzman ve sertifikalı terapistler",
+          colorScheme: "secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          icon: "dollar",
+          title: "Uygun Fiyat",
+          description: "Kaliteli hizmeti uygun fiyatlarla sunuyoruz",
+          colorScheme: "accent",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          icon: "heart",
+          title: "Müşteri Memnuniyeti",
+          description: "Binlerce mutlu müşterimiz var",
+          colorScheme: "destructive",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Why Us
+    await prisma.procedureWhyUs.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          icon: "lightning",
+          title: "Fast Treatment",
+          description: "Effective results in short time with latest technology",
+          colorScheme: "primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          icon: "users",
+          title: "Experienced Team",
+          description: "Expert and certified therapists in their field",
+          colorScheme: "secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          icon: "dollar",
+          title: "Affordable Price",
+          description: "We offer quality service at affordable prices",
+          colorScheme: "accent",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          icon: "heart",
+          title: "Customer Satisfaction",
+          description: "Thousands of happy customers",
+          colorScheme: "destructive",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  // FAQ kontrolü
+  const existingFAQs = await prisma.procedureFAQ.count({
+    where: { pageSlug: "lazer-epilasyon" },
+  });
+
+  if (existingFAQs === 0) {
+    // TR FAQs
+    await prisma.procedureFAQ.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          question: "Lazer epilasyon ağrılı mı?",
+          answer:
+            "Alma Soprano Ice Platinum'un Ice Platinum soğutma teknolojisi sayesinde işlem neredeyse ağrısızdır. Hafif bir ısınma hissi dışında rahatsızlık yaşamazsınız.",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          question: "Kaç seans gerekir?",
+          answer:
+            "Genellikle 6-8 seans önerilir. Ancak kişinin cilt tipi, tüy yapısı ve hormon dengesi gibi faktörlere göre bu sayı değişebilir.",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          question: "Yan etkisi var mı?",
+          answer:
+            "FDA onaylı cihazımız ile uygulanan lazer epilasyonun ciddi bir yan etkisi yoktur. Geçici kızarıklık veya hassasiyet yaşanabilir ancak bunlar kısa sürede geçer.",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          question: "Tüm cilt tiplerine uygun mu?",
+          answer:
+            "Evet, Alma Soprano Ice Platinum 3 farklı dalga boyu ile tüm cilt tiplerine (Fitzpatrick I-VI) güvenle uygulanabilir.",
+          order: 4,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          question: "İşlem ne kadar sürer?",
+          answer:
+            "Bölgeye göre değişir. Örneğin koltuk altı 10-15 dakika, tam bacak 30-40 dakika sürebilir.",
+          order: 5,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "tr",
+          question: "Seanslar arası ne kadar süre olmalı?",
+          answer:
+            "Yüz bölgesi için 4-6 hafta, vücut için 6-8 hafta aralarla seanslar planlanır.",
+          order: 6,
+          active: true,
+        },
+      ],
+    });
+
+    // EN FAQs
+    await prisma.procedureFAQ.createMany({
+      data: [
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          question: "Is laser hair removal painful?",
+          answer:
+            "Thanks to the Ice Platinum cooling technology of Alma Soprano Ice Platinum, the procedure is almost painless. You won't experience any discomfort except a slight warming sensation.",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          question: "How many sessions are needed?",
+          answer:
+            "Usually 6-8 sessions are recommended. However, this number may vary depending on factors such as skin type, hair structure and hormonal balance.",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          question: "Are there any side effects?",
+          answer:
+            "Laser hair removal performed with our FDA-approved device has no serious side effects. Temporary redness or sensitivity may occur but these pass quickly.",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          question: "Is it suitable for all skin types?",
+          answer:
+            "Yes, Alma Soprano Ice Platinum can be safely applied to all skin types (Fitzpatrick I-VI) with 3 different wavelengths.",
+          order: 4,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          question: "How long does the procedure take?",
+          answer:
+            "It varies by area. For example, underarms take 10-15 minutes, full legs take 30-40 minutes.",
+          order: 5,
+          active: true,
+        },
+        {
+          pageSlug: "lazer-epilasyon",
+          locale: "en",
+          question: "How long should be between sessions?",
+          answer:
+            "Sessions are planned 4-6 weeks apart for face area, 6-8 weeks apart for body.",
+          order: 6,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  console.log("✅ Lazer epilasyon page created (TR & EN)!");
 
   // ========================================
   // PROCEDURE PAGES - SAÇ EKİMİ
@@ -2982,672 +3273,479 @@ async function main() {
     console.log("✅ Sac ekimi page created (TR & EN)!");
   }
 
-  // ========================================
-  // PROCEDURE PAGES - AMELİYATLI ESTETİK
-  // ========================================
-
-  const existingAmeliyatliPageTR = await prisma.procedurePage.findFirst({
-    where: { slug: "ameliyatli-estetik", locale: "tr" },
+  // About Section kontrolü
+  const existingAboutSection = await prisma.procedureAboutSection.count({
+    where: { pageSlug: "ameliyatli-estetik" },
   });
 
-  const existingAmeliyatliPageEN = await prisma.procedurePage.findFirst({
-    where: { slug: "ameliyatli-estetik", locale: "en" },
-  });
-
-  if (!existingAmeliyatliPageTR || !existingAmeliyatliPageEN) {
-    console.log("🔄 Seeding ameliyatli estetik page...");
-
-    // TR Page
-    if (!existingAmeliyatliPageTR) {
-      await prisma.procedurePage.create({
-        data: {
-          slug: "ameliyatli-estetik",
-          locale: "tr",
-
-          // Hero Section
-          heroTitle: "Güzelliğinizi",
-          heroTitleHighlight: "Yeniden Keşfedin",
-          heroDescription:
-            "Modern cerrahi teknikler ve uzman doktorlarımız ile hayalinizdeki görünüme kavuşun. Güvenli, etkili ve doğal sonuçlar için buradayız.",
-          heroButtonReviews: "Müşteri Yorumları",
-          heroButtonPhone: "Hemen Ara",
-          heroImage: "/images/surgical-hero.jpg",
-          heroImageAlt: "Ameliyatlı Estetik Operasyonları",
-
-          // Categories Intro
-          categoriesIntroTitle: "Ameliyatlı Estetik Kategorilerimiz",
-          categoriesIntroDescription:
-            "Yüzünüzden vücudunuza kadar tüm estetik ihtiyaçlarınız için uzman ekibimiz ve ileri teknolojimizle yanınızdayız.",
-
-          // Device Section (genel bilgi)
-          deviceTitle: "Uzman Ekip ve Modern Ameliyathane",
-          deviceDescription:
-            "15 yılı aşkın deneyime sahip plastik cerrahlarımız, son teknoloji ekipmanlarla donatılmış ameliyathanelerimizde size hizmet vermektedir.",
-          deviceFeaturesTitle: "Ameliyathane Standartları",
-          deviceAdvantagesTitle: "Avantajlarımız",
-
-          // Pricing
-          pricingTitle: "Ameliyatlı Estetik Fiyatları",
-          pricingDescription:
-            "Her operasyon için özel fiyatlandırma yapılmaktadır. Detaylı bilgi ve randevu için bizimle iletişime geçin.",
-          pricingCallText: "Fiyat için arayın",
-
-          // Why Us
-          whyUsTitle: "Neden Veneta Clinic?",
-
-          // FAQ
-          faqTitle: "Sıkça Sorulan Sorular",
-
-          // CTA
-          ctaTitle: "Ücretsiz Konsültasyon İçin Hemen İletişime Geçin",
-          ctaDescription:
-            "Uzman doktorlarımız size en uygun tedavi planını oluşturmak için hazır. Randevunuz için bizi arayın.",
-          ctaButtonPhone: "Hemen Ara",
-          ctaButtonWhatsApp: "WhatsApp İle Ulaş",
-
-          active: true,
-        },
-      });
-    }
-
-    // EN Page
-    if (!existingAmeliyatliPageEN) {
-      await prisma.procedurePage.create({
-        data: {
-          slug: "ameliyatli-estetik",
-          locale: "en",
-
-          // Hero Section
-          heroTitle: "Rediscover",
-          heroTitleHighlight: "Your Beauty",
-          heroDescription:
-            "Achieve your dream appearance with modern surgical techniques and our expert doctors. We are here for safe, effective and natural results.",
-          heroButtonReviews: "Customer Reviews",
-          heroButtonPhone: "Call Now",
-          heroImage: "/images/surgical-hero.jpg",
-          heroImageAlt: "Surgical Aesthetic Operations",
-
-          // Categories Intro
-          categoriesIntroTitle: "Our Surgical Aesthetic Categories",
-          categoriesIntroDescription:
-            "We are with you for all your aesthetic needs from face to body with our expert team and advanced technology.",
-
-          // Device Section
-          deviceTitle: "Expert Team and Modern Operating Room",
-          deviceDescription:
-            "Our plastic surgeons with over 15 years of experience serve you in our operating rooms equipped with state-of-the-art equipment.",
-          deviceFeaturesTitle: "Operating Room Standards",
-          deviceAdvantagesTitle: "Our Advantages",
-
-          // Pricing
-          pricingTitle: "Surgical Aesthetic Prices",
-          pricingDescription:
-            "Special pricing is made for each operation. Contact us for detailed information and appointment.",
-          pricingCallText: "Call for price",
-
-          // Why Us
-          whyUsTitle: "Why Veneta Clinic?",
-
-          // FAQ
-          faqTitle: "Frequently Asked Questions",
-
-          // CTA
-          ctaTitle: "Contact Us Now for Free Consultation",
-          ctaDescription:
-            "Our expert doctors are ready to create the most suitable treatment plan for you. Call us for your appointment.",
-          ctaButtonPhone: "Call Now",
-          ctaButtonWhatsApp: "Contact via WhatsApp",
-
-          active: true,
-        },
-      });
-    }
-
-    // Features kontrolü
-    const existingFeatures = await prisma.procedureFeature.count({
-      where: { pageSlug: "ameliyatli-estetik" },
+  if (existingAboutSection === 0) {
+    // TR About Section
+    await prisma.procedureAboutSection.create({
+      data: {
+        pageSlug: "ameliyatli-estetik",
+        locale: "tr",
+        title: "Ameliyatlı Estetik Hakkında",
+        description:
+          "Ameliyatlı estetik operasyonlar, yüz ve vücut hatlarınızı yeniden şekillendirerek size daha genç, dinç ve özgüvenli bir görünüm kazandırır. Uzman cerrahlarımız, modern teknikler ve ileri teknoloji kullanarak doğal ve kalıcı sonuçlar elde etmenizi sağlar.",
+        areasTitle: "Uygulama Alanları",
+        advantagesTitle: "Avantajlar",
+      },
     });
 
-    if (existingFeatures === 0) {
-      // TR Features
-      await prisma.procedureFeature.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "user-check",
-            title: "Uzman Cerrahlar",
-            description: "15+ yıl deneyimli plastik cerrahlar",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "shield-check",
-            title: "Güvenli Operasyonlar",
-            description: "JCI akreditasyonlu hastane standartları",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "heart",
-            title: "Doğal Sonuçlar",
-            description: "Yüz anatomisine uygun, doğal görünüm",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Features
-      await prisma.procedureFeature.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "user-check",
-            title: "Expert Surgeons",
-            description: "Plastic surgeons with 15+ years experience",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "shield-check",
-            title: "Safe Operations",
-            description: "JCI accredited hospital standards",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "heart",
-            title: "Natural Results",
-            description: "Natural appearance suitable for facial anatomy",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // About Section kontrolü
-    const existingAboutSection = await prisma.procedureAboutSection.count({
-      where: { pageSlug: "ameliyatli-estetik" },
+    // EN About Section
+    await prisma.procedureAboutSection.create({
+      data: {
+        pageSlug: "ameliyatli-estetik",
+        locale: "en",
+        title: "About Surgical Aesthetics",
+        description:
+          "Surgical aesthetic operations reshape your face and body lines, giving you a younger, more vibrant and confident appearance. Our expert surgeons help you achieve natural and permanent results using modern techniques and advanced technology.",
+        areasTitle: "Application Areas",
+        advantagesTitle: "Advantages",
+      },
     });
 
-    if (existingAboutSection === 0) {
-      // TR About Section
-      await prisma.procedureAboutSection.create({
-        data: {
+    // TR About Areas
+    await prisma.procedureAboutArea.createMany({
+      data: [
+        {
           pageSlug: "ameliyatli-estetik",
           locale: "tr",
-          title: "Ameliyatlı Estetik Hakkında",
-          description:
-            "Ameliyatlı estetik operasyonlar, yüz ve vücut hatlarınızı yeniden şekillendirerek size daha genç, dinç ve özgüvenli bir görünüm kazandırır. Uzman cerrahlarımız, modern teknikler ve ileri teknoloji kullanarak doğal ve kalıcı sonuçlar elde etmenizi sağlar.",
-          areasTitle: "Uygulama Alanları",
-          advantagesTitle: "Avantajlar",
+          text: "Yüz Estetiği (Burun, Göz Kapağı, Yüz Germe)",
+          order: 1,
+          active: true,
         },
-      });
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Vücut Estetiği (Karın Germe, Liposuction)",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Meme Estetiği (Büyütme, Küçültme, Dikleştirme)",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Kalça ve Bacak Estetiği",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
 
-      // EN About Section
-      await prisma.procedureAboutSection.create({
-        data: {
+    // EN About Areas
+    await prisma.procedureAboutArea.createMany({
+      data: [
+        {
           pageSlug: "ameliyatli-estetik",
           locale: "en",
-          title: "About Surgical Aesthetics",
-          description:
-            "Surgical aesthetic operations reshape your face and body lines, giving you a younger, more vibrant and confident appearance. Our expert surgeons help you achieve natural and permanent results using modern techniques and advanced technology.",
-          areasTitle: "Application Areas",
-          advantagesTitle: "Advantages",
+          text: "Facial Aesthetics (Nose, Eyelid, Face Lift)",
+          order: 1,
+          active: true,
         },
-      });
-
-      // TR About Areas
-      await prisma.procedureAboutArea.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Yüz Estetiği (Burun, Göz Kapağı, Yüz Germe)",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Vücut Estetiği (Karın Germe, Liposuction)",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Meme Estetiği (Büyütme, Küçültme, Dikleştirme)",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Kalça ve Bacak Estetiği",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // EN About Areas
-      await prisma.procedureAboutArea.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Facial Aesthetics (Nose, Eyelid, Face Lift)",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Body Aesthetics (Tummy Tuck, Liposuction)",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Breast Aesthetics (Augmentation, Reduction, Lift)",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Hip and Leg Aesthetics",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // TR About Advantages
-      await prisma.procedureAboutAdvantage.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Kalıcı ve doğal sonuçlar",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Deneyimli ve uzman cerrahlar",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Modern ameliyathane ve teknoloji",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            text: "Kapsamlı ameliyat sonrası takip",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // EN About Advantages
-      await prisma.procedureAboutAdvantage.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Permanent and natural results",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Experienced and expert surgeons",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Modern operating room and technology",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            text: "Comprehensive post-operative follow-up",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // Process Steps kontrolü
-    const existingProcess = await prisma.procedureProcess.count({
-      where: { pageSlug: "ameliyatli-estetik" },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Body Aesthetics (Tummy Tuck, Liposuction)",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Breast Aesthetics (Augmentation, Reduction, Lift)",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Hip and Leg Aesthetics",
+          order: 4,
+          active: true,
+        },
+      ],
     });
 
-    if (existingProcess === 0) {
-      // TR Process Steps
-      await prisma.procedureProcess.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            number: "1",
-            title: "Konsültasyon",
-            description:
-              "İlk görüşmemizde beklentilerinizi dinliyor, size özel tedavi planı oluşturuyoruz. Tüm sorularınızı yanıtlıyor ve süreci detaylı olarak anlatıyoruz.",
-            bgColor: "bg-primary/20",
-            textColor: "text-primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            number: "2",
-            title: "Operasyon",
-            description:
-              "Deneyimli cerrahlarımız, modern ameliyathanelerimizde son teknoloji ekipmanlarla operasyonunuzu gerçekleştirir. Güvenliğiniz bizim önceliğimizdir.",
-            bgColor: "bg-secondary/20",
-            textColor: "text-secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            number: "3",
-            title: "İyileşme",
-            description:
-              "Operasyon sonrası iyileşme sürecinizde yanınızdayız. Düzenli kontroller ve 7/24 destek ekibimizle size rehberlik ediyoruz.",
-            bgColor: "bg-accent/20",
-            textColor: "text-accent",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Process Steps
-      await prisma.procedureProcess.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            number: "1",
-            title: "Consultation",
-            description:
-              "In our first meeting, we listen to your expectations and create a treatment plan specific to you. We answer all your questions and explain the process in detail.",
-            bgColor: "bg-primary/20",
-            textColor: "text-primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            number: "2",
-            title: "Operation",
-            description:
-              "Our experienced surgeons perform your operation with state-of-the-art equipment in our modern operating rooms. Your safety is our priority.",
-            bgColor: "bg-secondary/20",
-            textColor: "text-secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            number: "3",
-            title: "Recovery",
-            description:
-              "We are with you during your post-operative recovery process. We guide you with regular checks and our 24/7 support team.",
-            bgColor: "bg-accent/20",
-            textColor: "text-accent",
-            order: 3,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // Why Us kontrolü
-    const existingWhyUs = await prisma.procedureWhyUs.count({
-      where: { pageSlug: "ameliyatli-estetik" },
+    // TR About Advantages
+    await prisma.procedureAboutAdvantage.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Kalıcı ve doğal sonuçlar",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Deneyimli ve uzman cerrahlar",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Modern ameliyathane ve teknoloji",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          text: "Kapsamlı ameliyat sonrası takip",
+          order: 4,
+          active: true,
+        },
+      ],
     });
 
-    if (existingWhyUs === 0) {
-      // TR Why Us
-      await prisma.procedureWhyUs.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "user-check",
-            title: "Uzman Kadro",
-            description:
-              "15+ yıl deneyimli plastik cerrahlar ve anestezi uzmanları",
-            colorScheme: "primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "shield-check",
-            title: "Güvenli Ortam",
-            description: "JCI akreditasyonlu ameliyathane standartları",
-            colorScheme: "secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "heart",
-            title: "Doğal Sonuç",
-            description: "Kişiye özel, doğal ve estetik sonuçlar",
-            colorScheme: "accent",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            icon: "headphones",
-            title: "7/24 Destek",
-            description: "Ameliyat öncesi ve sonrası kesintisiz destek",
-            colorScheme: "destructive",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-
-      // EN Why Us
-      await prisma.procedureWhyUs.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "user-check",
-            title: "Expert Team",
-            description:
-              "Plastic surgeons and anesthesiologists with 15+ years experience",
-            colorScheme: "primary",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "shield-check",
-            title: "Safe Environment",
-            description: "JCI accredited operating room standards",
-            colorScheme: "secondary",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "heart",
-            title: "Natural Results",
-            description: "Personalized, natural and aesthetic results",
-            colorScheme: "accent",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            icon: "headphones",
-            title: "24/7 Support",
-            description: "Uninterrupted support before and after surgery",
-            colorScheme: "destructive",
-            order: 4,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    // FAQ kontrolü
-    const existingFAQs = await prisma.procedureFAQ.count({
-      where: { pageSlug: "ameliyatli-estetik" },
+    // EN About Advantages
+    await prisma.procedureAboutAdvantage.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Permanent and natural results",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Experienced and expert surgeons",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Modern operating room and technology",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          text: "Comprehensive post-operative follow-up",
+          order: 4,
+          active: true,
+        },
+      ],
     });
-
-    if (existingFAQs === 0) {
-      // TR FAQs
-      await prisma.procedureFAQ.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            question: "Ameliyatlı estetik operasyonlar güvenli mi?",
-            answer:
-              "Evet, deneyimli cerrahlarımız ve modern ameliyathane standartlarımızla tüm operasyonlar güvenli bir şekilde gerçekleştirilir. JCI akreditasyonlu hastane standartlarına uygun çalışıyoruz.",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            question: "İyileşme süreci ne kadar sürer?",
-            answer:
-              "Operasyon türüne göre değişir. Genellikle 1-2 hafta içinde günlük aktivitelere dönebilirsiniz. Tam iyileşme 3-6 ay içinde tamamlanır.",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            question: "Sonuçlar kalıcı mı?",
-            answer:
-              "Evet, ameliyatlı estetik operasyonların sonuçları kalıcıdır. Ancak doğal yaşlanma süreci devam eder. Sağlıklı yaşam tarzı ile sonuçlarınızı uzun yıllar koruyabilirsiniz.",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            question: "Hangi yaşta yaptırılabilir?",
-            answer:
-              "Genellikle 18 yaş ve üzeri kişiler yaptırabilir. Ancak her operasyon için özel değerlendirme yapılır ve uygunluk kontrolü gerçekleştirilir.",
-            order: 4,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "tr",
-            question: "Ameliyat sonrası takip nasıl olur?",
-            answer:
-              "Düzenli kontroller ve 7/24 destek hattımızla tüm süreç boyunca yanınızdayız. İlk kontrol 1 hafta sonra, sonraki kontroller doktorunuzun önerisi doğrultusunda yapılır.",
-            order: 5,
-            active: true,
-          },
-        ],
-      });
-
-      // EN FAQs
-      await prisma.procedureFAQ.createMany({
-        data: [
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            question: "Are surgical aesthetic operations safe?",
-            answer:
-              "Yes, all operations are performed safely with our experienced surgeons and modern operating room standards. We work in accordance with JCI accredited hospital standards.",
-            order: 1,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            question: "How long does the recovery process take?",
-            answer:
-              "It varies depending on the type of operation. Usually you can return to daily activities within 1-2 weeks. Full recovery is completed within 3-6 months.",
-            order: 2,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            question: "Are the results permanent?",
-            answer:
-              "Yes, the results of surgical aesthetic operations are permanent. However, the natural aging process continues. You can maintain your results for many years with a healthy lifestyle.",
-            order: 3,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            question: "At what age can it be done?",
-            answer:
-              "Usually people aged 18 and over can have it done. However, special evaluation is made for each operation and suitability check is performed.",
-            order: 4,
-            active: true,
-          },
-          {
-            pageSlug: "ameliyatli-estetik",
-            locale: "en",
-            question: "What is the post-operative follow-up like?",
-            answer:
-              "We are with you throughout the process with regular checks and our 24/7 support line. First check is after 1 week, subsequent checks are made according to your doctor's recommendation.",
-            order: 5,
-            active: true,
-          },
-        ],
-      });
-    }
-
-    console.log("✅ Ameliyatlı estetik page created (TR & EN)!");
   }
+
+  // Process Steps kontrolü
+  const existingProcess = await prisma.procedureProcess.count({
+    where: { pageSlug: "ameliyatli-estetik" },
+  });
+
+  if (existingProcess === 0) {
+    // TR Process Steps
+    await prisma.procedureProcess.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          number: "1",
+          title: "Konsültasyon",
+          description:
+            "İlk görüşmemizde beklentilerinizi dinliyor, size özel tedavi planı oluşturuyoruz. Tüm sorularınızı yanıtlıyor ve süreci detaylı olarak anlatıyoruz.",
+          bgColor: "bg-primary/20",
+          textColor: "text-primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          number: "2",
+          title: "Operasyon",
+          description:
+            "Deneyimli cerrahlarımız, modern ameliyathanelerimizde son teknoloji ekipmanlarla operasyonunuzu gerçekleştirir. Güvenliğiniz bizim önceliğimizdir.",
+          bgColor: "bg-secondary/20",
+          textColor: "text-secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          number: "3",
+          title: "İyileşme",
+          description:
+            "Operasyon sonrası iyileşme sürecinizde yanınızdayız. Düzenli kontroller ve 7/24 destek ekibimizle size rehberlik ediyoruz.",
+          bgColor: "bg-accent/20",
+          textColor: "text-accent",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Process Steps
+    await prisma.procedureProcess.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          number: "1",
+          title: "Consultation",
+          description:
+            "In our first meeting, we listen to your expectations and create a treatment plan specific to you. We answer all your questions and explain the process in detail.",
+          bgColor: "bg-primary/20",
+          textColor: "text-primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          number: "2",
+          title: "Operation",
+          description:
+            "Our experienced surgeons perform your operation with state-of-the-art equipment in our modern operating rooms. Your safety is our priority.",
+          bgColor: "bg-secondary/20",
+          textColor: "text-secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          number: "3",
+          title: "Recovery",
+          description:
+            "We are with you during your post-operative recovery process. We guide you with regular checks and our 24/7 support team.",
+          bgColor: "bg-accent/20",
+          textColor: "text-accent",
+          order: 3,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  // Why Us kontrolü
+  const existingWhyUsSurgery = await prisma.procedureWhyUs.count({
+    where: { pageSlug: "ameliyatli-estetik" },
+  });
+
+  if (existingWhyUsSurgery === 0) {
+    // TR Why Us
+    await prisma.procedureWhyUs.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          icon: "user-check",
+          title: "Uzman Kadro",
+          description:
+            "15+ yıl deneyimli plastik cerrahlar ve anestezi uzmanları",
+          colorScheme: "primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          icon: "shield-check",
+          title: "Güvenli Ortam",
+          description: "JCI akreditasyonlu ameliyathane standartları",
+          colorScheme: "secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          icon: "heart",
+          title: "Doğal Sonuç",
+          description: "Kişiye özel, doğal ve estetik sonuçlar",
+          colorScheme: "accent",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          icon: "headphones",
+          title: "7/24 Destek",
+          description: "Ameliyat öncesi ve sonrası kesintisiz destek",
+          colorScheme: "destructive",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+
+    // EN Why Us
+    await prisma.procedureWhyUs.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          icon: "user-check",
+          title: "Expert Team",
+          description:
+            "Plastic surgeons and anesthesiologists with 15+ years experience",
+          colorScheme: "primary",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          icon: "shield-check",
+          title: "Safe Environment",
+          description: "JCI accredited operating room standards",
+          colorScheme: "secondary",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          icon: "heart",
+          title: "Natural Results",
+          description: "Personalized, natural and aesthetic results",
+          colorScheme: "accent",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          icon: "headphones",
+          title: "24/7 Support",
+          description: "Uninterrupted support before and after surgery",
+          colorScheme: "destructive",
+          order: 4,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  // FAQ kontrolü
+  const existingFAQsSurgery = await prisma.procedureFAQ.count({
+    where: { pageSlug: "ameliyatli-estetik" },
+  });
+
+  if (existingFAQsSurgery === 0) {
+    // TR FAQs
+    await prisma.procedureFAQ.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          question: "Ameliyatlı estetik operasyonlar güvenli mi?",
+          answer:
+            "Evet, deneyimli cerrahlarımız ve modern ameliyathane standartlarımızla tüm operasyonlar güvenli bir şekilde gerçekleştirilir. JCI akreditasyonlu hastane standartlarına uygun çalışıyoruz.",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          question: "İyileşme süreci ne kadar sürer?",
+          answer:
+            "Operasyon türüne göre değişir. Genellikle 1-2 hafta içinde günlük aktivitelere dönebilirsiniz. Tam iyileşme 3-6 ay içinde tamamlanır.",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          question: "Sonuçlar kalıcı mı?",
+          answer:
+            "Evet, ameliyatlı estetik operasyonların sonuçları kalıcıdır. Ancak doğal yaşlanma süreci devam eder. Sağlıklı yaşam tarzı ile sonuçlarınızı uzun yıllar koruyabilirsiniz.",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          question: "Hangi yaşta yaptırılabilir?",
+          answer:
+            "Genellikle 18 yaş ve üzeri kişiler yaptırabilir. Ancak her operasyon için özel değerlendirme yapılır ve uygunluk kontrolü gerçekleştirilir.",
+          order: 4,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "tr",
+          question: "Ameliyat sonrası takip nasıl olur?",
+          answer:
+            "Düzenli kontroller ve 7/24 destek hattımızla tüm süreç boyunca yanınızdayız. İlk kontrol 1 hafta sonra, sonraki kontroller doktorunuzun önerisi doğrultusunda yapılır.",
+          order: 5,
+          active: true,
+        },
+      ],
+    });
+
+    // EN FAQs
+    await prisma.procedureFAQ.createMany({
+      data: [
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          question: "Are surgical aesthetic operations safe?",
+          answer:
+            "Yes, all operations are performed safely with our experienced surgeons and modern operating room standards. We work in accordance with JCI accredited hospital standards.",
+          order: 1,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          question: "How long does the recovery process take?",
+          answer:
+            "It varies depending on the type of operation. Usually you can return to daily activities within 1-2 weeks. Full recovery is completed within 3-6 months.",
+          order: 2,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          question: "Are the results permanent?",
+          answer:
+            "Yes, the results of surgical aesthetic operations are permanent. However, the natural aging process continues. You can maintain your results for many years with a healthy lifestyle.",
+          order: 3,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          question: "At what age can it be done?",
+          answer:
+            "Usually people aged 18 and over can have it done. However, special evaluation is made for each operation and suitability check is performed.",
+          order: 4,
+          active: true,
+        },
+        {
+          pageSlug: "ameliyatli-estetik",
+          locale: "en",
+          question: "What is the post-operative follow-up like?",
+          answer:
+            "We are with you throughout the process with regular checks and our 24/7 support line. First check is after 1 week, subsequent checks are made according to your doctor's recommendation.",
+          order: 5,
+          active: true,
+        },
+      ],
+    });
+  }
+
+  console.log("✅ Ameliyatlı estetik page created (TR & EN)!");
+
+  await seedSurgicalCategories();
 
   console.log("\n🎉 Seeding completed successfully!");
 }

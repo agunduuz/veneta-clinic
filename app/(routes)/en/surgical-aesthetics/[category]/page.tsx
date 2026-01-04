@@ -1,120 +1,164 @@
 // app/(routes)/en/surgical-aesthetics/[category]/page.tsx
-import { navigationItems } from "@/data/navigation";
-import { getOperationData } from "@/lib/operations";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import EnglishCategoryPageContent from "@/components/CategoryComponent/EnglishCategoryPageContent";
+import CategoryPageContent from "@/components/CategoryComponent/CategoryPageContent";
 import PhoneButton from "@/components/Header/PhoneButton";
 import WhatsAppButton from "@/components/Header/WhatsAppButton";
+import { prisma } from "@/lib/prisma";
 
-// ✅ COMPLETELY FIXED: generateStaticParams
 export async function generateStaticParams() {
-  const surgical = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );
+  try {
+    const categories = await prisma.surgicalCategory.findMany({
+      where: {
+        locale: "en",
+        published: true,
+        active: true,
+      },
+      select: {
+        slug: true,
+      },
+    });
 
-  return (
-    surgical?.subMenus?.map((sub) => {
-      const slug = sub.href.en.split("/").pop() || "";
-      return {
-        category: slug,
-      };
-    }) || []
-  );
+    return categories.map((cat) => ({
+      category: cat.slug,
+    }));
+  } catch (error) {
+    console.error("Failed to generate static params:", error);
+    return [];
+  }
 }
 
-// ✅ COMPLETELY FIXED: generateMetadata
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
   const { category } = await params;
-  const surgical = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );
 
-  const subMenu = surgical?.subMenus?.find((sub) => {
-    const slug = sub.href.en.split("/").pop();
-    return slug === category;
-  });
+  try {
+    const categoryData = await prisma.surgicalCategory.findFirst({
+      where: {
+        slug: category,
+        locale: "en",
+        published: true,
+        active: true,
+      },
+      select: {
+        title: true,
+        description: true,
+        heroImage: true,
+        metaTitle: true,
+        metaDescription: true,
+        metaKeywords: true,
+      },
+    });
 
-  if (!subMenu) return { title: "Page Not Found" };
+    if (!categoryData) {
+      return {
+        title: "Page Not Found",
+      };
+    }
 
-  // ✅ YENİ: getOperationData kullan
-  const operationInfo = getOperationData(category, "en");
-  const title = `${
-    operationInfo?.title || subMenu.titleKey
-  } | Turkey's Best Aesthetic Clinic | Veneta Clinic`;
-  const description = `${
-    operationInfo?.title || subMenu.titleKey
-  } - Turkey's leading aesthetic clinic. 15+ years of experience, expert doctors, modern technology. Call now for free consultation!`;
+    const title =
+      categoryData.metaTitle ||
+      `${categoryData.title} | Turkey's Best Aesthetic Clinic | Veneta Clinic`;
+    const description =
+      categoryData.metaDescription ||
+      `${categoryData.title} - Turkey's leading aesthetic clinic. 15+ years of experience, expert doctors, modern technology. Call now for free consultation!`;
 
-  return {
-    title,
-    description,
-    keywords: [
-      operationInfo?.title || subMenu.titleKey,
-      "aesthetic surgery",
-      "Turkey aesthetic clinic",
-      "Istanbul aesthetics",
-      "safe aesthetics",
-      "expert doctor",
-      "modern technology",
-      "patient satisfaction",
-    ].join(", "),
-    openGraph: {
+    return {
       title,
       description,
-      type: "website",
-      locale: "en_US",
-      siteName: "Veneta Clinic",
-      images: [
-        {
-          url: operationInfo?.image || "/images/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${operationInfo?.title || subMenu.titleKey} - Veneta Clinic`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [operationInfo?.image || "/images/og-image.jpg"],
-    },
-    alternates: {
-      canonical: `https://venetaclinic.com/en/surgical-aesthetics/${category}`,
-    },
-  };
+      keywords: categoryData.metaKeywords || undefined,
+      openGraph: {
+        title,
+        description,
+        type: "website",
+        locale: "en_US",
+        siteName: "Veneta Clinic",
+        images: categoryData.heroImage
+          ? [
+              {
+                url: categoryData.heroImage,
+                width: 1200,
+                height: 630,
+                alt: `${categoryData.title} - Veneta Clinic`,
+              },
+            ]
+          : undefined,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: categoryData.heroImage ? [categoryData.heroImage] : undefined,
+      },
+      alternates: {
+        canonical: `https://venetaclinic.com/en/surgical-aesthetics/${category}`,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to generate metadata:", error);
+    return {
+      title: "Page Not Found",
+    };
+  }
 }
 
-// ✅ COMPLETELY FIXED: Component function
-export default async function EnglishCategoryPage({
+export default async function CategoryPage({
   params,
 }: {
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const surgical = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );
 
-  const subMenu = surgical?.subMenus?.find((sub) => {
-    const slug = sub.href.en.split("/").pop();
-    return slug === category;
-  });
+  try {
+    const categoryData = await prisma.surgicalCategory.findFirst({
+      where: {
+        slug: category,
+        locale: "en",
+        published: true,
+        active: true,
+      },
+      include: {
+        advantages: {
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        processSteps: {
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        faqs: {
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        features: {
+          // ✅ YENİ
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        whyChooseItems: {
+          // ✅ YENİ
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+      },
+    });
 
-  if (!subMenu) return notFound();
+    if (!categoryData) {
+      return notFound();
+    }
 
-  const operationInfo = getOperationData(category, "en");
-
-  return (
-    <>
-      <EnglishCategoryPageContent operationInfo={operationInfo} />
-      <PhoneButton />
-      <WhatsAppButton />
-    </>
-  );
+    return (
+      <>
+        <CategoryPageContent categoryData={categoryData} />
+        <PhoneButton />
+        <WhatsAppButton />
+      </>
+    );
+  } catch (error) {
+    console.error("Failed to fetch category data:", error);
+    return notFound();
+  }
 }

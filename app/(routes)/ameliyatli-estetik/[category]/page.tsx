@@ -1,27 +1,38 @@
-// app/(routes)/ameliyatli-estetik/[category]/page.tsx
-import { navigationItems } from "@/data/navigation";
-import { getOperationData } from "@/lib/operations";
+// app/(routes)/ameliyatli-estetik/[category]/page.tsx - YENİ VERSİYON
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import CategoryPageContent from "@/components/CategoryComponent/CategoryPageContent";
 import PhoneButton from "@/components/Header/PhoneButton";
 import WhatsAppButton from "@/components/Header/WhatsAppButton";
+import { prisma } from "@/lib/prisma";
 
+// ✅ Database'den dynamic params
 export async function generateStaticParams() {
-  const ameliyatli = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );
+  try {
+    const categories = await prisma.surgicalCategory.findMany({
+      where: {
+        published: true,
+        active: true,
+      },
+      select: {
+        slug: true,
+        locale: true,
+      },
+    });
 
-  return (
-    ameliyatli?.subMenus?.map((sub) => {
-      const slug = sub.href.tr.split("/").pop() || "";
-      return {
-        category: slug,
-      };
-    }) || []
-  );
+    // TR kategorileri döndür (EN için ayrı route olacak)
+    return categories
+      .filter((cat) => cat.locale === "tr")
+      .map((cat) => ({
+        category: cat.slug,
+      }));
+  } catch (error) {
+    console.error("Failed to generate static params:", error);
+    return [];
+  }
 }
 
+// ✅ Database'den metadata
 export async function generateMetadata({
   params,
 }: {
@@ -29,67 +40,77 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { category } = await params;
 
-  // ✅ YENİ: getOperationData kullan
-  const operationInfo = getOperationData(category, "tr");
+  try {
+    const categoryData = await prisma.surgicalCategory.findFirst({
+      where: {
+        slug: category,
+        locale: "tr",
+        published: true,
+        active: true,
+      },
+      select: {
+        title: true,
+        description: true,
+        heroImage: true,
+        metaTitle: true,
+        metaDescription: true,
+        metaKeywords: true,
+      },
+    });
 
-  const ameliyatli = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );
+    if (!categoryData) {
+      return {
+        title: "Sayfa Bulunamadı",
+      };
+    }
 
-  const subMenu = ameliyatli?.subMenus?.find((sub) => {
-    const slug = sub.href.tr.split("/").pop();
-    return slug === category;
-  });
+    const title =
+      categoryData.metaTitle ||
+      `${categoryData.title} | Türkiye'nin En İyi Estetik Kliniği | Veneta Clinic`;
+    const description =
+      categoryData.metaDescription ||
+      `${categoryData.title} konusunda Türkiye'nin lider estetik kliniği. 15+ yıllık deneyim, uzman doktorlar, modern teknoloji. Ücretsiz konsültasyon için hemen arayın!`;
 
-  if (!subMenu) return { title: "Sayfa Bulunamadı" };
-
-  const title = `${
-    operationInfo?.title || subMenu.titleKey
-  } | Türkiye'nin En İyi Estetik Kliniği | Veneta Clinic`;
-  const description = `${
-    operationInfo?.title || subMenu.titleKey
-  } konusunda Türkiye'nin lider estetik kliniği. 15+ yıllık deneyim, uzman doktorlar, modern teknoloji. Ücretsiz konsültasyon için hemen arayın!`;
-
-  return {
-    title,
-    description,
-    keywords: [
-      operationInfo?.title || subMenu.titleKey,
-      "estetik cerrahi",
-      "Türkiye estetik kliniği",
-      "İstanbul estetik",
-      "güvenli estetik",
-      "uzman doktor",
-      "modern teknoloji",
-      "hasta memnuniyeti",
-    ].join(", "),
-    openGraph: {
+    return {
       title,
       description,
-      type: "website",
-      locale: "tr_TR",
-      siteName: "Veneta Clinic",
-      images: [
-        {
-          url: operationInfo?.image || "/images/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${operationInfo?.title || subMenu.titleKey} - Veneta Clinic`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [operationInfo?.image || "/images/og-image.jpg"],
-    },
-    alternates: {
-      canonical: `https://venetaclinic.com/ameliyatli-estetik/${category}`,
-    },
-  };
+      keywords: categoryData.metaKeywords || undefined,
+      openGraph: {
+        title,
+        description,
+        type: "website",
+        locale: "tr_TR",
+        siteName: "Veneta Clinic",
+        images: categoryData.heroImage
+          ? [
+              {
+                url: categoryData.heroImage,
+                width: 1200,
+                height: 630,
+                alt: `${categoryData.title} - Veneta Clinic`,
+              },
+            ]
+          : undefined,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: categoryData.heroImage ? [categoryData.heroImage] : undefined,
+      },
+      alternates: {
+        canonical: `https://venetaclinic.com/ameliyatli-estetik/${category}`,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to generate metadata:", error);
+    return {
+      title: "Sayfa Bulunamadı",
+    };
+  }
 }
 
+// ✅ Database'den page data
 export default async function CategoryPage({
   params,
 }: {
@@ -97,25 +118,53 @@ export default async function CategoryPage({
 }) {
   const { category } = await params;
 
-  // ✅ YENİ: getOperationData kullan
-  const operationInfo = getOperationData(category, "tr");
+  try {
+    const categoryData = await prisma.surgicalCategory.findFirst({
+      where: {
+        slug: category,
+        locale: "tr",
+        published: true,
+        active: true,
+      },
+      include: {
+        advantages: {
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        processSteps: {
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        faqs: {
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        features: {
+          // ✅ YENİ
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+        whyChooseItems: {
+          // ✅ YENİ
+          where: { active: true },
+          orderBy: { order: "asc" },
+        },
+      },
+    });
 
-  const ameliyatli = navigationItems.find(
-    (item) => item.titleKey === "nav.surgicalAesthetics"
-  );
+    if (!categoryData) {
+      return notFound();
+    }
 
-  const subMenu = ameliyatli?.subMenus?.find((sub) => {
-    const slug = sub.href.tr.split("/").pop();
-    return slug === category;
-  });
-
-  if (!subMenu) return notFound();
-
-  return (
-    <>
-      <CategoryPageContent operationInfo={operationInfo} />
-      <PhoneButton />
-      <WhatsAppButton />
-    </>
-  );
+    return (
+      <>
+        <CategoryPageContent categoryData={categoryData} />
+        <PhoneButton />
+        <WhatsAppButton />
+      </>
+    );
+  } catch (error) {
+    console.error("Failed to fetch category data:", error);
+    return notFound();
+  }
 }
