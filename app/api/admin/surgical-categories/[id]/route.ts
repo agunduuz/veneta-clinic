@@ -68,16 +68,12 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    // ✅ DÜZELTME: Nested relations'ları ayır
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const {
-      advantages,
-      processSteps,
-      faqs,
-      features,
-      whyChooseItems,
-      ...categoryData
-    } = body;
+    const { ...categoryData } = body;
+    delete categoryData.advantages;
+    delete categoryData.processSteps;
+    delete categoryData.faqs;
+    delete categoryData.features;
+    delete categoryData.whyChooseItems;
 
     // Sadece category bilgilerini güncelle
     const updated = await prisma.surgicalCategory.update({
