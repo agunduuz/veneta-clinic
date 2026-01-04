@@ -17,6 +17,7 @@ interface SurgicalCategory {
   description?: string;
   heroImage?: string;
   patientsCount: string;
+  clinicImage?: string;
   experienceYears: string;
   rating: string;
   galleryImages: string[];
