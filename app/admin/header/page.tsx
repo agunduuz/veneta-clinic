@@ -332,8 +332,23 @@ export default function HeaderEditor() {
                   className="border border-gray-200 rounded-lg"
                 >
                   {/* Main Menu Item */}
-                  <div className="p-4 bg-gray-50">
+                  <div
+                    className={`p-4 ${
+                      !item.active
+                        ? "bg-yellow-50 border-l-4 border-l-yellow-400"
+                        : "bg-gray-50"
+                    }`}
+                  >
                     <div className="flex items-start gap-3">
+                      {/* ✅ Pasif uyarısı */}
+                      {!item.active && (
+                        <div className="w-full mb-2 px-3 py-2 bg-yellow-100 border border-yellow-300 text-yellow-800 text-xs rounded-lg flex items-center gap-2">
+                          <span>⚠️</span>
+                          <span className="font-medium">
+                            Bu menü pasif - İlgili kategori silinmiş olabilir
+                          </span>
+                        </div>
+                      )}
                       {/* Expand/Collapse Button */}
                       {item.children.length > 0 && (
                         <button
@@ -457,8 +472,16 @@ export default function HeaderEditor() {
                       {item.children.map((child) => (
                         <div
                           key={child.id}
-                          className="p-4 pl-12 border-b last:border-b-0 border-gray-100"
+                          className={`p-4 pl-12 border-b last:border-b-0 ${
+                            !child.active ? "bg-yellow-50" : "border-gray-100"
+                          }`}
                         >
+                          {/* ✅ Pasif uyarısı */}
+                          {!child.active && (
+                            <div className="mb-2 px-3 py-2 bg-yellow-100 border border-yellow-300 text-yellow-800 text-xs rounded-lg">
+                              ⚠️ Bu kategori silinmiş veya pasif
+                            </div>
+                          )}
                           <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-start">
                             {/* Title */}
                             <div className="md:col-span-4">
