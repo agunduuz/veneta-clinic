@@ -68,18 +68,29 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
+    // Nested relations'ları ayır
     const { ...categoryData } = body;
-    delete categoryData.advantages;
-    delete categoryData.processSteps;
-    delete categoryData.faqs;
-    delete categoryData.features;
-    delete categoryData.whyChooseItems;
 
-    // Sadece category bilgilerini güncelle
     const updated = await prisma.surgicalCategory.update({
       where: { id },
       data: categoryData,
     });
+
+    // ✅ BONUS: Eğer category publish ve active ise, header item'ı da aktifleştir
+    if (updated.published && updated.active) {
+      const headerHref =
+        updated.locale === "en"
+          ? `/en/surgical-aesthetics/${updated.slug}`
+          : `/ameliyatli-estetik/${updated.slug}`;
+
+      await prisma.headerNavItem.updateMany({
+        where: {
+          href: headerHref,
+          locale: updated.locale,
+        },
+        data: { active: true },
+      });
+    }
 
     return NextResponse.json(updated);
   } catch (error) {
@@ -104,11 +115,42 @@ export async function DELETE(
 
     const { id } = await params;
 
+    // ✅ 1. Kategoriyi al
+    const category = await prisma.surgicalCategory.findUnique({
+      where: { id },
+      select: { slug: true, locale: true },
+    });
+
+    if (!category) {
+      return NextResponse.json(
+        { error: "Category not found" },
+        { status: 404 }
+      );
+    }
+
+    // ✅ 2. İlgili header navigation item'ı pasife al
+    const headerHref =
+      category.locale === "en"
+        ? `/en/surgical-aesthetics/${category.slug}`
+        : `/ameliyatli-estetik/${category.slug}`;
+
+    await prisma.headerNavItem.updateMany({
+      where: {
+        href: headerHref,
+        locale: category.locale,
+      },
+      data: { active: false },
+    });
+
+    // ✅ 3. Kategoriyi sil
     await prisma.surgicalCategory.delete({
       where: { id },
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      message: "Category deleted and header item deactivated",
+    });
   } catch (error) {
     console.error("Surgical category DELETE error:", error);
     return NextResponse.json(

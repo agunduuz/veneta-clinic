@@ -92,6 +92,9 @@ model BlogPost {
   excerpt   String
   imageUrl  String
   order     Int      @default(0)
+  metaTitle       String?   
+  metaDescription String?  @db.Text 
+  metaKeywords    String?  
   published Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

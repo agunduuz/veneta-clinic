@@ -53,7 +53,7 @@ export default function AdminSidebar() {
           const data = await res.json();
           // Sadece yayında olanları göster
           setSurgicalCategories(
-            data.filter((cat: SurgicalCategory) => cat.published)
+            data.filter((cat: SurgicalCategory) => cat.published),
           );
         }
       } catch (error) {
@@ -78,7 +78,7 @@ export default function AdminSidebar() {
     setOpenDropdowns((prev) =>
       prev.includes(itemName)
         ? prev.filter((name) => name !== itemName)
-        : [...prev, itemName]
+        : [...prev, itemName],
     );
   };
 
@@ -155,6 +155,25 @@ export default function AdminSidebar() {
             strokeLinejoin="round"
             strokeWidth={2}
             d="M4 5a1 1 0 011-1h14a2 2 0 012 2v14a2 2 0 01-2 2H5a1 1 0 01-1-1V5z"
+          />
+        </svg>
+      ),
+    },
+    {
+      name: "Blog",
+      href: "/admin/blog",
+      icon: (
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"
           />
         </svg>
       ),
@@ -383,7 +402,7 @@ export default function AdminSidebar() {
             const isDisabled = item.badge === "Yakında" && !item.hasDropdown;
             const isDropdownOpen = openDropdowns.includes(item.name);
             const hasActiveSubItem = item.subItems?.some(
-              (sub) => pathname === sub.href
+              (sub) => pathname === sub.href,
             );
 
             return (
@@ -443,8 +462,8 @@ export default function AdminSidebar() {
                       isActive
                         ? "bg-gradient-to-r from-[#b2d6a1] to-[#68947c] text-white shadow-md"
                         : isDisabled
-                        ? "text-gray-400 cursor-not-allowed"
-                        : "text-gray-700 hover:bg-[#f0f9ed]"
+                          ? "text-gray-400 cursor-not-allowed"
+                          : "text-gray-700 hover:bg-[#f0f9ed]"
                     }`}
                   >
                     <div className="flex items-center gap-1">
@@ -480,10 +499,10 @@ export default function AdminSidebar() {
                             isSubActive
                               ? "bg-[#68947c] text-white"
                               : isSubDisabled
-                              ? "text-gray-400 cursor-not-allowed"
-                              : subItem.isDynamic
-                              ? "text-gray-700 hover:bg-[#e8f5e9] pl-6" // Dinamik öğeler daha içeride
-                              : "text-gray-600 hover:bg-[#f0f9ed]"
+                                ? "text-gray-400 cursor-not-allowed"
+                                : subItem.isDynamic
+                                  ? "text-gray-700 hover:bg-[#e8f5e9] pl-6" // Dinamik öğeler daha içeride
+                                  : "text-gray-600 hover:bg-[#f0f9ed]"
                           }`}
                         >
                           <span className="flex items-center gap-2">
