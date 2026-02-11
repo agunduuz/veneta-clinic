@@ -569,6 +569,7 @@ model SurgicalFeature {
   order       Int               @default(0)
   active      Boolean           @default(true)
 
+  @@unique([categoryId, order])
   @@map("surgical_features")
 }
 
@@ -583,6 +584,7 @@ model SurgicalAdvantage {
   order       Int      @default(0)
   active      Boolean  @default(true)
   
+  @@unique([categoryId, order])
   @@index([categoryId, order])
 }
 
@@ -595,6 +597,7 @@ model SurgicalProcessStep {
   order       Int      @default(0)
   active      Boolean  @default(true)
   
+  @@unique([categoryId, order])
   @@index([categoryId, order])
 }
 
@@ -607,6 +610,7 @@ model SurgicalFAQ {
   order       Int      @default(0)
   active      Boolean  @default(true)
   
+  @@unique([categoryId, order])
   @@index([categoryId, order])
 }
 
@@ -618,5 +622,230 @@ model SurgicalWhyChooseItem {
   order       Int               @default(0)
   active      Boolean           @default(true)
 
+  @@unique([categoryId, order])
   @@map("surgical_why_choose_items")
+}
+
+// ============================================
+// SUB-CATEGORY MODELS (Hibrit Model)
+// ============================================
+
+// Genel sayfalar için alt kategoriler (Anasayfa, Hakkımızda, İletişim, vs.)
+model PageSubcategory {
+    id          String   @id @default(cuid())
+  parentSlug  String
+  slug        String
+  locale      String
+
+  // Hero Section
+  heroTitle          String
+  heroHighlight      String?
+  heroDescription    String?   @db.Text
+  heroImage          String?
+  heroImageAlt       String?
+
+  // İçerik Bölümleri (JSON)
+  sections           Json?
+
+  // SEO
+  metaTitle          String?
+  metaDescription    String?
+  metaKeywords       String?
+
+  // Metadata
+  order              Int       @default(0)
+  published          Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@unique([parentSlug, slug, locale])
+  @@map("page_subcategories")
+}
+
+// Prosedür sayfaları için alt kategoriler (Lazer Epilasyon, Saç Ekimi, vs.)
+model ProcedureSubcategory {
+  id          String   @id @default(cuid())
+  parentSlug  String   // "lazer-epilasyon", "sac-ekimi"
+  slug        String
+  locale      String
+  
+  // Hero Section
+  heroTitle           String
+  heroTitleHighlight  String?
+  heroDescription     String?  @db.Text
+  heroButtonReviews   String?
+  heroButtonPhone     String?
+  heroImage           String?
+  heroImageAlt        String?
+  
+  // Device/Technique Section
+  deviceTitle         String?
+  deviceDescription   String?  @db.Text
+  deviceFeaturesTitle String?
+  deviceAdvantagesTitle String?
+  
+  // Pricing Section
+  pricingTitle        String?
+  pricingDescription  String?  @db.Text
+  pricingCallText     String?
+  
+  // Why Us Section
+  whyUsTitle          String?
+  
+  // FAQ Section
+  faqTitle            String?
+  
+  // CTA Section
+  ctaTitle            String?
+  ctaDescription      String?  @db.Text
+  ctaButtonPhone      String?
+  ctaButtonWhatsApp   String?
+  
+  // Metadata
+  order       Int      @default(0)
+  published   Boolean  @default(false)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
+
+  // İlişkiler
+  features       ProcedureSubcategoryFeature[]
+  deviceItems    ProcedureSubcategoryDeviceItem[]
+  treatmentAreas ProcedureSubcategoryTreatmentArea[]
+  pricing        ProcedureSubcategoryPricing[]
+  whyUs          ProcedureSubcategoryWhyUs[]
+  faqs           ProcedureSubcategoryFAQ[]
+  
+  @@unique([parentSlug, slug, locale])
+  @@map("procedure_subcategories")
+}
+
+// Prosedür alt kategori özellikleri (Features)
+model ProcedureSubcategoryFeature {
+  id          String   @id @default(cuid())
+  subcategoryId String
+  locale      String
+  
+  icon        String?
+  title       String
+  description String
+  
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  subcategory ProcedureSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([subcategoryId, order])
+  @@map("procedure_subcategory_features")
+}
+
+// Prosedür alt kategori cihaz özellikleri
+model ProcedureSubcategoryDeviceItem {
+  id          String   @id @default(cuid())
+  subcategoryId String
+  locale      String
+  
+  type        String   // "feature" | "advantage"
+  text        String
+  
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  subcategory ProcedureSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([subcategoryId, type, order])
+  @@map("procedure_subcategory_device_items")
+}
+
+// Prosedür alt kategori tedavi alanları
+model ProcedureSubcategoryTreatmentArea {
+  id          String   @id @default(cuid())
+  subcategoryId String
+  locale      String
+  
+  title       String
+  description String?
+  
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  subcategory ProcedureSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([subcategoryId, order])
+  @@map("procedure_subcategory_treatment_areas")
+}
+
+// Prosedür alt kategori fiyatlandırma
+model ProcedureSubcategoryPricing {
+  id          String   @id @default(cuid())
+  subcategoryId String
+  locale      String
+  
+  title       String
+  description String?
+  priceText   String
+  colorScheme String?  // "primary" | "secondary" | "accent" | "destructive"
+  
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  subcategory ProcedureSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([subcategoryId, order])
+  @@map("procedure_subcategory_pricing")
+}
+
+// Prosedür alt kategori "Neden Biz"
+model ProcedureSubcategoryWhyUs {
+  id          String   @id @default(cuid())
+  subcategoryId String
+  locale      String
+  
+  icon        String?
+  title       String
+  description String
+  colorScheme String?
+  
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  subcategory ProcedureSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([subcategoryId, order])
+  @@map("procedure_subcategory_why_us")
+}
+
+// Prosedür alt kategori FAQ
+model ProcedureSubcategoryFAQ {
+  id          String   @id @default(cuid())
+  subcategoryId String
+  locale      String
+  
+  question    String
+  answer      String   @db.Text
+  
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  subcategory ProcedureSubcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([subcategoryId, order])
+  @@map("procedure_subcategory_faqs")
 }
